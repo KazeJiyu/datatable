@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable;
 
+import fr.kazejiyu.generic.datatable.annotation.Internal;
+
 /**
  * A row that belongs to a {@link Table}. 
  * 
@@ -50,6 +52,14 @@ public interface Row extends Iterable <Object> {
 	 * @param <T> The runtime type of the element
 	 */
 	public <T> T get(String header);
+	
+	@Internal
+	public default Row add(Object element) {
+		return insert(size(), element);
+	}
+	
+	@Internal
+	public Row insert(int position, Object element);
 	
 	/**
 	 * Creates a {@code Row} from a given iterable.

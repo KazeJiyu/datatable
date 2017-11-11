@@ -12,24 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.kazejiyu.generic.datatable;
+package fr.kazejiyu.generic.datatable.annotation;
 
-/**
- * A table containing {@link Rows} and {@link Columns}.
- * 
- * @author Emmanuel CHEBBI
- */
-public interface Table {
-	
-	/** @return whether the table is empty or not */
-	public default boolean isEmpty() {
-		return rows().isEmpty() || columns().isEmpty();
-	}
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-	/** @return the rows of the table */
-	public Rows rows();
-	
-	/** @return the columns of the table */
-	public Columns columns();
-	
+@Inherited
+@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.METHOD, ElementType.FIELD})
+public @interface Internal {
+	String message() default "";
 }

@@ -19,9 +19,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>ca.odell</groupId>
+			<groupId>net.java.dev.glazedlists</groupId>
 			<artifactId>glazedlists</artifactId>
-			<version>0.9.7</version>
+			<version>1.5.0</version>
 		</dependency>
 	</dependencies>
 

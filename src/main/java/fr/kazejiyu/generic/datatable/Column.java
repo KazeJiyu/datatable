@@ -14,8 +14,6 @@
  */
 package fr.kazejiyu.generic.datatable;
 
-import java.util.Arrays;
-
 /**
  * A column that belongs to a {@link Table}.
  * 
@@ -31,6 +29,9 @@ public interface Column <T> extends Iterable <T> {
 	/** @return the number of elements in the column */
 	public int size();
 	
+	/** @return the type of the column's elements */
+	public Class <T> type();
+	
 	/**
 	 * Returns the element of the column located in {@code row}.
 	 * 
@@ -40,37 +41,4 @@ public interface Column <T> extends Iterable <T> {
 	 * @return the element of the column located in {@code row}.
 	 */
 	public T get(int row);
-
-	/**
-	 * Creates a new {@code Column} from a given iterable.
-	 * 
-	 * @param header
-	 * 			The column's header
-	 * @param elements
-	 * 			The elements of the column
-	 * 
-	 * @return the new column containing {@code elements}.
-	 * 
-	 * @param <N> The type of the elements in the new column
-	 */
-	@SafeVarargs
-	public static <N> Column<N> of(String header, N... elements) {
-		return of(header, Arrays.asList(elements));
-	}
-
-	/**
-	 * Creates a new {@code Column} from a given iterable.
-	 * 
-	 * @param header
-	 * 			The column's header
-	 * @param elements
-	 * 			The elements of the column
-	 * 
-	 * @return the new column containing {@code elements}.
-	 * 
-	 * @param <N> The type of the elements in the new column
-	 */
-	public static <N> Column<N> of(String header, Iterable<N> elements) {
-		return null;	// TODO Implement Column.of(String, Iterable)
-	}
 }

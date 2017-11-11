@@ -12,24 +12,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.kazejiyu.generic.datatable;
+package fr.kazejiyu.generic.datatable.impl;
+
+import fr.kazejiyu.generic.datatable.Columns;
+import fr.kazejiyu.generic.datatable.Rows;
+import fr.kazejiyu.generic.datatable.Table;
 
 /**
- * A table containing {@link Rows} and {@link Columns}.
+ * A simple implement of {@link Table}
  * 
  * @author Emmanuel CHEBBI
  */
-public interface Table {
+public class DataTable implements Table {
 	
-	/** @return whether the table is empty or not */
-	public default boolean isEmpty() {
-		return rows().isEmpty() || columns().isEmpty();
+	/** The rows that compose the table */
+	private Rows rows;
+	
+	/** The columns that compose the table */
+	private Columns columns;
+	
+	public DataTable() {
+		this.rows = new SimpleRows();
+		this.columns = new SimpleColumns(this);
 	}
 
-	/** @return the rows of the table */
-	public Rows rows();
-	
-	/** @return the columns of the table */
-	public Columns columns();
-	
+	@Override
+	public Rows rows() {
+		return rows;
+	}
+
+	@Override
+	public Columns columns() {
+		return columns;
+	}
+
 }

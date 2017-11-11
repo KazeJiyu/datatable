@@ -20,9 +20,24 @@ package fr.kazejiyu.generic.datatable;
  * @author Emmanuel CHEBBI
  */
 public interface Rows extends Iterable <Row> {
+	
+	/** @return whether the collection is empty */
+	public default boolean isEmpty() {
+		return size() == 0;
+	}
 
 	/** @return the number of rows in the table */
 	public int size();
+	
+	/**
+	 * Returns the row located at {@code index}.
+	 * 
+	 * @param index
+	 * 			The index of the row to get.
+	 * 
+	 * @return the row located at {@code index}.
+	 */
+	public Row get(int index);
 	
 	/**
 	 * Adds a new row to the table.
@@ -36,15 +51,14 @@ public interface Rows extends Iterable <Row> {
 	
 	/**
 	 * Inserts a new row at the specified location.
-	 * 
-	 * @param row
-	 * 			The new row.
 	 * @param position
 	 * 			The location of the new row.
+	 * @param row
+	 * 			The new row.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 */
-	public Rows insert(Row row, int position);
+	public Rows insert(int position, Row row);
 	
 	/**
 	 * Removes a row from the table.
@@ -61,8 +75,8 @@ public interface Rows extends Iterable <Row> {
 	/**
 	 * Removes a row from the table.
 	 * 
-	 * @param id
-	 * 			The id of the row to remove.
+	 * @param index
+	 * 			The index of the row to remove.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 */
