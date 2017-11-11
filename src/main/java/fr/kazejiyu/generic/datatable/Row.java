@@ -32,7 +32,7 @@ public interface Row extends Iterable <Object> {
 	 * 
 	 * @return the element of the row located in {@code column}.
 	 * 
-	 * @param T the runtime type of the element
+	 * @param <T> The runtime type of the element
 	 */
 	public <T> T get(int column);
 	
@@ -44,7 +44,7 @@ public interface Row extends Iterable <Object> {
 	 * 
 	 * @return the element of the row located in the column called {@code header}.
 	 * 
-	 * @param T the runtime type of the element
+	 * @param <T> The runtime type of the element
 	 */
 	public <T> T get(String header);
 	

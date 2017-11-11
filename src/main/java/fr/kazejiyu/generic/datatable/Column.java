@@ -47,6 +47,8 @@ public interface Column <T> extends Iterable <T> {
 	 * 			The elements of the column
 	 * 
 	 * @return the new column containing {@code elements}.
+	 * 
+	 * @param <N> The type of the elements in the new column
 	 */
 	@SafeVarargs
 	public static <N> Column<N> of(String header, N... elements) {
@@ -62,6 +64,8 @@ public interface Column <T> extends Iterable <T> {
 	 * 			The elements of the column
 	 * 
 	 * @return the new column containing {@code elements}.
+	 * 
+	 * @param <N> The type of the elements in the new column
 	 */
 	public static <N> Column<N> of(String header, Iterable<N> elements) {
 		return null;	// TODO Implement Column.of(String, Iterable)
