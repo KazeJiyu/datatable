@@ -28,6 +28,9 @@ public interface Column <T> extends Iterable <T> {
 	/** @return the header of the column */
 	public String header();
 	
+	/** @return the number of elements in the column */
+	public int size();
+	
 	/**
 	 * Returns the element of the column located in {@code row}.
 	 * 

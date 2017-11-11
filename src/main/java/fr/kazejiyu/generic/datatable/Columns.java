@@ -21,6 +21,9 @@ package fr.kazejiyu.generic.datatable;
  */
 public interface Columns extends Iterable <Column<?>> {
 
+	/** @return the number of columns in the table */
+	public int size();
+	
 	/**
 	 * Adds a new column to the table.
 	 * 

@@ -21,6 +21,9 @@ package fr.kazejiyu.generic.datatable;
  */
 public interface Rows extends Iterable <Row> {
 
+	/** @return the number of rows in the table */
+	public int size();
+	
 	/**
 	 * Adds a new row to the table.
 	 * 

@@ -24,6 +24,9 @@ public interface Row extends Iterable <Object> {
 	/** @return the id of the row */
 	public int id();
 	
+	/** @return the number of elements in the row */
+	public int size();
+	
 	/**
 	 * Returns the element of the row located in {@code column}.
 	 * 
