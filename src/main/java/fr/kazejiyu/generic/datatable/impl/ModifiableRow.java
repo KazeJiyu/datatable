@@ -2,14 +2,14 @@ package fr.kazejiyu.generic.datatable.impl;
 
 import fr.kazejiyu.generic.datatable.Row;
 
-interface ModifiableRow extends Row {
+abstract class ModifiableRow implements Row {
 
-	public default Row add(Object element) {
+	Row add(Object element) {
 		return insert(size(), element);
 	}
 	
-	public Row insert(int position, Object element);
+	abstract Row insert(int position, Object element);
 	
-	public Row remove(int position);
+	abstract Row remove(int position);
 		
 }
