@@ -14,9 +14,17 @@
  */
 package fr.kazejiyu.generic.datatable.impl;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import fr.kazejiyu.generic.datatable.From;
 import fr.kazejiyu.generic.datatable.Where;
 
+/**
+ * An implementation of {@link From} able to deal with {@link DataTable}s.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class GlazedFrom implements From {
 
 	protected final QueryContext context;
@@ -24,9 +32,19 @@ public class GlazedFrom implements From {
 	public GlazedFrom(QueryContext context) {
 		this.context = context;
 	}
+	
+	@Override
+	public Where<?> where() {
+		return where(context.table.columns().headers());
+	}
 
 	@Override
-	public Where<?> where(String header) {
-		return new GlazedWhere<>(context, header);
+	public Where<?> where(String... headers) {
+		return where(Arrays.asList(headers));
+	}
+	
+	@Override
+	public Where<?> where(Collection <String> headers) {
+		return new GlazedWhere<>(context, headers);
 	}
 }

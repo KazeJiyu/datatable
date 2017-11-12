@@ -21,9 +21,19 @@ import java.util.function.Predicate;
 import fr.kazejiyu.generic.datatable.And;
 import fr.kazejiyu.generic.datatable.Where;
 
+/**
+ * An implement of {@link Where} able to deal with {@link DataTable}s.
+ * 
+ * @author Emmanuel CHEBBI
+ *
+ * @param <T> The type of the instances to filter.
+ */
 public class GlazedWhere <T> implements Where <T> {
 
+	/** The context of the query */
 	private final QueryContext context;
+	
+	/** The headers of the columns to filter */
 	private final Collection <String> headers;
 	
 	public GlazedWhere(QueryContext context, String header) {
@@ -39,6 +49,21 @@ public class GlazedWhere <T> implements Where <T> {
 	public And match(Predicate <T> predicate) {
 		context.filters.add(new Filter<T>(headers, predicate));
 		return new GlazedAnd(context);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <N> Where<N> as(Class <N> clazz) {
+		if( clazz == String.class )
+			return (Where <N>) asStr();
+		
+		else if( clazz == Number.class ) 
+			return (Where <N>) asNumber();
+		
+		else if( clazz == Boolean.class ) 
+			return (Where <N>) asBool();
+		
+		return new GlazedWhere<>(context, headers);
 	}
 
 	@Override

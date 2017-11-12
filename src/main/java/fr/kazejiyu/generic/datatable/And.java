@@ -14,9 +14,47 @@
  */
 package fr.kazejiyu.generic.datatable;
 
-public interface And {
+import java.util.Collection;
 
-	public Where <?> and(String header);
+/**
+ * Contribute to a query by selecting one or more column to filter.
+ * <br><br>
+ * This class is similar to {@link From}, except that the "where" method 
+ * is renamed "and" in order to make the query's DSL cleaner.
+ * <br><br>
+ * See {@link Query} for further details about the Querying API.
+ * <br><br>
+ * The DSL defined by the class is closed to the SQL "FROM" clause. 
+ * 
+ * @author Emmanuel CHEBBI
+ */
+public interface And {
+	
+	/**
+	 * Prepares to apply a filter on all the columns of the table.
+	 * @return a query set up to apply a filter on all the columns of the table.
+	 */
+	public Where<?> and();
+	
+	/**
+	 * Prepares to apply a filter on the specified columns.
+	 * 
+	 * @param headers
+	 * 			The columns on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on all the columns of the table.
+	 */
+	public Where<?> and(String... headers);
+	
+	/**
+	 * Prepares to apply a filter on the specified columns.
+	 * 
+	 * @param headers
+	 * 			The columns on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on all the columns of the table.
+	 */
+	public Where<?> and(Collection <String> headers);
 	
 	public Table queryTable();
 }

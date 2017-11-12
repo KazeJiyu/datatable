@@ -17,7 +17,13 @@ package fr.kazejiyu.generic.datatable.impl;
 import java.util.Collection;
 
 import fr.kazejiyu.generic.datatable.And;
+import fr.kazejiyu.generic.datatable.Where;
 
+/**
+ * A specialized {@link Where} aimed to deal with strings.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class WhereStr extends GlazedWhere <String> {
 	
 	public WhereStr(QueryContext context, String header) {
@@ -27,31 +33,76 @@ public class WhereStr extends GlazedWhere <String> {
 	public WhereStr(QueryContext context, Collection<String> headers) {
 		super(context, headers);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing an empty string.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isEmpty() {
 		return matchSafe(String::isEmpty);
 	}
 
+	/**
+	 * Adds a filter to keep the rows containing a string that is equal to {@code expected}
+	 * in a case-insensitive way
+	 * 
+	 * @param expected
+	 * 			The value to keep
+	 * .
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And equalsIgnoreCase(String expected) {
 		return matchSafe(str -> str.equalsIgnoreCase(expected));
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing lower case strings.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isInLowerCase() {
 		return matchSafe(str -> str.equals(str.toLowerCase()));
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing upper case strings.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isInUpperCase() {
 		return matchSafe(str -> str.equals(str.toUpperCase()));
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing string that contain {@code sub}.
+	 * 
+	 * @param sub
+	 * 			The sub-string that must be contained. Must not be {@code null}.
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And contains(String sub) {
 		return matchSafe(str -> str.contains(sub));
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing string that starts with {@code start}.
+	 * 
+	 * @param start
+	 * 			Must be at the begin of the string. Must not be {@code null}.
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And startsWith(String start) {
 		return matchSafe(str -> str.startsWith(start));
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing string that ends with {@code end}..
+	 * 
+	 * @param end
+	 * 			Must be at the end of the string. Must not be {@code null}.
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And endsWith(String end) {
 		return matchSafe(str -> str.endsWith(end));
 	}

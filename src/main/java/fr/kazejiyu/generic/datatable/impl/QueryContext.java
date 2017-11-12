@@ -16,12 +16,20 @@ package fr.kazejiyu.generic.datatable.impl;
 
 import java.util.LinkedHashSet;
 
-public class QueryContext {
+/**
+ * The context of a query.
+ * 
+ * @author Emmanuel CHEBBI
+ */
+class QueryContext {
 	
+	/** The DataTable that contains the rows to filter */
 	public final DataTable table;
 	
+	/** The columns that will be retured by the final query */
 	public final LinkedHashSet <String> selectedHeaders;
 	
+	/** The filters to apply on the table to obtain the desired result */
 	public final Filters filters;
 
 	public QueryContext(DataTable table, LinkedHashSet <String> selectedHeaders) {

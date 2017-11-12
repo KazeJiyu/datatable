@@ -20,10 +20,23 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import fr.kazejiyu.generic.datatable.Table;
+
+/**
+ * A filter that can be applied on multipled columns.
+ * <br><br>
+ * Helps to select the rows to keep or remove when querying a {@link Table}.
+ * 
+ * @author Emmanuel CHEBBI
+ *
+ * @param <T> The type of the instances to filter
+ */
 public class Filter <T> {
 	
+	/** The headers of the columns on which apply this filter */
 	public final Set <String> headers;
 	
+	/** Indicates whether a value has to be kept */
 	public final Predicate <T> predicate;
 	
 	Filter(String header, Predicate <T> predicate) {

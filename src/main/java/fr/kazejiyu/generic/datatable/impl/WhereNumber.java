@@ -17,7 +17,13 @@ package fr.kazejiyu.generic.datatable.impl;
 import java.util.Collection;
 
 import fr.kazejiyu.generic.datatable.And;
+import fr.kazejiyu.generic.datatable.Where;
 
+/**
+ * A specialized {@link Where} aimed to deal with numbers.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class WhereNumber extends GlazedWhere <Number> {
 	
 	public WhereNumber(QueryContext context, String header) {
@@ -28,42 +34,104 @@ public class WhereNumber extends GlazedWhere <Number> {
 		super(context, headers);
 	}
 
+	/**
+	 * Adds a filter to keep the rows containing 0.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isZero() {
 		return match(n -> n.doubleValue() == 0);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing a positive number.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isPositive() {
 		return match(n -> n.doubleValue() > 0);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing a negative number.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isNegative() {
 		return match(n -> n.doubleValue() < 0);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing an even number.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isEven() {
 		return match(n -> n.doubleValue() % 2 == 0);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing an odd number.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isOdd() {
 		return match(n -> n.doubleValue() % 2 != 0);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing a number comprised between {@code min} and {@code max}.
+	 * 
+	 * @param min
+	 * 			The lower bound of the range.
+	 * @param max
+	 * 			The upper bound of the range.
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And inRange(double min, double max) {
 		return match(n -> min <= n.doubleValue() && n.doubleValue() <= max);
 	}
 
+	/**
+	 * Adds a filter to keep the rows containing a number lower than {@code b}.
+	 * 
+	 * @param b
+	 * 			Must not be exceeded or equaled.
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And lt(double b) {
 		return match(a -> a.doubleValue() < b);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing a number lower than or equal to {@code b}.
+	 * 
+	 * @param b
+	 * 			Must not be exceeded.
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And le(double b) {
 		return matchSafe(a -> a.doubleValue() <= b);
 	}
 
+	/**
+	 * Adds a filter to keep the rows containing a number greater than {@code b}.
+	 * 
+	 * @param b
+	 * 			The lower bound
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And gt(double b) {
 		return match(a -> a.doubleValue() > b);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing a number greather than or equal to {@code b}.
+	 * 
+	 * @param b
+	 * 			The lower bound
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And ge(double b) {
 		return match(a -> a.doubleValue() >= b);
 	}

@@ -14,8 +14,43 @@
  */
 package fr.kazejiyu.generic.datatable;
 
-public interface From {
+import java.util.Collection;
 
-	public Where <?> where(String header);
+/**
+ * Contribute to a query by selecting one or more column to filter.
+ * <br><br>
+ * See {@link Query} for further details about the Querying API.
+ * <br><br>
+ * The DSL defined by the class is closed to the SQL "FROM" clause. 
+ * 
+ * @author Emmanuel CHEBBI
+ */
+public interface From {
+	
+	/**
+	 * Prepares to apply a filter on all the columns of the table.
+	 * @return a query set up to apply a filter on all the columns of the table.
+	 */
+	public Where<?> where();
+	
+	/**
+	 * Prepares to apply a filter on the specified columns.
+	 * 
+	 * @param headers
+	 * 			The columns on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on all the columns of the table.
+	 */
+	public Where<?> where(String... headers);
+	
+	/**
+	 * Prepares to apply a filter on the specified columns.
+	 * 
+	 * @param headers
+	 * 			The columns on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on all the columns of the table.
+	 */
+	public Where<?> where(Collection <String> headers);
 	
 }

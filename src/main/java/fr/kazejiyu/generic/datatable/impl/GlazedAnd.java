@@ -15,6 +15,8 @@
 package fr.kazejiyu.generic.datatable.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,17 +27,33 @@ import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Table;
 import fr.kazejiyu.generic.datatable.Where;
 
+/**
+ * An implement of {@link And} able to deal with {@link DataTable}s.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class GlazedAnd implements And {
 
+	/** The context of the query */
 	private final QueryContext context;
 
 	public GlazedAnd(QueryContext context) {
 		this.context = context;
 	}
+	
+	@Override
+	public Where<?> and() {
+		return and(context.table.columns().headers());
+	}
 
 	@Override
-	public Where<?> and(String header) {
-		return new GlazedWhere<>(context, header);
+	public Where<?> and(String... headers) {
+		return and(Arrays.asList(headers));
+	}
+	
+	@Override
+	public Where<?> and(Collection <String> headers) {
+		return new GlazedWhere<>(context, headers);
 	}
 
 	@Override
@@ -61,12 +79,14 @@ public class GlazedAnd implements And {
 		return queried;
 	}
 	
+	/** @return the indexes of the selected columns */
 	private List <Integer> indexes(QueryContext context) {
 		return context.selectedHeaders.stream()
 			   .map(context.table.columns()::indexOf)
 			   .collect(Collectors.toList());
 	}
 	
+	/** @return a new empty Table with the selected columns */
 	private Table emptyTable(QueryContext context) {
 		Table empty = new DataTable();
 		

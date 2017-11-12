@@ -17,7 +17,13 @@ package fr.kazejiyu.generic.datatable.impl;
 import java.util.Collection;
 
 import fr.kazejiyu.generic.datatable.And;
+import fr.kazejiyu.generic.datatable.Where;
 
+/**
+ * A specialized {@link Where} aimed to deal with booleans.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class WhereBool extends GlazedWhere <Boolean> {
 	
 	public WhereBool(QueryContext context, String header) {
@@ -28,10 +34,18 @@ public class WhereBool extends GlazedWhere <Boolean> {
 		super(context, headers);
 	}
 
+	/**
+	 * Adds a filter to keep the rows containing {@code true}.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isTrue() {
 		return matchSafe(Boolean::booleanValue);
 	}
-	
+
+	/**
+	 * Adds a filter to keep the rows containing {@code false}.
+	 * @return a {@code And} instance to continue the query.
+	 */
 	public And isFalse() {
 		return matchSafe(bool -> ! bool);
 	}

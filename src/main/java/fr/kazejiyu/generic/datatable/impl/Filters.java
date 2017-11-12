@@ -20,6 +20,13 @@ import java.util.List;
 import ca.odell.glazedlists.matchers.Matcher;
 import fr.kazejiyu.generic.datatable.Row;
 
+/**
+ * A GlazedLists's {@link Matcher} made of several {@link Filters}.
+ * <br><br>
+ * This way, a {@link Row} can be checked against multiple values.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class Filters implements Matcher<Row> {
 
 	private final List<Filter<?>> matchers = new ArrayList<>();
