@@ -17,6 +17,7 @@ package fr.kazejiyu.generic.datatable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import fr.kazejiyu.generic.datatable.impl.DataTable;
 import fr.kazejiyu.generic.datatable.impl.GlazedSelect;
 
 /**
@@ -32,7 +33,7 @@ public interface Query {
 	 * Returns a new query that selects all the columns of a {@link Table}.
 	 * @return a new query that selects all the columns of a {@code Table}.
 	 */
-	public static Select select() {
+	public static Select<DataTable> select() {
 		return new GlazedSelect();
 	}
 	
@@ -44,7 +45,7 @@ public interface Query {
 	 * 
 	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
 	 */
-	public static Select select(String... headers) {
+	public static Select<DataTable> select(String... headers) {
 		return new GlazedSelect(Arrays.asList(headers));
 	}
 	
@@ -56,7 +57,7 @@ public interface Query {
 	 * 
 	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
 	 */
-	public static Select select(Collection <String> headers) {
+	public static Select<DataTable> select(Collection <String> headers) {
 		return new GlazedSelect(headers);
 	}
 	
