@@ -64,18 +64,16 @@ public class GlazedAnd implements And {
 		List <Integer> indexes = indexes(context);
 		Table queried = emptyTable(context);
 		
-		System.out.println("INDEXES: " + indexes);
-		
 		for( Row row : filtered ) {
 			List <Object> elements = new ArrayList<>();
 			
 			for( int index : indexes )
 				elements.add(row.get(index));
 			
-			System.out.println("ELEMENTS: " + elements);
 			queried.rows().create(elements);
 		}
 		
+		filtered.dispose();	// Avoid possible memory leaks
 		return queried;
 	}
 	
