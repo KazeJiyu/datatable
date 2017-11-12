@@ -39,7 +39,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And isZero() {
-		return match(n -> n.doubleValue() == 0);
+		return matchSafe(n -> n.doubleValue() == 0);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And isPositive() {
-		return match(n -> n.doubleValue() > 0);
+		return matchSafe(n -> n.doubleValue() > 0);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And isNegative() {
-		return match(n -> n.doubleValue() < 0);
+		return matchSafe(n -> n.doubleValue() < 0);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And isEven() {
-		return match(n -> n.doubleValue() % 2 == 0);
+		return matchSafe(n -> n.doubleValue() % 2 == 0);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And isOdd() {
-		return match(n -> n.doubleValue() % 2 != 0);
+		return matchSafe(n -> n.doubleValue() % 2 != 0);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And inRange(double min, double max) {
-		return match(n -> min <= n.doubleValue() && n.doubleValue() <= max);
+		return matchSafe(n -> min <= n.doubleValue() && n.doubleValue() <= max);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And lt(double b) {
-		return match(a -> a.doubleValue() < b);
+		return matchSafe(a -> a.doubleValue() < b);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And gt(double b) {
-		return match(a -> a.doubleValue() > b);
+		return matchSafe(a -> a.doubleValue() > b);
 	}
 
 	/**
@@ -133,6 +133,6 @@ public class WhereNumber extends GlazedWhere <Number> {
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public And ge(double b) {
-		return match(a -> a.doubleValue() >= b);
+		return matchSafe(a -> a.doubleValue() >= b);
 	}
 }
