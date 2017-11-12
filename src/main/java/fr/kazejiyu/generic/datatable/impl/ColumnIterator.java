@@ -27,7 +27,7 @@ import fr.kazejiyu.generic.datatable.Rows;
  *
  * @param <T> The type of the elements stored by the column
  */
-public class ColumnIterator <T> implements Iterator <T> {
+class ColumnIterator <T> implements Iterator <T> {
 
 	/** Iterate through the rows of the table */
 	private final Iterator <Row> rows;

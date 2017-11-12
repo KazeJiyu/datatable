@@ -28,7 +28,7 @@ import fr.kazejiyu.generic.datatable.Columns;
 import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Table;
 
-public class SimpleColumns implements Columns {
+class SimpleColumns implements Columns {
 	
 	/** The table that owns the columns */
 	private final Table table;

@@ -2,7 +2,7 @@ package fr.kazejiyu.generic.datatable.impl;
 
 import fr.kazejiyu.generic.datatable.Row;
 
-public interface ModifiableRow extends Row {
+interface ModifiableRow extends Row {
 
 	public default Row add(Object element) {
 		return insert(size(), element);

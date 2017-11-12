@@ -19,7 +19,7 @@ import java.util.Iterator;
 import fr.kazejiyu.generic.datatable.Column;
 import fr.kazejiyu.generic.datatable.Table;
 
-public class SimpleColumn <T> implements Column <T> {
+class SimpleColumn <T> implements Column <T> {
 
 	private final Table table;
 	private final String header;

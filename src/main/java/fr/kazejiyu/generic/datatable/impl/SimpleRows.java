@@ -21,7 +21,7 @@ import ca.odell.glazedlists.BasicEventList;
 import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Rows;
 
-public class SimpleRows implements Rows {
+class SimpleRows implements Rows {
 	
 	private List<Row> elements;
 	

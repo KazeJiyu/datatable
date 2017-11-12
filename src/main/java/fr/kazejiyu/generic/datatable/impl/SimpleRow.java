@@ -27,7 +27,7 @@ import fr.kazejiyu.generic.datatable.Table;
  * 
  * @author Emmanuel CHEBBI
  */
-public class SimpleRow implements ModifiableRow {
+class SimpleRow implements ModifiableRow {
 	
 	/** The table that owns the row */
 	private final Table table;
