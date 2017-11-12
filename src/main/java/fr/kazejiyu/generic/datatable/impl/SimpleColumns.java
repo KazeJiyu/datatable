@@ -15,12 +15,13 @@
 package fr.kazejiyu.generic.datatable.impl;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import fr.kazejiyu.generic.datatable.Column;
 import fr.kazejiyu.generic.datatable.Columns;
@@ -36,12 +37,12 @@ public class SimpleColumns implements Columns {
 	private final List <Column<?>> elements;
 	
 	/** Maps the header in a case-insensitive way to their index */
-	private final Map <String,Integer> headerToIndex;
+	private final BiMap <String,Integer> headerToIndex;
 	
 	SimpleColumns(Table table) {
 		this.table = table;
 		this.elements = new LinkedList<>();
-		this.headerToIndex = new HashMap<>();
+		this.headerToIndex = HashBiMap.create();
 	}
 	
 	@Override
@@ -79,7 +80,7 @@ public class SimpleColumns implements Columns {
 		addColumn(column);
 		
 		for( Row row : table.rows() )
-			row.insert(position, column);
+			((ModifiableRow) row).insert(position, column);
 		
 		return this;
 	}
@@ -87,6 +88,11 @@ public class SimpleColumns implements Columns {
 	@Override
 	public Columns remove(int index) {
 		elements.remove(index);
+		headerToIndex.inverse().remove(index);
+		
+		for( Row row : table.rows() )
+			((ModifiableRow) row).remove(index);
+		
 		return this;
 	}
 
@@ -107,11 +113,10 @@ public class SimpleColumns implements Columns {
 			Iterator <Row> itRow = table.rows().iterator();
 			
 			while( itRow.hasNext() && itElement.hasNext() )
-				itRow.next().add(itElement.next());
+				((ModifiableRow) itRow.next()).add(itElement.next());
 		}
 		
 		addColumn( new SimpleColumn<>(type, table, header) );
 		return this;
 	}
-
 }

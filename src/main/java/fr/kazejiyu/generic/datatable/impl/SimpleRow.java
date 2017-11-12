@@ -27,7 +27,7 @@ import fr.kazejiyu.generic.datatable.Table;
  * 
  * @author Emmanuel CHEBBI
  */
-public class SimpleRow implements Row {
+public class SimpleRow implements ModifiableRow {
 	
 	/** The table that owns the row */
 	private final Table table;
@@ -80,6 +80,12 @@ public class SimpleRow implements Row {
 	@Override
 	public Row insert(int position, Object element) {
 		this.elements.add(position, element);
+		return this;
+	}
+	
+	@Override
+	public Row remove(int position) {
+		this.elements.remove(position);
 		return this;
 	}
 

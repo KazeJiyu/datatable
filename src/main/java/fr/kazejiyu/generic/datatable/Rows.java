@@ -82,4 +82,10 @@ public interface Rows extends Iterable <Row> {
 	 */
 	public Rows remove(int id);
 	
+	/**
+	 * Removes all the rows.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 */
+	public Rows clear();	
 }

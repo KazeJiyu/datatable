@@ -62,4 +62,9 @@ public class SimpleRows implements Rows {
 		return this;
 	}
 
+	@Override
+	public Rows clear() {
+		elements.clear();
+		return this;
+	}
 }
