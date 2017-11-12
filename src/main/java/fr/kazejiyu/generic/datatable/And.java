@@ -56,5 +56,6 @@ public interface And {
 	 */
 	public Where<?> and(Collection <String> headers);
 	
+	/** @return the Table resulting of the query */
 	public Table queryTable();
 }

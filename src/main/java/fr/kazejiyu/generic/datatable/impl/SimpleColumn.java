@@ -19,13 +19,35 @@ import java.util.Iterator;
 import fr.kazejiyu.generic.datatable.Column;
 import fr.kazejiyu.generic.datatable.Table;
 
+/**
+ * A simple implementation of {@link Column}.
+ * 
+ * @author Emmanuel CHEBBI
+ *
+ * @param <T> The type of the elements in the column.
+ */
 class SimpleColumn <T> implements Column <T> {
 
+	/** The table that owns the column. */
 	private final Table table;
+	
+	/** The column's header. */
 	private final String header;
+	
+	/** The type of the elements in the column. */
 	private final Class <T> type;
 	
-	SimpleColumn(Class <T> type, Table table, String header) {
+	/**
+	 * Creates a new column.
+	 * 
+	 * @param type
+	 * 			The type of the elements in the column.
+	 * @param table
+	 * 			The table that owns the column.
+	 * @param header
+	 * 			The header of the column.
+	 */
+	SimpleColumn(final Class <T> type, final Table table, final String header) {
 		this.type = type;
 		this.table = table;
 		this.header = header;
@@ -52,7 +74,7 @@ class SimpleColumn <T> implements Column <T> {
 	}
 
 	@Override
-	public T get(int row) {
+	public T get(final int row) {
 		int column = table.columns().indexOf(header);
 		return table.rows().get(row).get(column);
 	}

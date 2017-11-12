@@ -29,20 +29,38 @@ import fr.kazejiyu.generic.datatable.Table;
  */
 class SimpleRow extends ModifiableRow {
 	
-	/** The table that owns the row */
+	/** The table that owns the row. */
 	private final Table table;
 	
-	/** The id of the row */
+	/** The id of the row. */
 	private final int id;
 	
-	/** The content of the row */
-	private List<Object> elements;
+	/** The content of the row. */
+	private final List<Object> elements;
 	
-	SimpleRow(Table table, int id) {
+	/**
+	 * Creates a new empty row.
+	 * 
+	 * @param table
+	 * 			The table that owns the row.
+	 * @param id
+	 * 			Identify the row.
+	 */
+	SimpleRow(final Table table, final int id) {
 		this(table, id, Collections.emptyList());
 	}
 	
-	SimpleRow(Table table, int id, List <Object> elements) {
+	/**
+	 * Creates a new row with specified content.
+	 * 
+	 * @param table
+	 * 			The table that owns the row.
+	 * @param id
+	 * 			Identify the row.
+	 * @param elements
+	 * 			The content of the row.
+	 */
+	SimpleRow(final Table table, final int id, final List <Object> elements) {
 		this.table = table;
 		this.id = id;
 		this.elements = GlazedLists.eventList(elements);
@@ -65,26 +83,26 @@ class SimpleRow extends ModifiableRow {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T get(int column) {
+	public <T> T get(final int column) {
 		Class <?> runtimeClass = table.columns().get(column).type();
 		return (T) runtimeClass.cast(elements.get(column));
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T get(String header) {
+	public <T> T get(final String header) {
 		int index = table.columns().indexOf(header);
 		return (T) elements.get(index);
 	}
 
 	@Override
-	Row insert(int position, Object element) {
+	Row insert(final int position, final Object element) {
 		this.elements.add(position, element);
 		return this;
 	}
 	
 	@Override
-	Row remove(int position) {
+	Row remove(final int position) {
 		this.elements.remove(position);
 		return this;
 	}

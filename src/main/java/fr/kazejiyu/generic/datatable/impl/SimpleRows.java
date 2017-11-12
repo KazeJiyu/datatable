@@ -23,16 +23,30 @@ import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Rows;
 import fr.kazejiyu.generic.datatable.Table;
 
+/**
+ * An implementation of {@link Rows}.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 class SimpleRows implements Rows {
 	
-	private Table table;
-	private EventList <Row> elements;
+	/** The table that owns the rows. */
+	private final Table table;
 	
-	SimpleRows(Table table) {
+	/** The content of the rows. */
+	private final EventList <Row> elements = new BasicEventList<>();
+	
+	/**
+	 * Creates the rows of {@code table}.
+	 * 
+	 * @param table
+	 * 			The table that owns the rows.
+	 */
+	SimpleRows(final Table table) {
 		this.table = table;
-		elements = new BasicEventList<>();
 	}
 	
+	/** @return the {@code EventList} used internally */
 	EventList <Row> internal() {
 		return elements;
 	}
@@ -57,24 +71,24 @@ class SimpleRows implements Rows {
 	}
 	
 	@Override
-	public Rows create(List <Object> elements) {
+	public Rows create(final List <Object> elements) {
 		return add(new SimpleRow(table, nextId(), elements));
 	}
 
 	@Override
-	public Rows add(Row row) {
+	public Rows add(final Row row) {
 		elements.add(row);
 		return this;
 	}
 
 	@Override
-	public Rows insert(int position, Row row) {
+	public Rows insert(final int position, final Row row) {
 		elements.add(position, row);
 		return this;
 	}
 
 	@Override
-	public Rows remove(int index) {
+	public Rows remove(final int index) {
 		elements.remove(index);
 		return this;
 	}

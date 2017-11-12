@@ -40,15 +40,25 @@ public interface Rows extends Iterable <Row> {
 	 * @return the row located at {@code index}.
 	 */
 	public Row get(int index);
-	
+
+	/** @return the first row of the table */
 	public default Row first() {
 		return get(0);
 	}
 	
+	/** @return the last row of the table */
 	public default Row last() {
 		return get(size() - 1);
 	}
 	
+	/**
+	 * Creates then adds a new row.
+	 * 
+	 * @param elements
+	 * 			The elements of the new row.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 */
 	public Rows create(List <Object> elements);
 	
 	/**
@@ -63,6 +73,7 @@ public interface Rows extends Iterable <Row> {
 	
 	/**
 	 * Inserts a new row at the specified location.
+	 * 
 	 * @param position
 	 * 			The location of the new row.
 	 * @param row
@@ -92,7 +103,7 @@ public interface Rows extends Iterable <Row> {
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 */
-	public Rows remove(int id);
+	public Rows remove(int index);
 	
 	/**
 	 * Removes all the rows.

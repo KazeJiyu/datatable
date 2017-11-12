@@ -28,16 +28,22 @@ import fr.kazejiyu.generic.datatable.Table;
 import fr.kazejiyu.generic.datatable.Where;
 
 /**
- * An implement of {@link And} able to deal with {@link DataTable}s.
+ * An implementation of {@link And} able to deal with {@link DataTable}s.
  * 
  * @author Emmanuel CHEBBI
  */
-public class GlazedAnd implements And {
+class GlazedAnd implements And {
 
-	/** The context of the query */
+	/** The context of the query. */
 	private final QueryContext context;
 
-	public GlazedAnd(QueryContext context) {
+	/**
+	 * Creates a new And.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 */
+	public GlazedAnd(final QueryContext context) {
 		this.context = context;
 	}
 	

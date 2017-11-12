@@ -28,7 +28,7 @@ import fr.kazejiyu.generic.datatable.Where;
  *
  * @param <T> The type of the instances to filter.
  */
-public class GlazedWhere <T> implements Where <T> {
+class GlazedWhere <T> implements Where <T> {
 
 	/** The context of the query */
 	private final QueryContext context;
@@ -36,24 +36,40 @@ public class GlazedWhere <T> implements Where <T> {
 	/** The headers of the columns to filter */
 	private final Collection <String> headers;
 	
-	public GlazedWhere(QueryContext context, String header) {
+	/**
+	 * Prepare to filter the column called {@code header}.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param header
+	 * 			The name of the column to filter.
+	 */
+	public GlazedWhere(final QueryContext context, final String header) {
 		this(context, Arrays.asList(header));
 	}
 
-	public GlazedWhere(QueryContext context, Collection <String> headers) {
+	/**
+	 * Prepare to filter the columns which name is in {@code headers}.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param headers
+	 * 			The name of the column to filter.
+	 */
+	public GlazedWhere(final QueryContext context, final Collection <String> headers) {
 		this.context = context;
 		this.headers = headers;
 	}
 
 	@Override
-	public And match(Predicate <T> predicate) {
+	public And match(final Predicate <T> predicate) {
 		context.filters.add(new Filter<T>(headers, predicate));
 		return new GlazedAnd(context);
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public <N> Where<N> as(Class <N> clazz) {
+	public <N> Where<N> as(final Class <N> clazz) {
 		if( clazz == String.class )
 			return (Where <N>) asStr();
 		

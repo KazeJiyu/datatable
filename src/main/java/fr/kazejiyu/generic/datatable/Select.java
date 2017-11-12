@@ -14,11 +14,23 @@
  */
 package fr.kazejiyu.generic.datatable;
 
-import fr.kazejiyu.generic.datatable.impl.DataTable;
+/**
+ * First query's statement ; makes able to choose the table to filter.
+ * 
+ * @author Emmanuel CHEBBI
+ *
+ * @param <T> The type of the {@link Table} to query.
+ */
+public interface Select <T extends Table> {
 
-public interface Select {
-
-	public From from(Table table);
-	public From from(DataTable table);
+	/**
+	 * Choose the table to filter.
+	 *  
+	 * @param table
+	 * 			The table to filter.
+	 * 
+	 * @return the next query's statement
+	 */
+	public From from(T table);
 	
 }

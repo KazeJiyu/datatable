@@ -26,10 +26,26 @@ import fr.kazejiyu.generic.datatable.Where;
  */
 public class WhereStr extends GlazedWhere <String> {
 	
+	/**
+	 * Creates a new specialized Where &amp;String&amp;.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param header
+	 * 			The name of the column to filter.
+	 */
 	public WhereStr(QueryContext context, String header) {
 		super(context, header);
 	}
 	
+	/**
+	 * Creates a new specialized Where &amp;String&amp;.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param header
+	 * 			The name of the column to filter.
+	 */
 	public WhereStr(QueryContext context, Collection<String> headers) {
 		super(context, headers);
 	}

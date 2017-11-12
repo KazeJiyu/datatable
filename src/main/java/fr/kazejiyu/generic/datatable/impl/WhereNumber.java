@@ -26,11 +26,27 @@ import fr.kazejiyu.generic.datatable.Where;
  */
 public class WhereNumber extends GlazedWhere <Number> {
 	
-	public WhereNumber(QueryContext context, String header) {
+	/**
+	 * Creates a new specialized Where &amp;Number&amp;.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param header
+	 * 			The name of the column to filter.
+	 */
+	public WhereNumber(final QueryContext context, final String header) {
 		super(context, header);
 	}
 	
-	public WhereNumber(QueryContext context, Collection<String> headers) {
+	/**
+	 * Creates a new specialized Where &amp;Number&amp;.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param header
+	 * 			The name of the column to filter.
+	 */
+	public WhereNumber(final QueryContext context, final Collection<String> headers) {
 		super(context, headers);
 	}
 

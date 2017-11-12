@@ -132,10 +132,12 @@ public interface Columns extends Iterable <Column<?>> {
 	/**
 	 * Creates a new {@code Column} from a given iterable.
 	 * 
+	 * @param type
+	 * 			The type of the elements stored in the column.
 	 * @param header
-	 * 			The column's header
+	 * 			The column's header.
 	 * @param elements
-	 * 			The elements of the column
+	 * 			The elements of the column.
 	 * 
 	 * @return the new column containing {@code elements}.
 	 * 
@@ -149,10 +151,12 @@ public interface Columns extends Iterable <Column<?>> {
 	/**
 	 * Creates a new {@code Column} from a given iterable.
 	 * 
+	 * @param type
+	 * 			The type of the elements in the new column.
 	 * @param header
-	 * 			The column's header
+	 * 			The column's header.
 	 * @param elements
-	 * 			The elements of the column
+	 * 			The elements of the column.
 	 * 
 	 * @return the new column containing {@code elements}.
 	 * 

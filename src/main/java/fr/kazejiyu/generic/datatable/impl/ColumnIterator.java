@@ -16,7 +16,6 @@ package fr.kazejiyu.generic.datatable.impl;
 
 import java.util.Iterator;
 
-import fr.kazejiyu.generic.datatable.Column;
 import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Rows;
 
@@ -29,21 +28,21 @@ import fr.kazejiyu.generic.datatable.Rows;
  */
 class ColumnIterator <T> implements Iterator <T> {
 
-	/** Iterate through the rows of the table */
+	/** Iterate through the rows of the table. */
 	private final Iterator <Row> rows;
 	
-	/** The index of the column to iterate */
+	/** The index of the column to iterate. */
 	private final int column;
 	
 	/**
-	 * Creates a new iterator on the column identified by {@code header}
+	 * Creates a new iterator on the column identified by {@code header}.
 	 * 
-	 * @param table
-	 * 			The table that contains the elements to browse.
-	 * @param header
-	 * 			The header that corresponds to the column to browse.
+	 * @param rows
+	 * 			The whole rows of the table.
+	 * @param column
+	 * 			The column to iterate through.
 	 */
-	ColumnIterator(Rows rows, int column) {
+	ColumnIterator(final Rows rows, final int column) {
 		this.rows = rows.iterator();
 		this.column = column;
 	}

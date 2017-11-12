@@ -29,15 +29,24 @@ import fr.kazejiyu.generic.datatable.Row;
  */
 public class Filters implements Matcher<Row> {
 
+	/** The matchers to check against each table's row. */
 	private final List<Filter<?>> matchers = new ArrayList<>();
 	
-	public Filters add(Filter <?> matcher) {
+	/**
+	 * Adds a new filter.
+	 * 
+	 * @param matcher
+	 * 			The filter to add.
+	 * 
+	 * @return the current instance to enable method chaining.
+	 */
+	public Filters add(final Filter <?> matcher) {
 		matchers.add(matcher);
 		return this;
 	}
 
 	@Override
-	public boolean matches(Row row) {
+	public boolean matches(final Row row) {
 		for( Filter <?> filter : matchers ) 
 			for( String header : filter.headers )
 				if( ! filter.predicate.test(row.get(header)) )

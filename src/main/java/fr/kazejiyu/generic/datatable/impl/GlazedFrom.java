@@ -25,11 +25,18 @@ import fr.kazejiyu.generic.datatable.Where;
  * 
  * @author Emmanuel CHEBBI
  */
-public class GlazedFrom implements From {
+class GlazedFrom implements From {
 
-	protected final QueryContext context;
+	/** The context of the query. */
+	private final QueryContext context;
 
-	public GlazedFrom(QueryContext context) {
+	/**
+	 * Creates a new From.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 */
+	public GlazedFrom(final QueryContext context) {
 		this.context = context;
 	}
 	
@@ -39,12 +46,12 @@ public class GlazedFrom implements From {
 	}
 
 	@Override
-	public Where<?> where(String... headers) {
+	public Where<?> where(final String... headers) {
 		return where(Arrays.asList(headers));
 	}
 	
 	@Override
-	public Where<?> where(Collection <String> headers) {
+	public Where<?> where(final Collection <String> headers) {
 		return new GlazedWhere<>(context, headers);
 	}
 }

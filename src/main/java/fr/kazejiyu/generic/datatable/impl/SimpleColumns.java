@@ -28,18 +28,29 @@ import fr.kazejiyu.generic.datatable.Columns;
 import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Table;
 
+/**
+ * An implementation of {@link Columns}.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 class SimpleColumns implements Columns {
 	
-	/** The table that owns the columns */
+	/** The table that owns the columns. */
 	private final Table table;
 	
-	/** The columns that compose the table */
+	/** The columns that compose the table. */
 	private final List <Column<?>> elements;
 	
-	/** Maps the header in a case-insensitive way to their index */
+	/** Maps the header in a case-insensitive way to their index. */
 	private final BiMap <String,Integer> headerToIndex;
 	
-	SimpleColumns(Table table) {
+	/**
+	 * Creates the columns of {@code table}.
+	 * 
+	 * @param table
+	 * 			The table that owns the columns.
+	 */
+	SimpleColumns(final Table table) {
 		this.table = table;
 		this.elements = new LinkedList<>();
 		this.headerToIndex = HashBiMap.create();
@@ -66,21 +77,21 @@ class SimpleColumns implements Columns {
 	}
 
 	@Override
-	public Column<?> get(int index) {
+	public Column<?> get(final int index) {
 		return elements.get(index);
 	}
 	
-	private String simplify(String header) {
+	private String simplify(final String header) {
 		return header.toLowerCase();
 	}
 	
-	private void addColumn(Column <?> column) {
+	private void addColumn(final Column <?> column) {
 		headerToIndex.put(simplify(column.header()), size());
 		elements.add(column);
 	}
 
 	@Override
-	public Columns insert(int position, Column<?> column) {
+	public Columns insert(final int position, final Column<?> column) {
 		addColumn(column);
 		
 		for( Row row : table.rows() )
@@ -90,7 +101,7 @@ class SimpleColumns implements Columns {
 	}
 
 	@Override
-	public Columns remove(int index) {
+	public Columns remove(final int index) {
 		elements.remove(index);
 		headerToIndex.inverse().remove(index);
 		
@@ -101,12 +112,12 @@ class SimpleColumns implements Columns {
 	}
 
 	@Override
-	public int indexOf(String header) {
+	public int indexOf(final String header) {
 		return headerToIndex.get(simplify(header));
 	}
 
 	@Override
-	public <N> Columns create(Class<N> type, String header, Iterable<N> elements) {
+	public <N> Columns create(final Class<N> type, final String header, final Iterable<N> elements) {
 		Iterator <N> itElement = elements.iterator();
 
 		if( table.rows().size() == 0 ) {

@@ -20,8 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import fr.kazejiyu.generic.datatable.Table;
-
 /**
  * A filter that can be applied on multipled columns.
  * <br><br>
@@ -33,17 +31,33 @@ import fr.kazejiyu.generic.datatable.Table;
  */
 public class Filter <T> {
 	
-	/** The headers of the columns on which apply this filter */
+	/** The headers of the columns on which apply this filter. */
 	public final Set <String> headers;
 	
-	/** Indicates whether a value has to be kept */
+	/** Indicates whether a value has to be kept. */
 	public final Predicate <T> predicate;
 	
-	Filter(String header, Predicate <T> predicate) {
+	/**
+	 * Creates a new filter on a specific column.
+	 * 
+	 * @param header
+	 * 			The header of the column to filter.
+	 * @param predicate
+	 * 			Returns {@code true} if the row has to be kept.
+	 */
+	Filter(final String header, final Predicate <T> predicate) {
 		this(Arrays.asList(header), predicate);
 	}
 	
-	Filter(Collection <String> headers, Predicate <T> predicate) {
+	/**
+	 * Creates a new filter on a specific columns.
+	 * 
+	 * @param headers
+	 * 			The header² of the columns to filter.
+	 * @param predicate
+	 * 			Returns {@code true} if the row has to be kept.
+	 */
+	Filter(final Collection <String> headers, final Predicate <T> predicate) {
 		this.headers = new HashSet<>(headers);
 		this.predicate = predicate;
 	}

@@ -21,33 +21,46 @@ import java.util.LinkedHashSet;
 
 import fr.kazejiyu.generic.datatable.From;
 import fr.kazejiyu.generic.datatable.Select;
-import fr.kazejiyu.generic.datatable.Table;
 
-public class GlazedSelect implements Select {
+/**
+ * An implementation of {@link Select} able to deal with {@link DataTable}s.
+ * 
+ * @author Emmanuel CHEBBI
+ */
+public class GlazedSelect implements Select <DataTable> {
 
+	/** The name of the columns to return at the end of the query. */
 	private final LinkedHashSet <String> selectedHeaders;
 	
+	/**
+	 * Initialize the query by selecting all the columns of the table.
+	 */
 	public GlazedSelect() {
 		this(Collections.emptyList());
 	}
 	
-	public GlazedSelect(String header) {
+	/**
+	 * Initialize the query by selecting a unique column from the table.
+	 * 
+	 * @param header
+	 * 			The name of the column to return at the end of the query.
+	 */
+	public GlazedSelect(final String header) {
 		this(Arrays.asList(header));
 	}
 	
-	public GlazedSelect(Collection <String> headers) {
+	/**
+	 * Initialize the query by selecting a unique column from the table.
+	 * 
+	 * @param headers
+	 * 			The name of the columns to return at the end of the query.
+	 */
+	public GlazedSelect(final Collection <String> headers) {
 		this.selectedHeaders = new LinkedHashSet<>(headers);
 	}
 
 	@Override
-	public From from(Table table) {
-//		return new GlazedFrom(
-//				new QueryContext(table, selectedHeaders));
-		return null;
-	}
-
-	@Override
-	public From from(DataTable table) {
+	public From from(final DataTable table) {
 		if( selectedHeaders.isEmpty() )
 			return new GlazedFrom(new QueryContext(table, table.columns().headers()));
 		

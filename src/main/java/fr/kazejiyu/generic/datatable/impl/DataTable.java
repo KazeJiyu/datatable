@@ -22,23 +22,27 @@ import fr.kazejiyu.generic.datatable.Rows;
 import fr.kazejiyu.generic.datatable.Table;
 
 /**
- * A simple implement of {@link Table}
+ * A simple implementation of {@link Table} that rely on {@code GlazedLists}.
  * 
  * @author Emmanuel CHEBBI
  */
 public class DataTable implements Table, AutoCloseable {
 	
-	/** The rows that compose the table */
-	private Rows rows;
+	/** The rows that compose the table. */
+	private final Rows rows;
 	
-	/** The columns that compose the table */
-	private Columns columns;
+	/** The columns that compose the table. */
+	private final Columns columns;
 	
+	/**
+	 * Creates a new table.
+	 */
 	public DataTable() {
 		this.rows = new SimpleRows(this);
 		this.columns = new SimpleColumns(this);
 	}
 	
+	/** @return the {@code EventList} used internally */
 	EventList <Row> internal() {
 		return ((SimpleRows) rows).internal();
 	}
@@ -53,6 +57,9 @@ public class DataTable implements Table, AutoCloseable {
 		return columns;
 	}
 	
+	/**
+	 * 
+	 */
 	public void dispose() {
 		if( internal() instanceof TransformedList<?,?> )
 			((TransformedList<?,?>) internal()).dispose();

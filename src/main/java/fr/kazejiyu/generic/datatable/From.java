@@ -35,6 +35,16 @@ public interface From {
 	
 	/**
 	 * Prepares to apply a filter on the specified columns.
+	 * <br><br>
+	 * For instance, the code :
+	 * <pre>Query.select()
+	 *     .from(table)
+	 *     .where("A", "B").asNumber().isPositive();</pre>
+	 * It is semantically equal to:
+	 * <pre>Query.select()
+	 *     .from(table)
+	 *     .where("A").asNumber().isPositive();
+	 *     .where("B").asNumber().isPositive();</pre>
 	 * 
 	 * @param headers
 	 * 			The columns on which apply a filter.
@@ -45,6 +55,16 @@ public interface From {
 	
 	/**
 	 * Prepares to apply a filter on the specified columns.
+	 * <br><br>
+	 * For instance, the code :
+	 * <pre>Query.select()
+	 *     .from(table)
+	 *     .where("A", "B").asNumber().isPositive();</pre>
+	 * It is semantically equal to:
+	 * <pre>Query.select()
+	 *     .from(table)
+	 *     .where("A").asNumber().isPositive();
+	 *     .where("B").asNumber().isPositive();</pre>
 	 * 
 	 * @param headers
 	 * 			The columns on which apply a filter.

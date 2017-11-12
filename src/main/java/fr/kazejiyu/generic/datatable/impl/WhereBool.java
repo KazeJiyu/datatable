@@ -17,7 +17,6 @@ package fr.kazejiyu.generic.datatable.impl;
 import java.util.Collection;
 
 import fr.kazejiyu.generic.datatable.And;
-import fr.kazejiyu.generic.datatable.Where;
 
 /**
  * A specialized {@link Where} aimed to deal with booleans.
@@ -26,11 +25,27 @@ import fr.kazejiyu.generic.datatable.Where;
  */
 public class WhereBool extends GlazedWhere <Boolean> {
 	
-	public WhereBool(QueryContext context, String header) {
+	/**
+	 * Creates a new specialized Where &amp;Boolean&amp;.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param header
+	 * 			The name of the column to filter.
+	 */
+	public WhereBool(final QueryContext context, final String header) {
 		super(context, header);
 	}
 	
-	public WhereBool(QueryContext context, Collection<String> headers) {
+	/**
+	 * Creates a new specialized Where &amp;Boolean&amp;.
+	 * 
+	 * @param context
+	 * 			The context of the query.
+	 * @param headers
+	 * 			The name of the columns to filter.
+	 */
+	public WhereBool(final QueryContext context, final Collection<String> headers) {
 		super(context, headers);
 	}
 

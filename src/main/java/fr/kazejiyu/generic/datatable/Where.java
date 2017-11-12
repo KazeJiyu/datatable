@@ -119,6 +119,9 @@ public interface Where <T> {
 	/**
 	 * Adds a filter to keep the rows containing values that are instances of {@code clazz}.
 	 * 
+	 * @param clazz
+	 * 			The subclass of the values to keep.
+	 * 
 	 * @return a {@code And} instance to continue the query.
 	 */
 	public default And isInstanceOf(Class <?> clazz) {
@@ -210,6 +213,8 @@ public interface Where <T> {
 	 * 			The type of the elements contained by the column to filter.
 	 * 
 	 * @return a specialized instance of {@code Where}.
+	 * 
+	 * @param <N> The type of the elements to filter.
 	 */
 	public <N> Where <N> as(Class <N> clazz);
 
