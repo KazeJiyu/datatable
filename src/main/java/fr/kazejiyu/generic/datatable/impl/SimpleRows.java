@@ -18,15 +18,23 @@ import java.util.Iterator;
 import java.util.List;
 
 import ca.odell.glazedlists.BasicEventList;
+import ca.odell.glazedlists.EventList;
 import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Rows;
+import fr.kazejiyu.generic.datatable.Table;
 
 class SimpleRows implements Rows {
 	
-	private List<Row> elements;
+	private Table table;
+	private EventList <Row> elements;
 	
-	SimpleRows() {
+	SimpleRows(Table table) {
+		this.table = table;
 		elements = new BasicEventList<>();
+	}
+	
+	EventList <Row> internal() {
+		return elements;
 	}
 
 	@Override
@@ -42,6 +50,15 @@ class SimpleRows implements Rows {
 	@Override
 	public Row get(int index) {
 		return elements.get(index);
+	}
+	
+	private int nextId() {
+		return isEmpty() ? 0 : last().id() + 1;
+	}
+	
+	@Override
+	public Rows create(List <Object> elements) {
+		return add(new SimpleRow(table, nextId(), elements));
 	}
 
 	@Override

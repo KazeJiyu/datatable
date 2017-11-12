@@ -14,7 +14,10 @@
  */
 package fr.kazejiyu.generic.datatable.impl;
 
+import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.TransformedList;
 import fr.kazejiyu.generic.datatable.Columns;
+import fr.kazejiyu.generic.datatable.Row;
 import fr.kazejiyu.generic.datatable.Rows;
 import fr.kazejiyu.generic.datatable.Table;
 
@@ -23,7 +26,7 @@ import fr.kazejiyu.generic.datatable.Table;
  * 
  * @author Emmanuel CHEBBI
  */
-public class DataTable implements Table {
+public class DataTable implements Table, AutoCloseable {
 	
 	/** The rows that compose the table */
 	private Rows rows;
@@ -32,8 +35,12 @@ public class DataTable implements Table {
 	private Columns columns;
 	
 	public DataTable() {
-		this.rows = new SimpleRows();
+		this.rows = new SimpleRows(this);
 		this.columns = new SimpleColumns(this);
+	}
+	
+	EventList <Row> internal() {
+		return ((SimpleRows) rows).internal();
 	}
 
 	@Override
@@ -44,6 +51,16 @@ public class DataTable implements Table {
 	@Override
 	public Columns columns() {
 		return columns;
+	}
+	
+	public void dispose() {
+		if( internal() instanceof TransformedList<?,?> )
+			((TransformedList<?,?>) internal()).dispose();
+	}
+
+	@Override
+	public void close() throws Exception {
+		this.dispose();
 	}
 
 }

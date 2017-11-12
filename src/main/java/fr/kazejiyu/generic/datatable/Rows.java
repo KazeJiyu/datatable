@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable;
 
+import java.util.List;
+
 /**
  * A collection of {@link Row} that belongs to a {@link Table}.
  * 
@@ -38,6 +40,16 @@ public interface Rows extends Iterable <Row> {
 	 * @return the row located at {@code index}.
 	 */
 	public Row get(int index);
+	
+	public default Row first() {
+		return get(0);
+	}
+	
+	public default Row last() {
+		return get(size() - 1);
+	}
+	
+	public Rows create(List <Object> elements);
 	
 	/**
 	 * Adds a new row to the table.

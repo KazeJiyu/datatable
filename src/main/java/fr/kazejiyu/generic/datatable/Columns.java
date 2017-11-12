@@ -15,6 +15,7 @@
 package fr.kazejiyu.generic.datatable;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 
 /**
@@ -123,7 +124,11 @@ public interface Columns extends Iterable <Column<?>> {
 	 * @return the index of the column corresponding to the given header.
 	 */
 	public int indexOf(String header);
-
+	
+	public default Columns create(Class<?> type, String header) {
+		return create(type, header, Collections.emptyList());
+	}
+	
 	/**
 	 * Creates a new {@code Column} from a given iterable.
 	 * 

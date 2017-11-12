@@ -70,8 +70,12 @@ class SimpleColumns implements Columns {
 		return elements.get(index);
 	}
 	
+	private String simplify(String header) {
+		return header.toLowerCase();
+	}
+	
 	private void addColumn(Column <?> column) {
-		headerToIndex.put(column.header().toLowerCase(), size());
+		headerToIndex.put(simplify(column.header()), size());
 		elements.add(column);
 	}
 
@@ -98,7 +102,7 @@ class SimpleColumns implements Columns {
 
 	@Override
 	public int indexOf(String header) {
-		return headerToIndex.get(header);
+		return headerToIndex.get(simplify(header));
 	}
 
 	@Override
