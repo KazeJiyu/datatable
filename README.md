@@ -66,10 +66,10 @@ Table adults = Query
   .queryTable();
   
 // adults now contains :
-// +----------+-----+
-// |   Name   | Age |
-// +----------+-----|
-// | Baptiste | 32  |
-// |   Marie  | 42  |
-// +----------+-----+
+// +----------+
+// |   Name   |
+// +----------+
+// | Baptiste |
+// |   Marie  |
+// +----------+
 ```
