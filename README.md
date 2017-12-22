@@ -1,3 +1,8 @@
+[![Sandbox](https://img.shields.io/badge/state-sandbox-yellow.svg)](https://img.shields.io/badge/state-sandbox-yellow.svg)
+
+# Sandbow
+As of now, this project is much more a sandbox to experiment implementation of datatables in Java than a real usable API.
+
 # Motivation
 Create a Java class representing a table that can be filtered easily.
 
