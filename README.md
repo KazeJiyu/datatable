@@ -1,6 +1,6 @@
 [![Sandbox](https://img.shields.io/badge/state-sandbox-yellow.svg)](https://img.shields.io/badge/state-sandbox-yellow.svg)
 
-# Sandbow
+# Sandbox
 As of now, this project is much more a sandbox to experiment implementation of datatables in Java than a real usable API.
 
 # Motivation
