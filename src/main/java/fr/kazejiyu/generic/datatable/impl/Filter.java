@@ -14,14 +14,19 @@
  */
 package fr.kazejiyu.generic.datatable.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import ca.odell.glazedlists.matchers.Matcher;
+import fr.kazejiyu.generic.datatable.Table;
+
 /**
- * A filter that can be applied on multipled columns.
+ * A filter that can be applied on multiple columns.
  * <br><br>
  * Helps to select the rows to keep or remove when querying a {@link Table}.
  * 
@@ -29,13 +34,13 @@ import java.util.function.Predicate;
  *
  * @param <T> The type of the instances to filter
  */
-public class Filter <T> {
+public class Filter <T> implements Matcher<T> {
 	
 	/** The headers of the columns on which apply this filter. */
-	public final Set <String> headers;
+	private final Set <String> headers;
 	
 	/** Indicates whether a value has to be kept. */
-	public final Predicate <T> predicate;
+	private final Predicate <T> predicate;
 	
 	/**
 	 * Creates a new filter on a specific column.
@@ -44,6 +49,8 @@ public class Filter <T> {
 	 * 			The header of the column to filter.
 	 * @param predicate
 	 * 			Returns {@code true} if the row has to be kept.
+	 * 
+	 * @throws NullPointerException if {@code header} or {@code predicate} is {@code null}.
 	 */
 	Filter(final String header, final Predicate <T> predicate) {
 		this(Arrays.asList(header), predicate);
@@ -53,13 +60,27 @@ public class Filter <T> {
 	 * Creates a new filter on a specific columns.
 	 * 
 	 * @param headers
-	 * 			The header² of the columns to filter.
+	 * 			The header of the columns to filter. Must not be {@code null}.
 	 * @param predicate
-	 * 			Returns {@code true} if the row has to be kept.
+	 * 			Returns {@code true} if the row has to be kept. Must not be {@code null}.
+	 * 
+	 * @throws NullPointerException if {@code header} or {@code predicate} is {@code null}.
 	 */
 	Filter(final Collection <String> headers, final Predicate <T> predicate) {
+		requireNonNull(headers, "Filter's headers must not be null");
+		requireNonNull(predicate, "Filter's predicate must not be null");
+		
 		this.headers = new HashSet<>(headers);
 		this.predicate = predicate;
 	}
+	
+	/** @return the header of the columns on which apply this filter */
+	public Set<String> headers() {
+		return headers;
+	}
 
+	@Override
+	public boolean matches(T element) {
+		return predicate.test(element);
+	}
 }

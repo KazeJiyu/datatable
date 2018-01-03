@@ -22,7 +22,7 @@ import fr.kazejiyu.generic.datatable.Rows;
 import fr.kazejiyu.generic.datatable.Table;
 
 /**
- * A simple implementation of {@link Table} that rely on {@code GlazedLists}.
+ * A simple implementation of {@link Table} that relies on {@code GlazedLists}.
  * 
  * @author Emmanuel CHEBBI
  */

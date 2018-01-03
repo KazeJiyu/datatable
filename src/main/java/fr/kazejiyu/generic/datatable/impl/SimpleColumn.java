@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Iterator;
 
 import fr.kazejiyu.generic.datatable.Column;
@@ -41,16 +43,18 @@ class SimpleColumn <T> implements Column <T> {
 	 * Creates a new column.
 	 * 
 	 * @param type
-	 * 			The type of the elements in the column.
+	 * 			The type of the elements in the column. Must not be {@code null}.
 	 * @param table
-	 * 			The table that owns the column.
+	 * 			The table that owns the column. Must not be {@code null}.
 	 * @param header
-	 * 			The header of the column.
+	 * 			The header of the column. Must not be {@code null}.
+	 * 
+	 * @throws NullPointerException if at least one of the arguments is {@code null}.
 	 */
 	SimpleColumn(final Class <T> type, final Table table, final String header) {
-		this.type = type;
-		this.table = table;
-		this.header = header;
+		this.type = requireNonNull(type, "The type of the column must not be null");
+		this.table = requireNonNull(table, "The table that owns the column must not be null");
+		this.header = requireNonNull(header, "The header of the column must not be null");
 	}
 	
 	@Override

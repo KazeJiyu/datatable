@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,10 +42,12 @@ class SimpleRows implements Rows {
 	 * Creates the rows of {@code table}.
 	 * 
 	 * @param table
-	 * 			The table that owns the rows.
+	 * 			The table that owns the rows. Must not be {@code null}.
+	 * 
+	 * @throws NullPointerException if {@code table} is {@code null}.
 	 */
 	SimpleRows(final Table table) {
-		this.table = table;
+		this.table = requireNonNull(table, "The table that owns the columns must not be null");
 	}
 	
 	/** @return the {@code EventList} used internally */
@@ -72,18 +76,19 @@ class SimpleRows implements Rows {
 	
 	@Override
 	public Rows create(final List <Object> elements) {
+		requireNonNull(elements, "The content of the new row must not be null");
 		return add(new SimpleRow(table, nextId(), elements));
 	}
 
 	@Override
 	public Rows add(final Row row) {
-		elements.add(row);
+		elements.add(requireNonNull(row, "The row to add must not be null"));
 		return this;
 	}
 
 	@Override
 	public Rows insert(final int position, final Row row) {
-		elements.add(position, row);
+		elements.add(position, requireNonNull(row, "The row to insert must not be null"));
 		return this;
 	}
 

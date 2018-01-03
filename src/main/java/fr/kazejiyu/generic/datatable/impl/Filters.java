@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +23,8 @@ import ca.odell.glazedlists.matchers.Matcher;
 import fr.kazejiyu.generic.datatable.Row;
 
 /**
- * A GlazedLists's {@link Matcher} made of several {@link Filters}.
- * <br><br>
+ * An aggregation of {@link Filter}s used to match a {@link Row}. <br>
+ * <br>
  * This way, a {@link Row} can be checked against multiple values.
  * 
  * @author Emmanuel CHEBBI
@@ -36,20 +38,22 @@ public class Filters implements Matcher<Row> {
 	 * Adds a new filter.
 	 * 
 	 * @param matcher
-	 * 			The filter to add.
+	 * 			The filter to add. Must not be {@code null}
 	 * 
 	 * @return the current instance to enable method chaining.
+	 * 
+	 * @throws NullPointerException if {@code matcher} is null.
 	 */
 	public Filters add(final Filter <?> matcher) {
-		matchers.add(matcher);
+		matchers.add(requireNonNull(matcher));
 		return this;
 	}
 
 	@Override
 	public boolean matches(final Row row) {
 		for( Filter <?> filter : matchers ) 
-			for( String header : filter.headers )
-				if( ! filter.predicate.test(row.get(header)) )
+			for( String header : filter.headers() )
+				if( ! filter.matches(row.get(header)) )
 					return false;
 		
 		return true;

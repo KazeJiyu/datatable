@@ -55,9 +55,13 @@ public interface Rows extends Iterable <Row> {
 	 * Creates then adds a new row.
 	 * 
 	 * @param elements
-	 * 			The elements of the new row.
+	 * 			The elements of the new row. Must not be {@code null}.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws NullPointerException if {@code elements} is {@code null}.
+	 * 
+	 * @see #add(Row)
 	 */
 	public Rows create(List <Object> elements);
 	
@@ -68,6 +72,8 @@ public interface Rows extends Iterable <Row> {
 	 * 			The new row.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @see #create(List)
 	 */
 	public Rows add(Row row);
 	
@@ -77,9 +83,11 @@ public interface Rows extends Iterable <Row> {
 	 * @param position
 	 * 			The location of the new row.
 	 * @param row
-	 * 			The new row.
+	 * 			The new row. Must not be {@code null}.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws NullPointerException if {@code row} is {@code null}.
 	 */
 	public Rows insert(int position, Row row);
 	
@@ -87,9 +95,11 @@ public interface Rows extends Iterable <Row> {
 	 * Removes a row from the table.
 	 * 
 	 * @param row
-	 * 			The row to remove.
+	 * 			The row to remove. Must not be {@code null}.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws NullPointerException if {@code row} is {@code null}.
 	 */
 	public default Rows remove(Row row) {
 		return remove(row.id());

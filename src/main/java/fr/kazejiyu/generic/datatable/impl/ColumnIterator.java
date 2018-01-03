@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Iterator;
 
 import fr.kazejiyu.generic.datatable.Row;
@@ -38,13 +40,15 @@ class ColumnIterator <T> implements Iterator <T> {
 	 * Creates a new iterator on the column identified by {@code header}.
 	 * 
 	 * @param rows
-	 * 			The whole rows of the table.
+	 * 			The whole rows of the table. Must not be {@code null}.
 	 * @param column
-	 * 			The column to iterate through.
+	 * 			The column to iterate through. Must not be {@code null}.
+	 * 
+	 * @throws NullPointerException if {@code rows} or {@code column} is {@code null}.
 	 */
 	ColumnIterator(final Rows rows, final int column) {
-		this.rows = rows.iterator();
-		this.column = column;
+		this.rows = requireNonNull(rows, "The rows must not be null").iterator();
+		this.column = requireNonNull(column, "The column to iterate on must not be null");
 	}
 
 	@Override
