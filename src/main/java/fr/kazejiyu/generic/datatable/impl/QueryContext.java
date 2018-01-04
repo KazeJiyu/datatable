@@ -26,8 +26,8 @@ class QueryContext {
 	/** The DataTable that contains the rows to filter. */
 	public final DataTable table;
 	
-	/** The columns that will be retured by the final query. */
-	public final LinkedHashSet <String> selectedHeaders;
+	/** The columns that will be returned by the final query. */
+	public final LinkedHashSet<String> selectedHeaders;
 	
 	/** The filters to apply on the table to obtain the desired result. */
 	public final Filters filters;
@@ -40,7 +40,7 @@ class QueryContext {
 	 * @param selectedHeaders
 	 * 			The headers selected by the query, will be returned at the query's end.
 	 */
-	public QueryContext(final DataTable table, final LinkedHashSet <String> selectedHeaders) {
+	public QueryContext(final DataTable table, final LinkedHashSet<String> selectedHeaders) {
 		this.table = table;
 		this.selectedHeaders = selectedHeaders;
 		this.filters = new Filters();

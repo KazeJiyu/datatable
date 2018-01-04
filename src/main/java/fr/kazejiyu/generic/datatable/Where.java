@@ -17,6 +17,7 @@ package fr.kazejiyu.generic.datatable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import fr.kazejiyu.generic.datatable.impl.WhereBool;
@@ -235,4 +236,6 @@ public interface Where <T> {
 	 * @return an instance of {@code Where} specialized to deal with booleans.
 	 */
 	public WhereNumber asNumber();
+
+	<N> Where<N> map(Function<T, N> mapper);
 }

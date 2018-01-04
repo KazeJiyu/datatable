@@ -14,6 +14,10 @@
  */
 package fr.kazejiyu.generic.datatable;
 
+import java.util.LinkedHashSet;
+
+import ca.odell.glazedlists.matchers.Matcher;
+
 /**
  * A table containing {@link Rows} and {@link Columns}.
  * 
@@ -22,14 +26,46 @@ package fr.kazejiyu.generic.datatable;
 public interface Table {
 	
 	/** @return whether the table is empty or not */
-	public default boolean isEmpty() {
+	default boolean isEmpty() {
 		return rows().isEmpty() || columns().isEmpty();
 	}
 
 	/** @return the rows of the table */
-	public Rows rows();
+	Rows rows();
 	
 	/** @return the columns of the table */
-	public Columns columns();
+	Columns columns();
+
+	/**
+	 * Filters the table. <br>
+	 * <br>
+	 * The returned table is a new one, which backs new rows. However,
+	 * since no deep copy is performed the object contained by the resulting
+	 * table are the same than the ones stored by the original table.
+	 * 
+	 * @param matcher
+	 * 			Selects the rows to keep. Must not be {@code null}.
+	 * 
+	 * @return a new {@code Table} containing the filtered rows.
+	 * 
+	 * @throws NullPointerException if {@code matcher} is {@code null}.
+	 */
+	default Table filter(Matcher<Row> matcher) {
+		return filter(matcher, columns().headers());
+	}
 	
+	/**
+	 * Filters the table keeping only specific columns.
+	 * 
+	 * @param matcher
+	 * 			Selects the rows to keep. Must not be {@code null}.
+	 * @param columnsToKeep
+	 * 			The headers of the columns to keep. Must not be {@code null}
+	 * 
+	 * @return a new {@code Table} containing the filtered rows.
+	 * 
+	 * @throws {@link NullPointerException} if any of the arguments is {@code null}.
+	 * @throws IllegalArgumentException if ! columns().headers().containsAll(columnsToKeep)
+	 */
+	Table filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep);
 }

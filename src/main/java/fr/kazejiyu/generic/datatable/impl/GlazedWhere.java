@@ -16,6 +16,7 @@ package fr.kazejiyu.generic.datatable.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import fr.kazejiyu.generic.datatable.And;
@@ -31,10 +32,10 @@ import fr.kazejiyu.generic.datatable.Where;
 class GlazedWhere <T> implements Where <T> {
 
 	/** The context of the query */
-	private final QueryContext context;
+	protected final QueryContext context;
 	
 	/** The headers of the columns to filter */
-	private final Collection <String> headers;
+	protected final Collection <String> headers;
 	
 	/**
 	 * Prepare to filter the column called {@code header}.
@@ -65,6 +66,29 @@ class GlazedWhere <T> implements Where <T> {
 	public And match(final Predicate <T> predicate) {
 		context.filters.add(new Filter<T>(headers, predicate));
 		return new GlazedAnd(context);
+	}
+	
+	private static class MappedWhere <T,N> extends GlazedWhere <N> {
+		
+		private Function<T, N> mapper;
+
+		public MappedWhere(QueryContext context, Collection<String> headers, Function <T,N> mapper) {
+			super(context, headers);
+			this.mapper = mapper;
+			System.out.println("map");
+		}
+
+		@Override
+		public And match(final Predicate <N> predicate) {
+			System.out.println("Map predicate !");
+			context.filters.add(new Filter<T>(headers, o-> predicate.test(mapper.apply(o))));
+			return new GlazedAnd(context);
+		}
+	}
+	
+	@Override
+	public <N> Where<N> map(Function<T, N> mapper) {
+		return new MappedWhere<T,N>(context, headers, mapper);
 	}
 	
 	@Override

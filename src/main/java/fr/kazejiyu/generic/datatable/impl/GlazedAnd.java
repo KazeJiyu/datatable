@@ -64,40 +64,7 @@ class GlazedAnd implements And {
 
 	@Override
 	public Table queryTable() {
-		EventList <Row> rows = context.table.internal();
-		FilterList <Row> filtered = new FilterList<>(rows, context.filters);
-	
-		List <Integer> indexes = indexes(context);
-		Table queried = emptyTable(context);
-		
-		for( Row row : filtered ) {
-			List <Object> elements = new ArrayList<>();
-			
-			for( int index : indexes )
-				elements.add(row.get(index));
-			
-			queried.rows().create(elements);
-		}
-		
-		filtered.dispose();	// Avoid possible memory leaks
-		return queried;
-	}
-	
-	/** @return the indexes of the selected columns */
-	private List <Integer> indexes(QueryContext context) {
-		return context.selectedHeaders.stream()
-			   .map(context.table.columns()::indexOf)
-			   .collect(Collectors.toList());
-	}
-	
-	/** @return a new empty Table with the selected columns */
-	private Table emptyTable(QueryContext context) {
-		Table empty = new DataTable();
-		
-		for( String header : context.selectedHeaders ) 
-			empty.columns().create(context.table.columns().get(header).type(), header);
-		
-		return empty;
+		return context.table.filter(context.filters, context.selectedHeaders);
 	}
 
 }
