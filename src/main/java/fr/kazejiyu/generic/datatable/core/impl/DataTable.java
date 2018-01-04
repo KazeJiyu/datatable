@@ -28,6 +28,7 @@ import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Rows;
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * A simple implementation of {@link Table} that relies on {@code GlazedLists}.
@@ -61,16 +62,25 @@ public class DataTable implements Table, AutoCloseable {
 	}
 	
 	@Override
+	public boolean isEmpty() {
+		return rows.isEmpty() || rows.stream().allMatch(Row::isEmpty);
+	}
+	
+	@Override
 	public DataTable filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep) {
+		for(final String columnToKeep : columnsToKeep)
+			if( ! columns.hasHeader(columnToKeep) )
+				throw new HeaderNotFoundException("The header " + columnToKeep + " does not exist in the table");
+		
 		FilterList <Row> filtered = new FilterList<>(rows.internal(), matcher);
 		DataTable filteredTable = emptyTable(columnsToKeep);
 		
-		List<Integer> indexes = indexesOf(columnsToKeep);
+		List<Integer> indexesOfColumnsToKeep = indexesOf(columnsToKeep);
 		
 		for( Row row : filtered ) {
 			List <Object> elements = new ArrayList<>();
 			
-			for( int index : indexes ) {
+			for( int index : indexesOfColumnsToKeep ) {
 				Object value = row.get(index);
 				elements.add(value);
 			}

@@ -68,6 +68,11 @@ class SimpleColumn <T> implements Column <T> {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return table.rows().isEmpty();
+	}
+	
+	@Override
 	public int size() {
 		return table.rows().size();
 	}

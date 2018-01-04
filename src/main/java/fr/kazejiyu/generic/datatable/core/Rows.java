@@ -15,41 +15,66 @@
 package fr.kazejiyu.generic.datatable.core;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+import fr.kazejiyu.generic.datatable.exceptions.InconsistentRowSizeException;
 
 /**
- * A collection of {@link Row} that belongs to a {@link Table}.
+ * A collection of {@link Row}s that belongs to a {@link Table}.
  * 
  * @author Emmanuel CHEBBI
  */
 public interface Rows extends Iterable <Row> {
-	
-	/** @return whether the collection is empty */
-	public default boolean isEmpty() {
-		return size() == 0;
-	}
 
 	/** @return the number of rows in the table */
-	public int size();
+	int size();
+	
+	/** @return whether the collection is empty */
+	boolean isEmpty();
+	
+	/**
+	 * Returns the first row of the table.
+	 * @return the first row of the table.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty()
+	 * 
+	 * @see #last()
+	 * @see #get(int)
+	 */
+	public default Row first() {
+		return get(0);
+	}
+	
+	/**
+	 * Returns the last row of the table.
+	 * @return the last row of the table.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty()
+	 * 
+	 * @see #first()
+	 * @see #get(int)
+	 */
+	public default Row last() {
+		return get(size() - 1);
+	}
 	
 	/**
 	 * Returns the row located at {@code index}.
 	 * 
 	 * @param index
-	 * 			The index of the row to get.
+	 * 			The index of the row.
 	 * 
 	 * @return the row located at {@code index}.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || (index < 0 || size <= index)
+	 * 
+	 * @see #first()
+	 * @see #last()
 	 */
-	public Row get(int index);
-
-	/** @return the first row of the table */
-	public default Row first() {
-		return get(0);
-	}
+	Row get(int index);
 	
-	/** @return the last row of the table */
-	public default Row last() {
-		return get(size() - 1);
-	}
+	/** @return a Stream of all the rows of the table. */
+	Stream<Row> stream();
 	
 	/**
 	 * Creates then adds a new row.
@@ -59,11 +84,13 @@ public interface Rows extends Iterable <Row> {
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 * 
-	 * @throws NullPointerException if {@code elements} is {@code null}.
+	 * @throws ClassCastException if any row's element is not of the type expected by its column
+	 * @throws NullPointerException if {@code row} == {@code null}
+	 * @throws InconsistentRowSizeException if {@code row.size()} != {@code this.size()}
 	 * 
 	 * @see #add(Row)
 	 */
-	public Rows create(List <Object> elements);
+	Rows create(List<Object> elements);
 	
 	/**
 	 * Adds a new row to the table.
@@ -75,7 +102,7 @@ public interface Rows extends Iterable <Row> {
 	 * 
 	 * @see #create(List)
 	 */
-	public Rows add(Row row);
+	Rows add(Row row);
 	
 	/**
 	 * Inserts a new row at the specified location.
@@ -89,21 +116,7 @@ public interface Rows extends Iterable <Row> {
 	 * 
 	 * @throws NullPointerException if {@code row} is {@code null}.
 	 */
-	public Rows insert(int position, Row row);
-	
-	/**
-	 * Removes a row from the table.
-	 * 
-	 * @param row
-	 * 			The row to remove. Must not be {@code null}.
-	 * 
-	 * @return a reference to the instance to enable method chaining.
-	 * 
-	 * @throws NullPointerException if {@code row} is {@code null}.
-	 */
-	public default Rows remove(Row row) {
-		return remove(row.id());
-	}
+	Rows insert(int position, Row row);
 	
 	/**
 	 * Removes a row from the table.
@@ -112,13 +125,15 @@ public interface Rows extends Iterable <Row> {
 	 * 			The index of the row to remove.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || (index < 0 || size <= index)
 	 */
-	public Rows remove(int index);
+	Rows remove(int index);
 	
 	/**
 	 * Removes all the rows.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 */
-	public Rows clear();	
+	Rows clear();	
 }

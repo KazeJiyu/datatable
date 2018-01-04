@@ -17,6 +17,7 @@ package fr.kazejiyu.generic.datatable.core;
 import java.util.LinkedHashSet;
 
 import ca.odell.glazedlists.matchers.Matcher;
+import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * A table containing {@link Rows} and {@link Columns}.
@@ -25,10 +26,8 @@ import ca.odell.glazedlists.matchers.Matcher;
  */
 public interface Table {
 	
-	/** @return whether the table is empty or not */
-	default boolean isEmpty() {
-		return rows().isEmpty() || columns().isEmpty();
-	}
+	/** @return whether the table is empty or not. */
+	boolean isEmpty();
 
 	/** @return the rows of the table */
 	Rows rows();
@@ -65,7 +64,7 @@ public interface Table {
 	 * @return a new {@code Table} containing the filtered rows.
 	 * 
 	 * @throws {@link NullPointerException} if any of the arguments is {@code null}.
-	 * @throws IllegalArgumentException if ! columns().headers().containsAll(columnsToKeep)
+	 * @throws HeaderNotFoundException if ! columns().headers().containsAll(columnsToKeep)
 	 */
 	Table filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep);
 }

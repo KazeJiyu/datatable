@@ -24,13 +24,16 @@ package fr.kazejiyu.generic.datatable.core;
 public interface Column <T> extends Iterable <T> {
 
 	/** @return the header of the column */
-	public String header();
-	
-	/** @return the number of elements in the column */
-	public int size();
+	String header();
 	
 	/** @return the type of the column's elements */
-	public Class <T> type();
+	Class <T> type();
+	
+	/** @return the number of elements in the column */
+	int size();
+	
+	/** @return whether the column is empty */
+	boolean isEmpty();
 	
 	/**
 	 * Returns the element of the column located in {@code row}.
@@ -39,6 +42,9 @@ public interface Column <T> extends Iterable <T> {
 	 * 			The id of the row that contains the element to retrieve.
 	 * 
 	 * @return the element of the column located in {@code row}.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || row < 0 || size <= row)
+	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
-	public T get(int row);
+	T get(int row);
 }

@@ -22,10 +22,13 @@ package fr.kazejiyu.generic.datatable.core;
 public interface Row extends Iterable <Object> {
 
 	/** @return the id of the row */
-	public int id();
+	int id();
 	
 	/** @return the number of elements in the row */
-	public int size();
+	int size();
+	
+	/** @return whether the row is empty */
+	boolean isEmpty();
 	
 	/**
 	 * Returns the element of the row located in {@code column}.
@@ -36,8 +39,11 @@ public interface Row extends Iterable <Object> {
 	 * @return the element of the row located in {@code column}.
 	 * 
 	 * @param <T> The runtime type of the element
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
+	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
-	public <T> T get(int column);
+	<T> T get(int column);
 	
 	/**
 	 * Returns the element of the row located in the column called {@code header}.
@@ -48,18 +54,9 @@ public interface Row extends Iterable <Object> {
 	 * @return the element of the row located in the column called {@code header}.
 	 * 
 	 * @param <T> The runtime type of the element
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
+	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
 	public <T> T get(String header);
-	
-	/**
-	 * Creates a {@code Row} from a given iterable.
-	 * 
-	 * @param elements
-	 * 			The elements of the row to create.
-	 * 
-	 * @return a new row containing {@code elements}.
-	 */
-	public static Row of(Iterable <Object> elements) {
-		return null;
-	}
 }

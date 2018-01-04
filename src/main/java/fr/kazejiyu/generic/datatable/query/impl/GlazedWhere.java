@@ -16,7 +16,6 @@ package fr.kazejiyu.generic.datatable.query.impl;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;

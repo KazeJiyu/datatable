@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -27,6 +29,7 @@ import fr.kazejiyu.generic.datatable.core.Column;
 import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * An implementation of {@link Columns}.
@@ -57,13 +60,18 @@ class SimpleColumns implements Columns {
 	}
 	
 	@Override
-	public LinkedHashSet <String> headers() {
+	public LinkedHashSet<String> headers() {
 		LinkedHashSet <String> headers = new LinkedHashSet<>();
 		
 		for( Column <?> column : elements )
 			headers.add(column.header());
 		
 		return headers;
+	}
+	
+	@Override
+	public boolean hasHeader(String header) {
+		return headerToIndex.containsKey(normalize(header));
 	}
 
 	@Override
@@ -75,33 +83,31 @@ class SimpleColumns implements Columns {
 	public int size() {
 		return elements.size();
 	}
+	
+	@Override
+	public boolean isEmpty() {
+		return elements.isEmpty();
+	}
 
 	@Override
 	public Column<?> get(final int index) {
 		return elements.get(index);
 	}
 	
-	private String simplify(final String header) {
+	private String normalize(final String header) {
 		return header.toLowerCase();
 	}
 	
 	private void addColumn(final Column <?> column) {
-		headerToIndex.put(simplify(column.header()), size());
+		headerToIndex.put(normalize(column.header()), size());
 		elements.add(column);
 	}
 
 	@Override
-	public Columns insert(final int position, final Column<?> column) {
-		addColumn(column);
-		
-		for( Row row : table.rows() )
-			((ModifiableRow) row).insert(position, column);
-		
-		return this;
-	}
-
-	@Override
 	public Columns remove(final int index) {
+		if ((isEmpty()) || (index < 0 || size() < index))
+			throw new IndexOutOfBoundsException("There is no row at index " + index);
+			
 		elements.remove(index);
 		headerToIndex.inverse().remove(index);
 		
@@ -113,21 +119,30 @@ class SimpleColumns implements Columns {
 
 	@Override
 	public int indexOf(final String header) {
-		return headerToIndex.get(simplify(header));
+		String key = normalize(header);
+		
+		if( ! headerToIndex.containsKey(key) )
+			throw new HeaderNotFoundException("The header " + header + " does not exist in the table");
+		
+		return headerToIndex.get(key);
 	}
 
 	@Override
-	public <N> Columns create(final Class<N> type, final String header, final Iterable<N> elements) {
-		Iterator <N> itElement = elements.iterator();
+	public <N> Columns create(final Class<N> type, final String header, final Iterable<N> column) {
+		requireNonNull(type, "The type of a column must not be null");
+		requireNonNull(header, "The header of a column must not be null");
+		requireNonNull(column, "The content of a column must not be null");
+		
+		Iterator<N> itElement = column.iterator();
 
-		if( table.rows().size() == 0 ) {
+		if( table.rows().isEmpty() ) {
 			for( int id = 0 ; itElement.hasNext() ; id++ )
 				table.rows().add(new SimpleRow(table, id, Arrays.asList(itElement.next())));
 		}
 		else {
 			Iterator <Row> itRow = table.rows().iterator();
 			
-			while( itRow.hasNext() && itElement.hasNext() )
+			while ((itRow.hasNext()) && (itElement.hasNext()))
 				((ModifiableRow) itRow.next()).add(itElement.next());
 		}
 		

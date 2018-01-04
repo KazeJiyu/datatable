@@ -30,6 +30,8 @@ abstract class ModifiableRow implements Row {
 	 * 			The value to insert.
 	 * 
 	 * @return a reference to the instance to enable method chaining
+	 * 
+	 * @throws IndexOutOfBoundsException if position < 0 || size < position
 	 */
 	abstract Row insert(int position, Object element);
 	
@@ -40,7 +42,9 @@ abstract class ModifiableRow implements Row {
 	 * 			The position of the element to remove.
 	 * 
 	 * @return a reference to the instance to enable method chaining
+	 * 
+	 * @throws IndexOutOfBoundsException if position < 0 || size <= position
 	 */
 	abstract Row remove(int position);
-		
+
 }

@@ -18,6 +18,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
+import fr.kazejiyu.generic.datatable.exceptions.InconsistentColumnSizeException;
+
 /**
  * A collection of {@link Column} that belongs to a {@link Table}.
  * 
@@ -26,15 +29,26 @@ import java.util.LinkedHashSet;
 public interface Columns extends Iterable <Column<?>> {
 	
 	/** @return whether the collection is empty */
-	public default boolean isEmpty() {
-		return size() == 0;
-	}
+	boolean isEmpty();
 
 	/** @return the number of columns in the table */
-	public int size();
+	int size();
 	
 	/** @return the headers of the columns */
-	public LinkedHashSet <String> headers();
+	LinkedHashSet <String> headers();
+	
+	/** @return whether {@code header} is a valid header */
+	boolean hasHeader(String header);
+	
+	/** @return the first column of the table */
+	default Column<?> first() {
+		return get(0);
+	}
+	
+	/** @return the last column of the table */
+	default Column<?> last() {
+		return get(size() - 1);
+	}
 	
 	/**
 	 * Returns the {@code Column} identified by the given header.
@@ -44,7 +58,7 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 
 	 * @return the column identified by the given header
 	 */
-	public default Column<?> get(String header) {
+	default Column<?> get(String header) {
 		return get(indexOf(header));
 	}
 	
@@ -56,42 +70,70 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 
 	 * @return the column located at the specified index
 	 */
-	public Column<?> get(int index);
+	Column<?> get(int index);
 	
 	/**
-	 * Adds a new column to the table.
+	 * Returns the index of the column corresponding to the given header.
 	 * 
-	 * @param column
-	 * 			The new column.
+	 * @param header
+	 * 			The header of the column.
 	 * 
-	 * @return a reference to the instance to enable method chaining.
+	 * @return the index of the column corresponding to the given header.
+	 * 
+	 * @throws HeaderNotFoundException if ! hasHeader(header)
 	 */
-	public default Columns add(Column <?> column) {
-		return insert(size(), column);
+	int indexOf(String header);
+	
+	default Columns create(Class<?> type, String header) {
+		return create(type, header, Collections.emptyList());
 	}
 	
 	/**
-	 * Inserts a new column at the specified location.
-	 * @param position
-	 * 			The location of the new column.
+	 * Creates a new {@code Column} from a given iterable.
+	 * 
+	 * @param type
+	 * 			The type of the elements stored in the column.
+	 * 			Must not be {@code null}.
+	 * @param header
+	 * 			The column's header.
+	 * 			Must not be {@code null}.
 	 * @param column
-	 * 			The new column.
+	 * 			The elements of the column.
+	 * 			Must not be {@code null}.
 	 * 
-	 * @return a reference to the instance to enable method chaining.
+	 * @return the new column containing {@code elements}.
+	 * 
+	 * @param <N> The type of the elements in the new column
+	 * 
+	 * @throws NullPointerException if any of the parameters is {@code null}
+	 * @throws InconsistentColumnSizeException if {@code column.length} != {@code rows.size()}
 	 */
-	public Columns insert(int position, Column <?> column);
-	
-	/**
-	 * Removes a column from the table.
-	 * 
-	 * @param column
-	 * 			The column to remove.
-	 * 
-	 * @return a reference to the instance to enable method chaining.
-	 */
-	public default Columns remove(Column <?> column) {
-		return remove(column.header());
+	@SuppressWarnings("unchecked")
+	default <N> Columns create(Class<N> type, String header, N... column) {
+		return create(type, header, Arrays.asList(column));
 	}
+
+	/**
+	 * Creates a new {@code Column} from a given iterable.
+	 * 
+	 * @param type
+	 * 			The type of the elements in the new column.
+	 * 			Must not be {@code null}. 
+	 * @param header
+	 * 			The column's header.
+	 * 			Must not be {@code null}. 
+	 * @param column
+	 * 			The elements of the column.
+	 * 			Must not be {@code null}. 
+	 * 
+	 * @return the new column containing {@code elements}.
+	 * 
+	 * @param <N> The type of the elements in the new column
+	 * 
+	 * @throws NullPointerException if any of the parameters is {@code null}.
+	 * @throws InconsistentColumnSizeException if {@code column.size()} != {@code this.size()}
+	 */
+	<N> Columns create(Class<N> type, String header, Iterable<N> column);
 	
 	/**
 	 * Removes a column from the table.
@@ -100,8 +142,10 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 			The header of the column to remove.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws HeaderNotFoundException if ! hasHeader(header)
 	 */
-	public default Columns remove(String header) {
+	default Columns remove(String header) {
 		return remove(indexOf(header));
 	}
 	
@@ -112,55 +156,8 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 			The index of the column to remove.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || (index < 0 || size <= index)
 	 */
-	public Columns remove(int index);
-	
-	/**
-	 * Returns the index of the column corresponding to the given header.
-	 * 
-	 * @param header
-	 * 			The header of the column.
-	 * 
-	 * @return the index of the column corresponding to the given header.
-	 */
-	public int indexOf(String header);
-	
-	public default Columns create(Class<?> type, String header) {
-		return create(type, header, Collections.emptyList());
-	}
-	
-	/**
-	 * Creates a new {@code Column} from a given iterable.
-	 * 
-	 * @param type
-	 * 			The type of the elements stored in the column.
-	 * @param header
-	 * 			The column's header.
-	 * @param elements
-	 * 			The elements of the column.
-	 * 
-	 * @return the new column containing {@code elements}.
-	 * 
-	 * @param <N> The type of the elements in the new column
-	 */
-	@SuppressWarnings("unchecked")
-	public default <N> Columns create(Class<N> type, String header, N... elements) {
-		return create(type, header, Arrays.asList(elements));
-	}
-
-	/**
-	 * Creates a new {@code Column} from a given iterable.
-	 * 
-	 * @param type
-	 * 			The type of the elements in the new column.
-	 * @param header
-	 * 			The column's header.
-	 * @param elements
-	 * 			The elements of the column.
-	 * 
-	 * @return the new column containing {@code elements}.
-	 * 
-	 * @param <N> The type of the elements in the new column
-	 */
-	public <N> Columns create(Class<N> type, String header, Iterable<N> elements);
+	Columns remove(int index);
 }

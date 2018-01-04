@@ -18,6 +18,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
@@ -59,6 +60,11 @@ class SimpleRows implements Rows {
 	public Iterator<Row> iterator() {
 		return elements.iterator();
 	}
+	
+	@Override
+	public boolean isEmpty() {
+		return elements.isEmpty();
+	}
 
 	@Override
 	public int size() {
@@ -68,6 +74,11 @@ class SimpleRows implements Rows {
 	@Override
 	public Row get(int index) {
 		return elements.get(index);
+	}
+	
+	@Override
+	public Stream<Row> stream() {
+		return elements.stream();
 	}
 	
 	private int nextId() {

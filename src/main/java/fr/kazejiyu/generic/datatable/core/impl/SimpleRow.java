@@ -86,6 +86,11 @@ class SimpleRow extends ModifiableRow {
 	public int size() {
 		return elements.size();
 	}
+	
+	@Override
+	public boolean isEmpty() {
+		return elements.isEmpty();
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
