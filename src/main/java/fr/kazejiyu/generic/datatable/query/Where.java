@@ -236,6 +236,4 @@ public interface Where <T> {
 	 * @return an instance of {@code Where} specialized to deal with booleans.
 	 */
 	public WhereNumber asNumber();
-
-	<N> Where<N> map(Function<T, N> mapper);
 }

@@ -69,29 +69,6 @@ class GlazedWhere <T> implements Where <T> {
 		return new GlazedAnd(context);
 	}
 	
-	private static class MappedWhere <T,N> extends GlazedWhere <N> {
-		
-		private Function<T, N> mapper;
-
-		public MappedWhere(QueryContext context, Collection<String> headers, Function <T,N> mapper) {
-			super(context, headers);
-			this.mapper = mapper;
-			System.out.println("map");
-		}
-
-		@Override
-		public And match(final Predicate <N> predicate) {
-			System.out.println("Map predicate !");
-			context.filters.add(new Filter<T>(headers, o-> predicate.test(mapper.apply(o))));
-			return new GlazedAnd(context);
-		}
-	}
-	
-	@Override
-	public <N> Where<N> map(Function<T, N> mapper) {
-		return new MappedWhere<T,N>(context, headers, mapper);
-	}
-	
 	@Override
 	@SuppressWarnings("unchecked")
 	public <N> Where<N> as(final Class <N> clazz) {
