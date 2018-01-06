@@ -17,6 +17,7 @@ package fr.kazejiyu.generic.datatable.core;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.stream.Stream;
 
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.InconsistentColumnSizeException;
@@ -85,6 +86,8 @@ public interface Columns extends Iterable <Column<?>> {
 	 * @throws IndexOutOfBoundsException if isEmpty() || (index < 0 || size() <= index) 
 	 */
 	Column<?> get(int index);
+	
+	Stream<Column<?>> stream();
 	
 	/**
 	 * Returns the index of the column corresponding to the given header.

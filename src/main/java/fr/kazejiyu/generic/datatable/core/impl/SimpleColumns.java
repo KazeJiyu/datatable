@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -95,6 +96,11 @@ class SimpleColumns implements Columns {
 	@Override
 	public Column<?> get(final int index) {
 		return elements.get(index);
+	}
+	
+	@Override
+	public Stream<Column<?>> stream() {
+		return null;
 	}
 	
 	private String normalize(final String header) {

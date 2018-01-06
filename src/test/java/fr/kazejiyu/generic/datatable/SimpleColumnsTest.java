@@ -1,9 +1,11 @@
 package fr.kazejiyu.generic.datatable;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -47,7 +49,7 @@ public class SimpleColumnsTest {
 		people = new DataTable();
 		people.columns()
 				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Mathilde")
-				.create(Integer.class, AGE_HEADER, 23, 32, 42)
+				.create(Integer.class, AGE_HEADER, 23, 32, 21)
 				.create(String.class, SEX_HEADER, "Male", "Male", "Female");
 	}
 	
@@ -186,5 +188,46 @@ public class SimpleColumnsTest {
 	void shouldThrowWhenAskedForTheIndexOfANonExistingHeader() {
 		assertThatExceptionOfType(HeaderNotFoundException.class)
 			.isThrownBy(() -> people.columns().indexOf("wrong header"));
+	}
+	
+	// iterator()
+	
+	@Test
+	void shouldReturnALoneIteratorWhenEmpty() {
+		assertThat(empty.columns().iterator())
+			.isNotNull()
+			.isEmpty();
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	void shouldReturnAnOrderedIterator() {
+		Iterator<Column<?>> itRows = people.columns().iterator();
+		
+		assertThat((Column<String>) itRows.next()).containsExactly("Luc", "Baptiste", "Mathilde");
+		assertThat((Column<Integer>) itRows.next()).containsExactly(23, 32, 21);
+		assertThat((Column<String>) itRows.next()).containsExactly("Male", "Male", "Female");
+		
+		assertThat(itRows.hasNext()).isFalse();
+	}
+	
+	// stream()
+	
+	@Test
+	void shouldReturnALoneStreamWhenEmpty() {
+		assertThat(empty.columns().stream())
+			.isEmpty();
+	}
+	
+	@Test
+	@SuppressWarnings("unchecked")
+	void shouldReturnAnOrderedStream() {
+		List<Column<?>> columns = people.columns().stream().collect(toList());
+		
+		assertThat(columns).size().isEqualTo(3);
+		
+		assertThat((Column<String>) columns.get(0)).containsExactly("Luc", "Baptiste", "Mathilde");
+		assertThat((Column<Integer>) columns.get(1)).containsExactly(23, 32, 21);
+		assertThat((Column<String>) columns.get(2)).containsExactly("Male", "Male", "Female");
 	}
 }

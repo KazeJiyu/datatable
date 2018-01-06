@@ -14,8 +14,7 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
+import com.google.common.collect.Iterables;
 
 import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Table;
@@ -52,24 +51,9 @@ class ColumnsPreconditions {
 		if( table.isEmpty() )
 			return;
 		
-		int size = size(column);
+		int size = Iterables.size(column);
 		
 		if( size != table.rows().size() )
 			throw new InconsistentColumnSizeException("The column's size does not match the number of rows in the table (got: " + size + ", expected: " + table.rows().size() +")");
-	}
-	
-	private <T> int size(Iterable<T> iterable) {
-		if( iterable instanceof Collection )
-			return ((Collection<?>) iterable).size();
-		
-		int count = 0;
-        Iterator<T> iterator = iterable.iterator();
-        
-        while(iterator.hasNext()) {
-            iterator.next();
-            count++;
-        }
-        
-        return count;
 	}
 }

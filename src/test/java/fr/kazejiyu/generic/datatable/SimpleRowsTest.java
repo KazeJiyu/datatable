@@ -1,9 +1,11 @@
 package fr.kazejiyu.generic.datatable;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -14,7 +16,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import fr.kazejiyu.generic.datatable.core.Column;
+import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Rows;
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
@@ -110,10 +112,9 @@ public class SimpleRowsTest {
 	// first()
 	
 	@Test
-	@SuppressWarnings("unchecked")
 	void canReturnItsFirstRow() {
-		assertThat((Column<Object>) people.rows().first())
-			.containsExactly("Luc", "25", "Male");
+		assertThat(people.rows().first())
+			.containsExactly("Luc", 23, "Male");
 	}
 	
 	@Test
@@ -125,9 +126,8 @@ public class SimpleRowsTest {
 	// last()
 	
 	@Test
-	@SuppressWarnings("unchecked")
 	void canReturnItsLastColumn() {
-		assertThat((Column<Object>) people.rows().last())
+		assertThat(people.rows().last())
 			.containsExactly("Mathilde", 21, "Female");
 	}
 	
@@ -135,5 +135,45 @@ public class SimpleRowsTest {
 	void shouldThrowWhenLastColumnIsAskForWhileEmpty() {
 		assertThatExceptionOfType(IndexOutOfBoundsException.class)
 			.isThrownBy(() -> empty.rows().last());
+	}
+	
+	// iterator()
+	
+	@Test
+	void shouldReturnALoneIteratorWhenEmpty() {
+		assertThat(empty.rows().iterator())
+			.isNotNull()
+			.isEmpty();
+	}
+	
+	@Test
+	void shouldReturnAnOrderedIterator() {
+		Iterator<Row> itRows = people.rows().iterator();
+		
+		assertThat(itRows.next()).containsExactly("Luc", 23, "Male");
+		assertThat(itRows.next()).containsExactly("Baptiste", 32, "Male");
+		assertThat(itRows.next()).containsExactly("Mathilde", 21, "Female");
+		
+		assertThat(itRows.hasNext()).isFalse();
+	}
+	
+	// stream()
+	
+	@Test
+	void shouldReturnALoneStreamWhenEmpty() {
+		assertThat(empty.rows().stream())
+			.isNotNull()
+			.isEmpty();
+	}
+	
+	@Test
+	void shouldReturnAnOrderedStream() {
+		List<Row> rows = people.rows().stream().collect(toList());
+		
+		assertThat(rows).size().isEqualTo(3);
+		
+		assertThat(rows.get(0)).containsExactly("Luc", 23, "Male");
+		assertThat(rows.get(1)).containsExactly("Baptiste", 32, "Male");
+		assertThat(rows.get(2)).containsExactly("Mathilde", 21, "Female");
 	}
 }
