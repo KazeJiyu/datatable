@@ -36,6 +36,9 @@ class SimpleRows implements Rows {
 	/** The table that owns the rows. */
 	private final Table table;
 	
+	/** Checks methods' preconditions. */
+	private final RowsPreconditions preconditions;
+	
 	/** The content of the rows. */
 	private final EventList <Row> elements = new BasicEventList<>();
 	
@@ -49,6 +52,7 @@ class SimpleRows implements Rows {
 	 */
 	SimpleRows(final Table table) {
 		this.table = requireNonNull(table, "The table that owns the columns must not be null");
+		this.preconditions = new RowsPreconditions(table);
 	}
 	
 	/** @return the {@code EventList} used internally */
@@ -88,6 +92,9 @@ class SimpleRows implements Rows {
 	@Override
 	public Rows create(final List <Object> elements) {
 		requireNonNull(elements, "The content of the new row must not be null");
+		preconditions.assertRowSizeIsConsistent(elements);
+		preconditions.assertRowElementsAreOfTheExpectedTypes(elements);
+		
 		return add(new SimpleRow(table, nextId(), elements));
 	}
 

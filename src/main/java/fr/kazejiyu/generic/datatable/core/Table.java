@@ -26,7 +26,17 @@ import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
  */
 public interface Table {
 	
-	/** @return whether the table is empty or not. */
+	/**
+	 * Returns whether the table is empty or not. <br>
+	 * <br>
+	 * A table is considered empty if it has either:
+	 * <ul>
+	 * 	<li>no rows at all,</li>
+	 * 	<li>or only empty rows.</li>
+	 * </ul>
+	 * 
+	 * @return whether the table is empty or not. 
+	 */
 	boolean isEmpty();
 
 	/** @return the rows of the table */

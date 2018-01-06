@@ -14,6 +14,9 @@
  */
 package fr.kazejiyu.generic.datatable.core;
 
+import static java.util.Arrays.asList;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -77,20 +80,55 @@ public interface Rows extends Iterable <Row> {
 	Stream<Row> stream();
 	
 	/**
+	 * Creates an empty row then adds it to the table.
+	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws InconsistentRowSizeException if ! columns.isEmpty()
+	 * 
+	 * @see #create(List)
+	 * @see #create(Object...)
+	 */
+	default Rows create() {
+		return create(new ArrayList<>());
+	}
+	
+	/**
 	 * Creates then adds a new row.
 	 * 
-	 * @param elements
+	 * @param row
+	 * 			The elements of the new row. Must not be {@code null}.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws ClassCastException if any row's element is not of the type expected by its column.
+	 * @throws NullPointerException if {@code row} == null
+	 * @throws InconsistentRowSizeException if {@code row.length} != {@code columns().size()}
+	 * 
+	 * @see #create()
+	 * @see #create(List)
+	 */
+	@SuppressWarnings("unchecked")
+	default <T> Rows create( T... row) {
+		return create(asList(row));
+	}
+	
+	/**
+	 * Creates then adds a new row.
+	 * 
+	 * @param row
 	 * 			The elements of the new row. Must not be {@code null}.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 * 
 	 * @throws ClassCastException if any row's element is not of the type expected by its column
 	 * @throws NullPointerException if {@code row} == {@code null}
-	 * @throws InconsistentRowSizeException if {@code row.size()} != {@code this.size()}
+	 * @throws InconsistentRowSizeException if {@code row.size()} != {@code columns().size()}
 	 * 
 	 * @see #add(Row)
+	 * @see #create()
+	 * @see #create(Object...)
 	 */
-	Rows create(List<Object> elements);
+	Rows create(List<Object> row);
 	
 	/**
 	 * Adds a new row to the table.

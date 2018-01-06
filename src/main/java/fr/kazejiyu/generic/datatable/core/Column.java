@@ -17,6 +17,8 @@ package fr.kazejiyu.generic.datatable.core;
 /**
  * A column that belongs to a {@link Table}.
  * 
+ * <pre><code class="java">String truc = new String("hello");</code></pre>
+ * 
  * @author Emmanuel CHEBBI
  *
  * @param <T> The type of the elements stored by the column
@@ -34,6 +36,19 @@ public interface Column <T> extends Iterable <T> {
 	
 	/** @return whether the column is empty */
 	boolean isEmpty();
+	
+	/**
+	 * Returns whether {@code object} could be accepted into the column. <br>
+	 * <br>
+	 * Typically, this method checks {@code object}'s type to ensure that it
+	 * is a subtype of {@link #type()}.
+	 * 
+	 * @param object
+	 * 			The object that could be into the column.
+	 * 
+	 * @return whether {@code object} could be accepted into the row.
+	 */
+	boolean accepts(Object object);
 	
 	/**
 	 * Returns the element of the column located in {@code row}.

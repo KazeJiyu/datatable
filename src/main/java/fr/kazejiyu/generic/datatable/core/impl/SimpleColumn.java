@@ -81,6 +81,11 @@ class SimpleColumn <T> implements Column <T> {
 	public Class <T> type() {
 		return type;
 	}
+	
+	@Override
+	public boolean accepts(Object object) {
+		return type.isInstance(object);
+	}
 
 	@Override
 	public T get(final int row) {

@@ -29,7 +29,6 @@ import fr.kazejiyu.generic.datatable.core.Column;
 import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Table;
-import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * An implementation of {@link Columns}.
@@ -47,6 +46,9 @@ class SimpleColumns implements Columns {
 	/** Maps the header in a case-insensitive way to their index. */
 	private final BiMap <String,Integer> headerToIndex;
 	
+	/** Checks methods' preconditions. */
+	private final ColumnsPreconditions preconditions;
+	
 	/**
 	 * Creates the columns of {@code table}.
 	 * 
@@ -57,6 +59,7 @@ class SimpleColumns implements Columns {
 		this.table = table;
 		this.elements = new LinkedList<>();
 		this.headerToIndex = HashBiMap.create();
+		this.preconditions = new ColumnsPreconditions(table, this);
 	}
 	
 	@Override
@@ -119,12 +122,8 @@ class SimpleColumns implements Columns {
 
 	@Override
 	public int indexOf(final String header) {
-		String key = normalize(header);
-		
-		if( ! headerToIndex.containsKey(key) )
-			throw new HeaderNotFoundException("The header " + header + " does not exist in the table");
-		
-		return headerToIndex.get(key);
+		preconditions.assertHeaderExist(header);
+		return headerToIndex.get(normalize(header));
 	}
 
 	@Override
@@ -132,6 +131,8 @@ class SimpleColumns implements Columns {
 		requireNonNull(type, "The type of a column must not be null");
 		requireNonNull(header, "The header of a column must not be null");
 		requireNonNull(column, "The content of a column must not be null");
+		preconditions.assertHeaderDoesNotExist(header);
+		preconditions.assertColumnSizeIsConsistent(column);
 		
 		Iterator<N> itElement = column.iterator();
 
@@ -140,10 +141,8 @@ class SimpleColumns implements Columns {
 				table.rows().add(new SimpleRow(table, id, Arrays.asList(itElement.next())));
 		}
 		else {
-			Iterator <Row> itRow = table.rows().iterator();
-			
-			while ((itRow.hasNext()) && (itElement.hasNext()))
-				((ModifiableRow) itRow.next()).add(itElement.next());
+			for(Row row : table.rows())
+				((ModifiableRow) row).add(itElement.next());
 		}
 		
 		addColumn( new SimpleColumn<>(type, table, header) );

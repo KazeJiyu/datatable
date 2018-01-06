@@ -40,12 +40,22 @@ public interface Columns extends Iterable <Column<?>> {
 	/** @return whether {@code header} is a valid header */
 	boolean hasHeader(String header);
 	
-	/** @return the first column of the table */
+	/**
+	 * Returns the first column of the table. 
+	 * @return the first column of the table.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty()
+	 */
 	default Column<?> first() {
 		return get(0);
 	}
 	
-	/** @return the last column of the table */
+	/** 
+	 * Returns the last column of the table.
+	 * @return the last column of the table.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty()
+	 */
 	default Column<?> last() {
 		return get(size() - 1);
 	}
@@ -57,6 +67,8 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 			Identify the column to return.
 	 * 
 	 * @return the column identified by the given header
+	 * 
+	 * @throws HeaderNotFoundException if ! hasHeader(header)
 	 */
 	default Column<?> get(String header) {
 		return get(indexOf(header));
@@ -69,6 +81,8 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 			The index of the column to get.
 	 * 
 	 * @return the column located at the specified index
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty() || (index < 0 || size() <= index) 
 	 */
 	Column<?> get(int index);
 	
@@ -84,9 +98,14 @@ public interface Columns extends Iterable <Column<?>> {
 	 */
 	int indexOf(String header);
 	
+	default Columns create(String header) {
+		return create(Object.class, header);
+	}
+	
 	default Columns create(Class<?> type, String header) {
 		return create(type, header, Collections.emptyList());
 	}
+	
 	
 	/**
 	 * Creates a new {@code Column} from a given iterable.
