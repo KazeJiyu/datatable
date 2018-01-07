@@ -14,6 +14,7 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Rows;
 import fr.kazejiyu.generic.datatable.core.Table;
-import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * A simple implementation of {@link Table} that relies on {@code GlazedLists}.
@@ -43,12 +43,16 @@ public class DataTable implements Table, AutoCloseable {
 	/** The columns that compose the table. */
 	private final Columns columns;
 	
+	/** Checks methods' preconditions. */
+	private final TablePreconditions preconditions;
+	
 	/**
 	 * Creates a new table.
 	 */
 	public DataTable() {
 		this.rows = new SimpleRows(this);
 		this.columns = new SimpleColumns(this);
+		this.preconditions = new TablePreconditions(this);
 	}
 	
 	@Override
@@ -75,9 +79,9 @@ public class DataTable implements Table, AutoCloseable {
 	
 	@Override
 	public DataTable filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep) {
-		for(final String columnToKeep : columnsToKeep)
-			if( ! columns.hasHeader(columnToKeep) )
-				throw new HeaderNotFoundException("The header " + columnToKeep + " does not exist in the table");
+		requireNonNull(matcher, "The matcher must not be null");
+		requireNonNull(columnsToKeep, "The columns to keep must not be null");
+		preconditions.assertAreExistingHeaders(columnsToKeep);
 		
 		FilterList <Row> filtered = new FilterList<>(rows.internal(), matcher);
 		DataTable filteredTable = emptyTable(columnsToKeep);
@@ -85,18 +89,19 @@ public class DataTable implements Table, AutoCloseable {
 		List<Integer> indexesOfColumnsToKeep = indexesOf(columnsToKeep);
 		
 		for( Row row : filtered ) {
-			List <Object> elements = new ArrayList<>();
-			
-			for( int index : indexesOfColumnsToKeep ) {
-				Object value = row.get(index);
-				elements.add(value);
-			}
-			
-			filteredTable.rows.create(elements);
+			List<Object> filteredRow = pickElementsAtIndexes(row, indexesOfColumnsToKeep);
+			filteredTable.rows.create(filteredRow);
 		}
 		
 		filtered.dispose(); // avoid possible memory leaks
 		return filteredTable;
+	}
+	
+	/** @return the indexes of the selected columns */
+	private List<Integer> indexesOf(Set<String> headers) {
+		return headers.stream()
+				.map(columns::indexOf)
+				.collect(toList());
 	}
 	
 	/** @return a new empty Table with the selected columns */
@@ -108,12 +113,16 @@ public class DataTable implements Table, AutoCloseable {
 		
 		return empty;
 	}
-	
-	/** @return the indexes of the selected columns */
-	private List<Integer> indexesOf(Set<String> headers) {
-		return headers.stream()
-			   .map(columns::indexOf)
-			   .collect(toList());
+
+	/** @return a new List containing only the elements of {@row} located at {@code indexes} */
+	private List<Object> pickElementsAtIndexes(Row row, List<Integer> indexesOfColumnsToKeep) {
+		List <Object> elements = new ArrayList<>();
+		
+		for( int index : indexesOfColumnsToKeep ) {
+			Object value = row.get(index);
+			elements.add(value);
+		}
+		return elements;
 	}
 
 	@Override

@@ -91,10 +91,7 @@ class SimpleRows implements Rows {
 	
 	@Override
 	public Rows create(final List <Object> elements) {
-		requireNonNull(elements, "The content of the new row must not be null");
-		preconditions.assertRowSizeIsConsistent(elements);
-		preconditions.assertRowElementsAreOfTheExpectedTypes(elements);
-		
+		preconditions.assertIsAValidNewRow(elements);
 		return add(new SimpleRow(table, nextId(), elements));
 	}
 

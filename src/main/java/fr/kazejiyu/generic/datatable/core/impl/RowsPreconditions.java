@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.List;
 
 import fr.kazejiyu.generic.datatable.core.Rows;
@@ -46,6 +48,17 @@ class RowsPreconditions {
 				throw new ClassCastException(
 						"Row's " + i + "th element has not the expected type "
 					  + "(got: " + elements.getClass() + " expecting: " + table.columns().get(i).type() + ")");
+	}
+
+	/**
+	 * @throws NullPointerException if elements == null
+	 * @throws InconsistentRowSizeException if table.columns().size() != row.size()
+	 * @throws ClassCastException if row's elements have not the type expected by table's columns
+	 */
+	<N> void assertIsAValidNewRow(List<Object> row) {
+		requireNonNull(row, "The content of the new row must not be null");
+		assertRowSizeIsConsistent(row);
+		assertRowElementsAreOfTheExpectedTypes(row);
 	}
 	
 	

@@ -14,9 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
-import static java.util.Objects.requireNonNull;
+import static java.util.Arrays.asList;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -107,16 +106,10 @@ class SimpleColumns implements Columns {
 	private String normalize(final String header) {
 		return header.toLowerCase();
 	}
-	
-	private void addColumn(final Column <?> column) {
-		headerToIndex.put(normalize(column.header()), size());
-		elements.add(column);
-	}
 
 	@Override
 	public Columns remove(final int index) {
-		if ((isEmpty()) || (index < 0 || size() < index))
-			throw new IndexOutOfBoundsException("There is no row at index " + index);
+		preconditions.assertIsAValidIndex(index);
 			
 		elements.remove(index);
 		headerToIndex.inverse().remove(index);
@@ -135,17 +128,13 @@ class SimpleColumns implements Columns {
 
 	@Override
 	public <N> Columns create(final Class<N> type, final String header, final Iterable<N> column) {
-		requireNonNull(type, "The type of a column must not be null");
-		requireNonNull(header, "The header of a column must not be null");
-		requireNonNull(column, "The content of a column must not be null");
-		preconditions.assertHeaderDoesNotExist(header);
-		preconditions.assertColumnSizeIsConsistent(column);
+		preconditions.assertIsAValidNewColumn(type, header, column);
 		
 		Iterator<N> itElement = column.iterator();
 
 		if( table.rows().isEmpty() ) {
-			for( int id = 0 ; itElement.hasNext() ; id++ )
-				table.rows().add(new SimpleRow(table, id, Arrays.asList(itElement.next())));
+			while( itElement.hasNext() )
+				table.rows().create(asList(itElement.next()));
 		}
 		else {
 			for(Row row : table.rows())
@@ -154,6 +143,11 @@ class SimpleColumns implements Columns {
 		
 		addColumn( new SimpleColumn<>(type, table, header) );
 		return this;
+	}
+	
+	private void addColumn(final Column <?> column) {
+		headerToIndex.put(normalize(column.header()), size());
+		elements.add(column);
 	}
 	
 	@Override

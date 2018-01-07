@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.Iterables;
 
 import fr.kazejiyu.generic.datatable.core.Columns;
@@ -37,16 +39,19 @@ class ColumnsPreconditions {
 		this.columns = columns;
 	}
 
+	/** @throws HeaderAlreadyExistsException if columns.hasHeader(header) */
 	void assertHeaderDoesNotExist(String header) {
 		if( columns.hasHeader(header) )
 			throw new HeaderAlreadyExistsException("The header " + header + " already exist in the table");
 	}
 
+	/** @throws HeaderNotFoundException if ! columns.hasHeader(header) */
 	void assertHeaderExist(String header) {
 		if( ! columns.hasHeader(header) )
 			throw new HeaderNotFoundException("The header " + header + " does not exist in the table");
 	}
 
+	/** @throws InconsistentColumnSizeException if ! table.isEmpty() && table.rows().size() != size(column) */
 	void assertColumnSizeIsConsistent(Iterable<?> column) {
 		if( table.isEmpty() )
 			return;
@@ -55,5 +60,24 @@ class ColumnsPreconditions {
 		
 		if( size != table.rows().size() )
 			throw new InconsistentColumnSizeException("The column's size does not match the number of rows in the table (got: " + size + ", expected: " + table.rows().size() +")");
+	}
+
+	/** @throws IndexOutOfBoundsException if columns.isEmpty() || index < 0 || columns.size() < index */
+	void assertIsAValidIndex(int index) {
+		if ((columns.isEmpty()) || (index < 0 || columns.size() < index))
+			throw new IndexOutOfBoundsException("There is no row at index " + index);		
+	}
+
+	/** 
+	 * @throws NullPointerException if any parameter is {@code null}
+	 * @throws HeaderAlreadyExistsException if columns.hasHeader(header)
+	 * @throws InconsistentColumnSizeException if size(column) != table.rows().size()
+	 */
+	<N> void assertIsAValidNewColumn(Class<N> type, String header, Iterable<N> column) {
+		requireNonNull(type, "The type of a column must not be null");
+		requireNonNull(header, "The header of a column must not be null");
+		requireNonNull(column, "The content of a column must not be null");
+		assertHeaderDoesNotExist(header);
+		assertColumnSizeIsConsistent(column);
 	}
 }
