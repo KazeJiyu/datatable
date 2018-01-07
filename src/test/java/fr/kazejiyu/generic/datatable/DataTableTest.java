@@ -3,6 +3,8 @@ package fr.kazejiyu.generic.datatable;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import fr.kazejiyu.generic.datatable.core.Table;
@@ -13,74 +15,84 @@ import fr.kazejiyu.generic.datatable.core.impl.DataTable;
  * 
  * @author Emmanuel CHEBBI
  */
+@DisplayName("A DataTable")
 class DataTableTest {
 	
-	private Table empty;
-	private Table people;
-	
-	private static final String AGE_HEADER = "AGE";
-	private static final String NAME_HEADER = "name";
-	private static final String SEX_HEADER = "sEx";
-	
-	@BeforeEach
-	void initializeEmptyTable() {
-		empty = new DataTable();
-	}
-	
-	@BeforeEach
-	void initializePeopleTable() {
-		people = new DataTable();
-		people.columns()
-				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
-				.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-				.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
-	}
-	
-	@Test
-	void shouldBeEmptyByDefault() {
-		assertThat(empty.isEmpty()).isTrue();
-	}
-	
-	@Test
-	void shouldBeEmptyWithOnlyEmptyRows() {
-		empty.rows().create()
-					.create();
+	@Nested
+	@DisplayName("when empty")
+	class Empty {
+		private Table empty;
 		
-		assertThat(empty.isEmpty()).isTrue();
-	}
-	
-	@Test
-	void shouldBeEmptyWithOnlyEmptyColumns() {
-		empty.columns().create("Empty Column")
-					   .create("Another Empty Column");
+		@BeforeEach
+		void initializeEmptyTable() {
+			empty = new DataTable();
+		}
 		
-		assertThat(empty.isEmpty()).isTrue();
-	}
-
-	@Test
-	void shouldNotBeEmptyWithNonEmptyRows() {
-		assertThat(people.isEmpty()).isFalse();
+		@Test @DisplayName("is empty")
+		void isEmpty() {
+			assertThat(empty.isEmpty()).isTrue();
+		}
+		
+		@Test @DisplayName("is still empty when adding empty rows")
+		void isEmptyWithOnlyEmptyRows() {
+			empty.rows().create()
+						.create();
+			
+			assertThat(empty.isEmpty()).isTrue();
+		}
+		
+		@Test @DisplayName("is still empty when adding empty columns")
+		void isEmptyWithOnlyEmptyColumns() {
+			empty.columns().create("Empty Column")
+						   .create("Another Empty Column");
+			
+			assertThat(empty.isEmpty()).isTrue();
+		}
+		
+		@Test @DisplayName("returns a non-null Rows instance")
+		void returnsNonNullRows() {
+			assertThat(empty.rows()).isNotNull();
+		}
+		
+		@Test @DisplayName("returns a non-null Columns instance")
+		void returnsNonNullColumns() {
+			assertThat(empty.columns()).isNotNull();
+		}
 	}
 	
-	@Test
-	void shouldNotReturnNullRowsWhenEmpty() {
-		assertThat(empty.rows()).isNotNull();
-	}
+	@Nested
+	@DisplayName("when not empty")
+	class NonEmpty {
+		private Table people;
+		
+		private static final String AGE_HEADER = "AGE";
+		private static final String NAME_HEADER = "name";
+		private static final String SEX_HEADER = "sEx";
+		
+		@BeforeEach
+		void initializePeopleTable() {
+			people = new DataTable();
+			people.columns()
+					.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
+					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
+					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+		}
 	
-	@Test
-	void shouldNotReturnNullColumnsWhenEmpty() {
-		assertThat(empty.columns()).isNotNull();
-	}
-	
-	@Test
-	void shouldRemoveAllItsRowsOnClear() {
-		people.clear();
-		assertThat(people.rows().isEmpty()).isTrue();
-	}
-	
-	@Test
-	void shouldRemoveAllItsColumnsOnClear() {
-		people.clear();
-		assertThat(people.columns().isEmpty()).isTrue();
+		@Test @DisplayName("is not empty")
+		void isNotEmpty() {
+			assertThat(people.isEmpty()).isFalse();
+		}
+		
+		@Test @DisplayName("removes all its rows when cleared")
+		void removesAllItsRowsWhenCleared() {
+			people.clear();
+			assertThat(people.rows().isEmpty()).isTrue();
+		}
+		
+		@Test @DisplayName("removes all its columns when cleared")
+		void removesAllItsColumnsWhenCleared() {
+			people.clear();
+			assertThat(people.columns().isEmpty()).isTrue();
+		}
 	}
 }
