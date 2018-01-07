@@ -67,6 +67,13 @@ public class DataTable implements Table, AutoCloseable {
 	}
 	
 	@Override
+	public Table clear() {
+		rows.clear();
+		columns.clear();
+		return this;
+	}
+	
+	@Override
 	public DataTable filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep) {
 		for(final String columnToKeep : columnsToKeep)
 			if( ! columns.hasHeader(columnToKeep) )

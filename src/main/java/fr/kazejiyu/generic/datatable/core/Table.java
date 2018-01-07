@@ -44,6 +44,14 @@ public interface Table {
 	
 	/** @return the columns of the table */
 	Columns columns();
+	
+	/**
+	 * Erases the content of the table by removing all its rows and
+	 * all its columns.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 */
+	Table clear();
 
 	/**
 	 * Filters the table. <br>

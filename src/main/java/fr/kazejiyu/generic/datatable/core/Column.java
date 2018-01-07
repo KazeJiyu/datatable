@@ -15,7 +15,10 @@
 package fr.kazejiyu.generic.datatable.core;
 
 /**
- * A column that belongs to a {@link Table}.
+ * A column that belongs to a {@link Table}. <br>
+ * <br>
+ * A column is an ordered collection of elements of a same type. It is also
+ * identified by its header : a string that should be unique across the table.
  * 
  * <pre><code class="java">String truc = new String("hello");</code></pre>
  * 

@@ -15,7 +15,11 @@
 package fr.kazejiyu.generic.datatable.core;
 
 /**
- * A row that belongs to a {@link Table}. 
+ * A row that belongs to a {@link Table}. <br>
+ * <br>
+ * A row is an ordered collection of heterogeneous elements.
+ * The type of its elements depends on the type expected by the {@link Column}s
+ * of the table.
  * 
  * @author Emmanuel CHEBBI
  */

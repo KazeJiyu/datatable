@@ -182,4 +182,10 @@ public interface Columns extends Iterable <Column<?>> {
 	 * @throws IndexOutOfBoundsException if isEmpty || (index < 0 || size <= index)
 	 */
 	Columns remove(int index);
+	
+	/**
+	 * Removes all the columns.
+	 * @return a reference to the instance to enable method chaining
+	 */
+	Columns clear();
 }

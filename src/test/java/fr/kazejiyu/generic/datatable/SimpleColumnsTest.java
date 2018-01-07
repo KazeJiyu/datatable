@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.assertj.core.api.SoftAssertions;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import fr.kazejiyu.generic.datatable.core.Column;
 import fr.kazejiyu.generic.datatable.core.Columns;
+import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderAlreadyExistsException;
@@ -48,21 +50,21 @@ public class SimpleColumnsTest {
 	void initializePeopleTable() {
 		people = new DataTable();
 		people.columns()
-				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Mathilde")
-				.create(Integer.class, AGE_HEADER, 23, 32, 21)
-				.create(String.class, SEX_HEADER, "Male", "Male", "Female");
+				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
+				.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
+				.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
 	}
 	
 	// isEmpty()
 	
 	@Test
 	void shouldBeEmptyByDefault() {
-		assertThat(empty.columns().isEmpty()).isTrue();
+		assertThat(empty.columns()).isEmpty();
 	}
 	
 	@Test
 	void shouldNotBeEmptyWhenFilled() {
-		assertThat(people.columns().isEmpty()).isFalse();
+		assertThat(people.columns()).isNotEmpty();
 	}
 	
 	// size()
@@ -125,10 +127,10 @@ public class SimpleColumnsTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	void shouldAppendCreatedColumnsAtTheEnd() {
-		people.columns().create(Double.class, "SomeValue", 0.6, 12d, 0d);
+		people.columns().create(Double.class, "SomeValue", 0.6, 12d, 0d, 42d);
 		
 		assertThat((Column<Double>) people.columns().last())
-			.containsExactly(.6, 12d, 0d);
+			.containsExactly(.6, 12d, 0d, 42d);
 	}
 	
 	// headers()
@@ -151,13 +153,13 @@ public class SimpleColumnsTest {
 	@SuppressWarnings("unchecked")
 	void canReturnItsFirstColumn() {
 		assertThat((Column<Object>) people.columns().first())
-			.containsExactly("Luc", "Baptiste", "Mathilde");
+			.containsExactly("Luc", "Baptiste", "Anya", "Mathilde");
 	}
 	
 	@Test
 	void shouldThrowWhenFirstColumnIsAskForWhileEmpty() {
 		assertThatExceptionOfType(IndexOutOfBoundsException.class)
-			.isThrownBy(() -> empty.columns().first());
+			.isThrownBy(empty.columns()::first);
 	}
 	
 	// last()
@@ -166,13 +168,13 @@ public class SimpleColumnsTest {
 	@SuppressWarnings("unchecked")
 	void canReturnItsLastColumn() {
 		assertThat((Column<Object>) people.columns().last())
-			.containsExactly("Male", "Male", "Female");
+			.containsExactly("Male", "Male", "Female", "Female");
 	}
 	
 	@Test
 	void shouldThrowWhenLastColumnIsAskForWhileEmpty() {
 		assertThatExceptionOfType(IndexOutOfBoundsException.class)
-			.isThrownBy(() -> empty.columns().last());
+			.isThrownBy(empty.columns()::last);
 	}
 	
 	// indexOf
@@ -195,8 +197,12 @@ public class SimpleColumnsTest {
 	@Test
 	void shouldReturnALoneIteratorWhenEmpty() {
 		assertThat(empty.columns().iterator())
-			.isNotNull()
 			.isEmpty();
+	}
+	
+	@Test
+	void shouldReturnAWellSizedIterator() {
+		assertThat(people.columns().iterator()).size().isEqualTo(3);
 	}
 	
 	@Test
@@ -204,11 +210,13 @@ public class SimpleColumnsTest {
 	void shouldReturnAnOrderedIterator() {
 		Iterator<Column<?>> itRows = people.columns().iterator();
 		
-		assertThat((Column<String>) itRows.next()).containsExactly("Luc", "Baptiste", "Mathilde");
-		assertThat((Column<Integer>) itRows.next()).containsExactly(23, 32, 21);
-		assertThat((Column<String>) itRows.next()).containsExactly("Male", "Male", "Female");
+		SoftAssertions softly = new SoftAssertions();
 		
-		assertThat(itRows.hasNext()).isFalse();
+		softly.assertThat((Column<String>) itRows.next()).containsExactly("Luc", "Baptiste", "Anya", "Mathilde");
+		softly.assertThat((Column<Integer>) itRows.next()).containsExactly(23, 32, 0, 21);
+		softly.assertThat((Column<String>) itRows.next()).containsExactly("Male", "Male", "Female", "Female");
+		
+		softly.assertAll();
 	}
 	
 	// stream()
@@ -220,14 +228,41 @@ public class SimpleColumnsTest {
 	}
 	
 	@Test
+	void shouldReturnAWellSizedStream() {
+		assertThat(people.columns().stream()).size().isEqualTo(3);
+	}
+	
+	@Test
 	@SuppressWarnings("unchecked")
 	void shouldReturnAnOrderedStream() {
 		List<Column<?>> columns = people.columns().stream().collect(toList());
 		
-		assertThat(columns).size().isEqualTo(3);
+		SoftAssertions softly = new SoftAssertions();
 		
-		assertThat((Column<String>) columns.get(0)).containsExactly("Luc", "Baptiste", "Mathilde");
-		assertThat((Column<Integer>) columns.get(1)).containsExactly(23, 32, 21);
-		assertThat((Column<String>) columns.get(2)).containsExactly("Male", "Male", "Female");
+		softly.assertThat((Column<String>) columns.get(0)).containsExactly("Luc", "Baptiste", "Anya", "Mathilde");
+		softly.assertThat((Column<Integer>) columns.get(1)).containsExactly(23, 32, 0, 21);
+		softly.assertThat((Column<String>) columns.get(2)).containsExactly("Male", "Male", "Female", "Female");
+		
+		softly.assertAll();
+	}
+	
+	// clear()
+	
+	@Test
+	void shouldRemoveAllItsColumnsOnClear() {
+		people.columns().clear();
+		assertThat(people.columns()).isEmpty();
+	}
+	
+	@Test
+	void shouldNotAlterNumberOfRowsOnClear() {
+		people.columns().clear();
+		assertThat(people.rows()).size().isEqualTo(4);
+	}
+	
+	@Test
+	void shouldLeaveEmptyRowsOnClear() {
+		people.columns().clear();
+		assertThat(people.rows()).allMatch(Row::isEmpty);
 	}
 }

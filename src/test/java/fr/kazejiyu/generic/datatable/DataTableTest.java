@@ -31,9 +31,9 @@ class DataTableTest {
 	void initializePeopleTable() {
 		people = new DataTable();
 		people.columns()
-				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Mathilde")
-				.create(Integer.class, AGE_HEADER, 23, 32, 42)
-				.create(String.class, SEX_HEADER, "Male", "Male", "Female");
+				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
+				.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
+				.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
 	}
 	
 	@Test
@@ -70,5 +70,17 @@ class DataTableTest {
 	@Test
 	void shouldNotReturnNullColumnsWhenEmpty() {
 		assertThat(empty.columns()).isNotNull();
+	}
+	
+	@Test
+	void shouldRemoveAllItsRowsOnClear() {
+		people.clear();
+		assertThat(people.rows().isEmpty()).isTrue();
+	}
+	
+	@Test
+	void shouldRemoveAllItsColumnsOnClear() {
+		people.clear();
+		assertThat(people.columns().isEmpty()).isTrue();
 	}
 }

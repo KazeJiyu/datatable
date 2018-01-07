@@ -22,6 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -100,7 +101,7 @@ class SimpleColumns implements Columns {
 	
 	@Override
 	public Stream<Column<?>> stream() {
-		return null;
+		return StreamSupport.stream(spliterator(), false);
 	}
 	
 	private String normalize(final String header) {
@@ -152,6 +153,14 @@ class SimpleColumns implements Columns {
 		}
 		
 		addColumn( new SimpleColumn<>(type, table, header) );
+		return this;
+	}
+	
+	@Override
+	public Columns clear() {
+		for( int i = size() ; i > 0 ; --i )
+			remove(i-1);
+		
 		return this;
 	}
 }

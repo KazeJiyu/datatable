@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +17,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import fr.kazejiyu.generic.datatable.core.Column;
 import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Rows;
 import fr.kazejiyu.generic.datatable.core.Table;
@@ -45,21 +47,21 @@ public class SimpleRowsTest {
 	void initializePeopleTable() {
 		people = new DataTable();
 		people.columns()
-				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Mathilde")
-				.create(Integer.class, AGE_HEADER, 23, 32, 21)
-				.create(String.class, SEX_HEADER, "Male", "Male", "Female");
+				.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
+				.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
+				.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
 	}
 	
 	// isEmpty()
 	
 	@Test
 	void shouldBeEmptyByDefault() {
-		assertThat(empty.rows().isEmpty()).isTrue();
+		assertThat(empty.rows()).isEmpty();
 	}
 	
 	@Test
 	void shouldNotBeEmptyWhenFilled() {
-		assertThat(people.rows().isEmpty()).isFalse();
+		assertThat(people.rows()).isNotEmpty();
 	}
 	
 	// size()
@@ -120,7 +122,7 @@ public class SimpleRowsTest {
 	@Test
 	void shouldThrowWhenFirstColumnIsAskForWhileEmpty() {
 		assertThatExceptionOfType(IndexOutOfBoundsException.class)
-			.isThrownBy(() -> empty.rows().first());
+			.isThrownBy(empty.rows()::first);
 	}
 	
 	// last()
@@ -134,7 +136,7 @@ public class SimpleRowsTest {
 	@Test
 	void shouldThrowWhenLastColumnIsAskForWhileEmpty() {
 		assertThatExceptionOfType(IndexOutOfBoundsException.class)
-			.isThrownBy(() -> empty.rows().last());
+			.isThrownBy(empty.rows()::last);
 	}
 	
 	// iterator()
@@ -147,14 +149,22 @@ public class SimpleRowsTest {
 	}
 	
 	@Test
+	void shouldReturnAWellSizeIterator() {
+		assertThat(people.rows().iterator()).size().isEqualTo(4);
+	}
+	
+	@Test
 	void shouldReturnAnOrderedIterator() {
 		Iterator<Row> itRows = people.rows().iterator();
 		
-		assertThat(itRows.next()).containsExactly("Luc", 23, "Male");
-		assertThat(itRows.next()).containsExactly("Baptiste", 32, "Male");
-		assertThat(itRows.next()).containsExactly("Mathilde", 21, "Female");
+		SoftAssertions softly = new SoftAssertions();
 		
-		assertThat(itRows.hasNext()).isFalse();
+		softly.assertThat(itRows.next()).containsExactly("Luc", 23, "Male");
+		softly.assertThat(itRows.next()).containsExactly("Baptiste", 32, "Male");
+		softly.assertThat(itRows.next()).containsExactly("Anya", 0, "Female");
+		softly.assertThat(itRows.next()).containsExactly("Mathilde", 21, "Female");
+		
+		softly.assertAll();
 	}
 	
 	// stream()
@@ -162,18 +172,45 @@ public class SimpleRowsTest {
 	@Test
 	void shouldReturnALoneStreamWhenEmpty() {
 		assertThat(empty.rows().stream())
-			.isNotNull()
 			.isEmpty();
+	}
+	
+	@Test
+	void shouldReturnAWellSizedStream() {
+		assertThat(people.rows().stream()).size().isEqualTo(4);
 	}
 	
 	@Test
 	void shouldReturnAnOrderedStream() {
 		List<Row> rows = people.rows().stream().collect(toList());
 		
-		assertThat(rows).size().isEqualTo(3);
+		SoftAssertions softly = new SoftAssertions();
 		
-		assertThat(rows.get(0)).containsExactly("Luc", 23, "Male");
-		assertThat(rows.get(1)).containsExactly("Baptiste", 32, "Male");
-		assertThat(rows.get(2)).containsExactly("Mathilde", 21, "Female");
+		softly.assertThat(rows.get(0)).containsExactly("Luc", 23, "Male");
+		softly.assertThat(rows.get(1)).containsExactly("Baptiste", 32, "Male");
+		softly.assertThat(rows.get(2)).containsExactly("Anya", 0, "Female");
+		softly.assertThat(rows.get(3)).containsExactly("Mathilde", 21, "Female");
+	
+		softly.assertAll();
+	}
+	
+	// clear()
+	
+	@Test
+	void shouldRemoveAllItsRowsOnClear() {
+		people.rows().clear();
+		assertThat(people.rows()).isEmpty();
+	}
+	
+	@Test
+	void shouldNotAlterNumberOfColumnsOnClear() {
+		people.rows().clear();
+		assertThat(people.columns()).size().isEqualTo(3);
+	}
+	
+	@Test
+	void shouldLeaveEmptyColumnsOnClear() {
+		people.rows().clear();
+		assertThat(people.columns()).allMatch(Column::isEmpty);
 	}
 }
