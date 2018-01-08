@@ -1,14 +1,11 @@
-[![Sandbox](https://img.shields.io/badge/state-sandbox-yellow.svg)](https://img.shields.io/badge/state-sandbox-yellow.svg)
-
-# Sandbox
-As of now, this project is much more a sandbox to experiment implementation of _mutable_ datatables in Java than a real usable API.
-
 # Motivation
-Create a Java class representing a table that can be filtered easily.
+This project is aimed to experiment with the implements of heterogeneous yet type-safe table structure.
 
-The Querying API, which makes able to filter a table, consists of a SQL-like DSL.
+As of now, the API makes able to:
 
-__Important__: this API is still in progress and will change in the near future.
+- create heterogeneous tables,
+- modify them by adding either rows or columns,
+- query their content in a type-safe way. 
 
 # Quick start
 
@@ -79,6 +76,8 @@ Notice how the last row has been removed first in order to avoid bugs related to
 
 ## Querying a `Table`
 
+### Standard way
+
 The `filter` method makes easy to retrieve the rows of a table that match a specific criterion :
 
 ```java
@@ -90,7 +89,45 @@ Table adultsWhoseNameEndsWithLetterE(Table people) {
 }
 ```
 
-Since the type of a column's elements is only known at runtime, the cast is mandatory within the lambda expression.
+Since the type of a column's elements is only known at runtime, the cast is mandatory within the lambda expression. However, since dealing with numerous casts can be really tedious, the API provides a type-safe way to query a `Table`. 
+
+### Type safety
+
+A column can be identified by a [ColumnId](https://github.com/KazeJiyu/datatable/blob/master/src/main/java/fr/kazejiyu/generic/datatable/core/impl/ColumnIterator.java), which is a simple structure containing the type of the column's elements and its header.
+
+An id can be get with the `id` static method :
+```java
+// Matches any column that contains Strings and which header is "name"
+ColumnId<String> name = ColumnId.id(String.class, "name");
+```
+
+The following snippet shows how the `filter` method can benefit from this feature:
+
+```java
+import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.id;
+
+public class Main {
+	
+    // Ids that match table's columns
+    private static final ColumnId<Integer> AGE = id(Integer.class, "age");
+    private static final ColumnId<String> NAME = id(String.class, "name");
+
+    public static void main(String[] args) {
+        Table people = ...
+		
+        // No need for casting anymore
+        Table adultsWhoseNameEndsWithLetterE = people.filter(row ->
+            row.get(AGE) > 18 &&
+            row.get(NAME).startsWith("E")
+        );
+    }
+
+}
+```
+
+### SQL-like DSL
+
+(__Caution__: with the arrival of the new type-safe features, the DSL is likely to evolve soon).
 
 For more complex cases, the API also brings a SQL-like DSL that can be used as follows :
 
