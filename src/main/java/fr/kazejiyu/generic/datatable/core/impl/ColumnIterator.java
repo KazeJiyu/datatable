@@ -36,9 +36,14 @@ class ColumnIterator <T> implements Iterator <T> {
 	/** The index of the column to iterate. */
 	private final int column;
 	
+	/** The type of column's elements. */
+	private final Class<T> type;
+	
 	/**
 	 * Creates a new iterator on the column identified by {@code header}.
 	 * 
+	 * @param type
+	 * 			The type of the elements of the column. Must not be {@code null}.
 	 * @param rows
 	 * 			The whole rows of the table. Must not be {@code null}.
 	 * @param column
@@ -46,7 +51,8 @@ class ColumnIterator <T> implements Iterator <T> {
 	 * 
 	 * @throws NullPointerException if {@code rows} or {@code column} is {@code null}.
 	 */
-	ColumnIterator(final Rows rows, final int column) {
+	ColumnIterator(Class<T> type, final Rows rows, final int column) {
+		this.type = requireNonNull(type, "The type must not be null");
 		this.rows = requireNonNull(rows, "The rows must not be null").iterator();
 		this.column = requireNonNull(column, "The column to iterate on must not be null");
 	}
@@ -58,7 +64,7 @@ class ColumnIterator <T> implements Iterator <T> {
 
 	@Override
 	public T next() {
-		return rows.next().get(column);
+		return type.cast(rows.next().get(column));
 	}
 
 }

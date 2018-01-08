@@ -53,7 +53,7 @@ public class Filters implements Matcher<Row> {
 	public boolean matches(final Row row) {
 		for( Filter <?> filter : matchers ) 
 			for( String header : filter.headers() )
-				if( ! filter.matches(row.get(header)) )
+//				if( ! filter.matches(row.get(header)) )
 					return false;
 		
 		return true;

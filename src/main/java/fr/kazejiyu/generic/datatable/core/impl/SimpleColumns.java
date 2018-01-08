@@ -14,12 +14,16 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
+import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.id;
 import static java.util.Arrays.asList;
+import static java.util.Objects.requireNonNull;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -47,6 +51,9 @@ class SimpleColumns implements Columns {
 	/** Maps the header in a case-insensitive way to their index. */
 	private final BiMap <String,Integer> headerToIndex;
 	
+	/** Helps to provide an heterogeneous type-safe #get method. */
+	private final Map <ColumnId<?>,Integer> idToIndex;
+	
 	/** Checks methods' preconditions. */
 	private final ColumnsPreconditions preconditions;
 	
@@ -59,6 +66,7 @@ class SimpleColumns implements Columns {
 	SimpleColumns(final Table table) {
 		this.table = table;
 		this.elements = new LinkedList<>();
+		this.idToIndex = new HashMap<>();
 		this.headerToIndex = HashBiMap.create();
 		this.preconditions = new ColumnsPreconditions(table, this);
 	}
@@ -98,6 +106,16 @@ class SimpleColumns implements Columns {
 		return elements.get(index);
 	}
 	
+	@Override 
+	@SuppressWarnings("unchecked")
+	public <T> Column<T> get(final ColumnId<T> index) {
+		preconditions.assertIsAValidColumnId(index);
+		requireNonNull(index, "The index must not be null");
+		
+		Column<?> queried = get(idToIndex.get(index));
+		return (Column<T>) queried;
+	}
+	
 	@Override
 	public Stream<Column<?>> stream() {
 		return StreamSupport.stream(spliterator(), false);
@@ -125,6 +143,12 @@ class SimpleColumns implements Columns {
 		preconditions.assertHeaderExist(header);
 		return headerToIndex.get(normalize(header));
 	}
+	
+	@Override
+	public int indexOf(final ColumnId<?> id) {
+		preconditions.assertIsAValidColumnId(id);
+		return idToIndex.get(id);
+	}
 
 	@Override
 	public <N> Columns create(final Class<N> type, final String header, final Iterable<N> column) {
@@ -141,13 +165,16 @@ class SimpleColumns implements Columns {
 				((ModifiableRow) row).add(itElement.next());
 		}
 		
-		addColumn( new SimpleColumn<>(type, table, header) );
+		createLastColumn(id(type, header));
 		return this;
 	}
 	
-	private void addColumn(final Column <?> column) {
-		headerToIndex.put(normalize(column.header()), size());
-		elements.add(column);
+	private void createLastColumn(ColumnId<?> id) {
+		int nextIndex = size();
+		
+		idToIndex.put(id(id.type(), id.header()), nextIndex);
+		headerToIndex.put(normalize(id.header()), nextIndex);
+		elements.add( new SimpleColumn<>(id, table) );
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.InconsistentColumnSizeException;
 
@@ -83,28 +84,80 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 
 	 * @return the column located at the specified index
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty() || (index < 0 || size() <= index) 
+	 * @throws IndexOutOfBoundsException if isEmpty() || (index < 0 || size() <= index)
 	 */
 	Column<?> get(int index);
 	
+	/**
+	 * Returns a type-safe {@code Column} identified by {@code id}.
+	 * 
+	 * @param id
+	 * 			Identifies the column to get. Must not be {@code null}.
+	 * 
+	 * @return a type-safe {@code Column}.
+	 */
+	<T> Column<T> get(ColumnId<T> id);
+	
+	/**
+	 * Returns a Stream containing all the columns of the table, in order.
+	 * @return a Stream containing all the columns of the table, in order.
+	 */
 	Stream<Column<?>> stream();
 	
 	/**
 	 * Returns the index of the column corresponding to the given header.
 	 * 
 	 * @param header
-	 * 			The header of the column.
+	 * 			The header of the column. Must not be {@code null}.
 	 * 
 	 * @return the index of the column corresponding to the given header.
 	 * 
 	 * @throws HeaderNotFoundException if ! hasHeader(header)
+	 * @throws NullPointerException if header == null
 	 */
 	int indexOf(String header);
 	
+	/**
+	 * Returns the index of the column identified by the given id.
+	 * 
+	 * @param id
+	 * 			The id of the column.
+	 * 
+	 * @return the index of the column corresponding to the given header.
+	 * 
+	 * @throws ColumnIdNotFoundException if no column has id's type and id's header
+	 * @throws NullPointerException if id == null
+	 */
+	int indexOf(ColumnId<?> id);
+	
+	/**
+	 * Creates a new empty column that accepts elements of any type.
+	 * 
+	 * @param header
+	 * 			The header of the column. Must not be {@code null}.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws NullPointerException if header == null
+	 * @throws InconsistentColumnSizeException if ! isEmpty()
+	 */
 	default Columns create(String header) {
 		return create(Object.class, header);
 	}
 	
+	/**
+	 * Creates a new empty column that accepts elements of the given type.
+	 * 
+	 * @param type
+	 * 			The type of the elements of the column. Must not be {@code null}.
+	 * @param header
+	 * 			The header of the column.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws NullPointerException if type == null || header == null
+	 * @throws InconsistentColumnSizeException if ! isEmpty()
+	 */
 	default Columns create(Class<?> type, String header) {
 		return create(type, header, Collections.emptyList());
 	}
@@ -123,7 +176,7 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 			The elements of the column.
 	 * 			Must not be {@code null}.
 	 * 
-	 * @return the new column containing {@code elements}.
+	 * @return a reference to the instance to enable method chaining.
 	 * 
 	 * @param <N> The type of the elements in the new column
 	 * 

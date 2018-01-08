@@ -33,38 +33,31 @@ class SimpleColumn <T> implements Column <T> {
 	/** The table that owns the column. */
 	private final Table table;
 	
-	/** The column's header. */
-	private final String header;
-	
-	/** The type of the elements in the column. */
-	private final Class <T> type;
+	/** Identifies uniquely the column by providing its type and its header. */
+	private final ColumnId<T> id;
 	
 	/**
 	 * Creates a new column.
-	 * 
-	 * @param type
-	 * 			The type of the elements in the column. Must not be {@code null}.
+	 * @param id
+	 * 			Identifies uniquely the column. Must not be {@code null}.
 	 * @param table
 	 * 			The table that owns the column. Must not be {@code null}.
-	 * @param header
-	 * 			The header of the column. Must not be {@code null}.
 	 * 
 	 * @throws NullPointerException if at least one of the arguments is {@code null}.
 	 */
-	SimpleColumn(final Class <T> type, final Table table, final String header) {
-		this.type = requireNonNull(type, "The type of the column must not be null");
+	SimpleColumn(final ColumnId<T> id, final Table table) {
+		this.id = requireNonNull(id, "The id of the column must not be null");
 		this.table = requireNonNull(table, "The table that owns the column must not be null");
-		this.header = requireNonNull(header, "The header of the column must not be null");
 	}
 	
 	@Override
 	public Iterator <T> iterator() {
-		return new ColumnIterator<>(table.rows(), table.columns().indexOf(header));
+		return new ColumnIterator<>(id.type(), table.rows(), table.columns().indexOf(id.header()));
 	}
 
 	@Override
 	public String header() {
-		return header;
+		return id.header();
 	}
 
 	@Override
@@ -79,18 +72,19 @@ class SimpleColumn <T> implements Column <T> {
 
 	@Override
 	public Class <T> type() {
-		return type;
+		return id.type();
 	}
 	
 	@Override
 	public boolean accepts(Object object) {
-		return type.isInstance(object);
+		return id.type().isInstance(object);
 	}
 
 	@Override
 	public T get(final int row) {
-		int column = table.columns().indexOf(header);
-		return table.rows().get(row).get(column);
+		int column = table.columns().indexOf(id.header());
+		Object element = table.rows().get(row).get(column);
+		return id.type().cast(element);
 	}
 
 }

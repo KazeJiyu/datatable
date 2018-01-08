@@ -14,6 +14,9 @@
  */
 package fr.kazejiyu.generic.datatable.core;
 
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
+
 /**
  * A row that belongs to a {@link Table}. <br>
  * <br>
@@ -47,7 +50,22 @@ public interface Row extends Iterable <Object> {
 	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
-	<T> T get(int column);
+	<T> Object get(int column);
+	
+	/**
+	 * Returns the element located at the column identified by the given id. <br>
+	 * <br>
+	 * This method is type-safe and cannot throw a {@code ClassCastException}.
+	 * 
+	 * @param id
+	 * 			Identifies the element's column. Must not be {@code null}.
+	 * 
+	 * @return the element located at the column identified by the given id.
+	 * 
+	 * @throws ColumnIdNotFoundException if id does not match any column
+	 * @throws NullPointerException if id == null
+	 */
+	<T> T get(ColumnId<T> id);
 	
 	/**
 	 * Returns the element of the row located in the column called {@code header}.
@@ -62,5 +80,5 @@ public interface Row extends Iterable <Object> {
 	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
-	public <T> T get(String header);
+	public <T> Object get(String header);
 }

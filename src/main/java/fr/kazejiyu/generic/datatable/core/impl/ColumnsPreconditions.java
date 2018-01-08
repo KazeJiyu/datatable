@@ -20,6 +20,7 @@ import com.google.common.collect.Iterables;
 
 import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderAlreadyExistsException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.InconsistentColumnSizeException;
@@ -79,5 +80,13 @@ class ColumnsPreconditions {
 		requireNonNull(column, "The content of a column must not be null");
 		assertHeaderDoesNotExist(header);
 		assertColumnSizeIsConsistent(column);
+	}
+
+	<T> void assertIsAValidColumnId(ColumnId<T> id) {
+		requireNonNull(id, "The index must not be null");
+		
+		if( ! table.columns().hasHeader(id.header())
+		 || ! id.type().isAssignableFrom(table.columns().get(id.header()).type()) )
+			throw new ColumnIdNotFoundException("The id with header [" + id.header() + "] and type [" + id.type() + "] does not match any column");
 	}
 }

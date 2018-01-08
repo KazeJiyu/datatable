@@ -14,8 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
-import static java.util.Objects.requireNonNull;
 import static ca.odell.glazedlists.GlazedLists.eventList;
+import static java.util.Objects.requireNonNull;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -93,17 +93,20 @@ class SimpleRow extends ModifiableRow {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T get(final int column) {
-		Class <?> runtimeClass = table.columns().get(column).type();
-		return (T) runtimeClass.cast(elements.get(column));
+	public Object get(final int column) {
+		return elements.get(column);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <T> T get(final String header) {
+	public Object get(final String header) {
 		int index = table.columns().indexOf(header);
-		return (T) elements.get(index);
+		return elements.get(index);
+	}
+	
+	@Override
+	public <T> T get(final ColumnId<T> id) {
+		int index = table.columns().indexOf(id);
+		return id.type().cast( elements.get(index) );
 	}
 
 	@Override
