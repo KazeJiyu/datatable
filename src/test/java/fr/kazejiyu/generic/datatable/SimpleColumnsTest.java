@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.id;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,7 @@ import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderAlreadyExistsException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.InconsistentColumnSizeException;
@@ -217,6 +219,26 @@ class SimpleColumnsTest {
 		void throwsWhenAskedForTheIndexOfANonExistingHeader() {
 			assertThatExceptionOfType(HeaderNotFoundException.class)
 				.isThrownBy(() -> people.columns().indexOf("wrong header"));
+		}
+
+		@ParameterizedTest
+		@CsvSource({"'name', 'java.lang.String', 0", "'age', 'java.lang.Integer', 1", "'sex', 'java.lang.String', 2"})
+		@DisplayName("can returns the index of a column from its id")
+		void canReturnTheIndexOfAColumnFromItsId(String header, String className, int expectedIndex) throws ClassNotFoundException {
+			assertThat(people.columns().indexOf(id(Class.forName(className), header)))
+				.isEqualTo(expectedIndex);
+		}
+		
+		@Test @DisplayName("throws when asked for the index of a column which id's type is wrong")
+		void throwsWhenAskedForTheIndexOfAnIdWithWrongType() {
+			assertThatExceptionOfType(ColumnIdNotFoundException.class)
+				.isThrownBy(() -> people.columns().indexOf(id(String.class, "age")));
+		}
+		
+		@Test @DisplayName("throws when asked for the index of a column which id's header is wrong")
+		void throwsWhenAskedForTheIndexOfAnIdWithWrongHeader() {
+			assertThatExceptionOfType(ColumnIdNotFoundException.class)
+				.isThrownBy(() -> people.columns().indexOf(id(Integer.class, "name")));
 		}
 		
 		// iterator()

@@ -172,7 +172,7 @@ class SimpleColumns implements Columns {
 	private void createLastColumn(ColumnId<?> id) {
 		int nextIndex = size();
 		
-		idToIndex.put(id(id.type(), id.header()), nextIndex);
+		idToIndex.put(id(id.type(), normalize(id.header())), nextIndex);
 		headerToIndex.put(normalize(id.header()), nextIndex);
 		elements.add( new SimpleColumn<>(id, table) );
 	}
