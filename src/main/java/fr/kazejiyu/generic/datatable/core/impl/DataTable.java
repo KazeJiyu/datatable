@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 import ca.odell.glazedlists.FilterList;
-import ca.odell.glazedlists.TransformedList;
 import ca.odell.glazedlists.matchers.Matcher;
 import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Row;
@@ -35,7 +34,7 @@ import fr.kazejiyu.generic.datatable.core.Table;
  * 
  * @author Emmanuel CHEBBI
  */
-public class DataTable implements Table, AutoCloseable {
+public class DataTable implements Table {
 	
 	/** The rows that compose the table. */
 	private final SimpleRows rows;
@@ -123,19 +122,6 @@ public class DataTable implements Table, AutoCloseable {
 			elements.add(value);
 		}
 		return elements;
-	}
-
-	@Override
-	public void close() throws Exception {
-		this.dispose();
-	}
-	
-	/**
-	 * 
-	 */
-	public void dispose() {
-		if( rows.internal() instanceof TransformedList<?,?> )
-			((TransformedList<?,?>) rows.internal()).dispose();
 	}
 
 }
