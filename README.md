@@ -1,11 +1,33 @@
+![build status](https://travis-ci.org/KazeJiyu/datatable.svg?branch=master)
+
 # Motivation
-This project is aimed to experiment with the implements of heterogeneous yet type-safe table structure.
+This project is aimed to experiment with the implementation of heterogeneous yet type-safe table structure.
 
 As of now, the API makes able to:
 
 - create heterogeneous tables,
 - modify them by adding either rows or columns,
 - query their content in a type-safe way. 
+
+# Full example
+
+Because code is better than words, here is a code snippet that shows an overview of the API:
+
+```java
+Table people = new DataTable();
+people.columns()
+    .create(String.class, "Name", "Luc", "Baptiste", "Marie")
+    .create(Integer.class, "Age", 23, 32, 42);
+
+// Used to identify table's columns in a type-safe way    
+ColumnId<Integer> AGE = id(Integer.class, "age");
+ColumnId<String> NAME = id(String.class, "name");
+	
+Table adultsWhoseNameEndsWithLetterE = people.filter(row ->
+    row.get(AGE) > 18 &&
+    row.get(NAME).startsWith("E")
+);
+```
 
 # Quick start
 
@@ -33,7 +55,7 @@ people.rows()
 ```
    
 The table resulting of the above statements is the following :
-```
+```java
 +----------+-----+
 |   Name   | Age |
 +----------+-----|
