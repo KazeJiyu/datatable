@@ -6,10 +6,32 @@
 	<artifactId>datatable</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>datatable</name>
-	<description>Datatables that can be filtered easily</description>
+	<description>Heterogeneous and type-safe table structure</description>
 
-	<url>http://maven.apache.org</url>
+	<url>https://github.com/KazeJiyu/datatable</url>
+	
+	<issueManagement>
+		<url>https://github.com/KazeJiyu/datatable/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
 
+	<licenses>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<id>KazeJiyu</id>
+			<name>Emmanuel CHEBBI</name>
+			<email>emmanuel.chebbi@outlook.fr</email>
+			<url>https://github.com/KazeJiyu</url>
+		</developer>	
+	</developers>
+	
 	<properties>
 		<junit.version>5.0.1</junit.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -50,9 +72,9 @@
 	</dependencies>
 
 	<build>
-		<!-- A workaround, waiting for maven-surefire-plugin to support JUnit5 -->
-		<!-- See issue : https://issues.apache.org/jira/browse/SUREFIRE-1330 -->
 		<plugins>
+			<!-- A workaround, waiting for maven-surefire-plugin to support JUnit 5 -->
+			<!-- See issue : https://issues.apache.org/jira/browse/SUREFIRE-1330 -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.19.1</version>
