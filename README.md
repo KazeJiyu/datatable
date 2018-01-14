@@ -11,7 +11,7 @@ As of now, the API makes able to:
 
 # Full example
 
-Because code is better than words, here is a code snippet that shows an overview of the API:
+Because code is better than words, here is an overview of the API:
 
 ```java
 Table people = new DataTable();
@@ -34,6 +34,7 @@ Table adultsWhoseNameEndsWithLetterE = people.filter(row ->
 ## Populating a `Table`
 
 Creation of a new [Table](https://github.com/KazeJiyu/datatable/blob/master/src/main/java/fr/kazejiyu/generic/datatable/core/Table.java) consists of an easy one-liner : 
+
 ```java
 Table people = new DataTable();
 ```
@@ -55,6 +56,7 @@ people.rows()
 ```
    
 The table resulting of the above statements is the following :
+
 ```java
 +----------+-----+
 |   Name   | Age |
@@ -126,49 +128,80 @@ ColumnId<String> name = ColumnId.id(String.class, "name");
 The following snippet shows how the `filter` method can benefit from this feature:
 
 ```java
-import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.id;
+import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
 
 public class Main {
 	
     // Ids that match table's columns
     private static final ColumnId<Integer> AGE = id(Integer.class, "age");
     private static final ColumnId<String> NAME = id(String.class, "name");
-
-    public static void main(String[] args) {
-        Table people = ...
-		
-        // No need for casting anymore
-        Table adultsWhoseNameEndsWithLetterE = people.filter(row ->
+    
+    // no need for casting anymore
+    Table adultsWhoseNameEndsWithLetterE(Table people) {
+        return people.filter(row ->
             row.get(AGE) > 18 &&
             row.get(NAME).startsWith("E")
         );
     }
-
 }
 ```
 
 ### SQL-like DSL
 
-(__Caution__: with the arrival of the new type-safe features, the DSL is likely to evolve soon).
+### Standard way
 
-For more complex cases, the API also brings a SQL-like DSL that can be used as follows :
+For more complex cases, the API also brings a SQL-like DSL that makes possible to apply a same filter to multiple columns. It can be used as follows :
 
-Hence, the previous snippet can be re-written as follows: 
 ```java
-// Retrieve all the adults whose name ends with the letter "e"
-Table adults = Query
-  .select("Name")
-  .from(people)
-  .where("Name").asStr().endsWith("e")
-  .and("Age").asNumber().gt(18)
-  .queryTable();
+// Retrieve all european adults whose name and surename ends with the letter "e"
+Table adultsWhoseNameEndsWithLetterE(Table people) {
+    return Query
+        .from(people)
+        .where("Name", "Surename").asStr().endsWith("e")
+        .and("Age").asNumber().gt(18)
+        .and("Country").match(country -> ((Country) country).isInEurope())
+        .select();
+}
 ```
 
-The `as*` methods provide tailored methods, making easier to build explicit queries. As of now, three of them are available :
+The `as*` methods provide tailored methods, making easier to build explicit queries. As of now, four of them are available :
 
 - `asStr()` to indicate that the column contains `String`s,
 - `asBool()` to indicate that the column contains `Boolean`s,
 - `asNumber()` to indicate that the column contains `Number`s,
 - `as(Class<T>)` to indicate that the column contains `T`s.
 
-__Important__: these methods do not perform dynamic casts. If the column's elements are not of the rigth type, a `ClassCastException` is thrown.
+__Important__: these methods do not perform dynamic casts. If the column's elements are not of the right type, a `ClassCastException` is thrown.
+
+Again, the API provides a way to avoid the explicit cast.
+
+### Type safety
+
+A clearer way to use the DSL is the following:
+
+```java
+import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
+
+public class Main {
+	
+    // Ids that match table's columns
+    private static final ColumnId<Integer> AGE = id(Integer.class, "age");
+    private static final ColumnId<String> NAME = id(String.class, "name");
+    private static final ColumnId<String> SURENAME = id(String.class, "surename");
+
+    // Retrieve all european adults whose name and surename ends with the letter "e"
+    Table adultsWhoseNameEndsWithLetterE(Table people) {
+        return Query
+            .from(people)
+            .where(s(NAME, SURENAME)).endsWith("e")
+            .and(AGE).gt(18)
+            .and(COUNTRY).match(Country::isInEurope)
+            .select();
+    }
+}
+```
+
+Notice how the `s` method is used to specify several columns of type String to the `WHERE`clause. Due to Java's type erasure, this trick is mandatory. This static method is defined in the `ColumnId` class, as well as the methods:
+
+- `n`: used to specify several methods of type Number,
+- `b`: used to specify several methods of type Boolean.
