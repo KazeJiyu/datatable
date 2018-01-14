@@ -14,10 +14,16 @@
  */
 package fr.kazejiyu.generic.datatable.query.impl;
 
+import static java.util.Arrays.asList;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnOfNumbersId;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnOfStringsId;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
 import fr.kazejiyu.generic.datatable.query.And;
 import fr.kazejiyu.generic.datatable.query.Where;
@@ -27,7 +33,7 @@ import fr.kazejiyu.generic.datatable.query.Where;
  * 
  * @author Emmanuel CHEBBI
  */
-class GlazedAnd implements And {
+class SimpleAnd implements And {
 
 	/** The context of the query. */
 	private final QueryContext context;
@@ -38,7 +44,7 @@ class GlazedAnd implements And {
 	 * @param context
 	 * 			The context of the query.
 	 */
-	public GlazedAnd(final QueryContext context) {
+	public SimpleAnd(final QueryContext context) {
 		this.context = context;
 	}
 	
@@ -54,12 +60,39 @@ class GlazedAnd implements And {
 	
 	@Override
 	public Where<?> and(Collection <String> headers) {
-		return new GlazedWhere<>(context, headers);
+		return new SimpleWhere<>(context, headers);
+	}
+	
+	@Override
+	public <T> Where<T> and(ColumnId<T> id) {
+		return new SimpleWhere<>(context, id.header());
+	}
+	
+	@Override
+	public WhereStr and(ColumnOfStringsId id) {
+		return new WhereStr(context, id.header());
+	}
+	
+	@Override
+	public WhereNumber and(ColumnOfNumbersId id) {
+		return new WhereNumber(context, id.header());
 	}
 
 	@Override
-	public Table queryTable() {
-		return context.table.filter(context.filters, context.selectedHeaders);
+	public Table select() {
+		return select(context.table.columns().headers());
+	}
+
+	@Override
+	public Table select(String... headers) {
+		return select(asList(headers));
+	}
+
+	@Override
+	public Table select(Collection<String> headers) {
+		LinkedHashSet<String> selectedHeaders = new LinkedHashSet<>();
+		selectedHeaders.addAll(headers);
+		return context.table.filter(context.filters, selectedHeaders);
 	}
 
 }

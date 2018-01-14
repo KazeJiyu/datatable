@@ -23,7 +23,7 @@ import fr.kazejiyu.generic.datatable.query.And;
  * 
  * @author Emmanuel CHEBBI
  */
-public class WhereBool extends GlazedWhere <Boolean> {
+public class WhereBool extends SimpleWhere <Boolean> {
 	
 	/**
 	 * Creates a new specialized Where &amp;Boolean&amp;.

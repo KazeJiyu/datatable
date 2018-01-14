@@ -14,7 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.query.impl;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 import java.util.Collection;
 import java.util.function.Predicate;
 
@@ -29,7 +30,7 @@ import fr.kazejiyu.generic.datatable.query.Where;
  *
  * @param <T> The type of the instances to filter.
  */
-class GlazedWhere <T> implements Where <T> {
+class SimpleWhere <T> implements Where <T> {
 
 	/** The context of the query */
 	protected final QueryContext context;
@@ -45,8 +46,8 @@ class GlazedWhere <T> implements Where <T> {
 	 * @param header
 	 * 			The name of the column to filter.
 	 */
-	public GlazedWhere(final QueryContext context, final String header) {
-		this(context, Arrays.asList(header));
+	public SimpleWhere(final QueryContext context, final String header) {
+		this(context, asList(header));
 	}
 
 	/**
@@ -57,7 +58,7 @@ class GlazedWhere <T> implements Where <T> {
 	 * @param headers
 	 * 			The name of the column to filter.
 	 */
-	public GlazedWhere(final QueryContext context, final Collection <String> headers) {
+	public SimpleWhere(final QueryContext context, final Collection <String> headers) {
 		this.context = context;
 		this.headers = headers;
 	}
@@ -65,7 +66,7 @@ class GlazedWhere <T> implements Where <T> {
 	@Override
 	public And match(final Predicate <T> predicate) {
 		context.filters.add(new Filter<T>(headers, predicate));
-		return new GlazedAnd(context);
+		return new SimpleAnd(context);
 	}
 	
 	@Override
@@ -80,7 +81,7 @@ class GlazedWhere <T> implements Where <T> {
 		else if( clazz == Boolean.class ) 
 			return (Where <N>) asBool();
 		
-		return new GlazedWhere<>(context, headers);
+		return new SimpleWhere<>(context, headers);
 	}
 
 	@Override

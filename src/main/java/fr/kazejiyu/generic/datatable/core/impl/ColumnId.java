@@ -14,6 +14,9 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.kazejiyu.generic.datatable.core.Column;
 
 /**
@@ -24,7 +27,7 @@ import fr.kazejiyu.generic.datatable.core.Column;
  *
  * @param <T> The type of column's elements.
  */
-public final class ColumnId<T> {
+public class ColumnId<T> {
 
 	private final Class<T> type;
 	
@@ -80,5 +83,27 @@ public final class ColumnId<T> {
 	/** @return a new {@code ColumnId} */
 	public static <T> ColumnId<T> id(Class<T> type, String header) {
 		return new ColumnId<>(type, header);
+	}
+	
+	/** @return a new {@code ColumnId} */
+	public static ColumnOfStringsId s(ColumnId<String> id) {
+		return new ColumnOfStringsId(id);
+	}
+	
+	/** @return a new {@code ColumnId} */
+	@SafeVarargs
+	public static ColumnOfStringsId[] s(ColumnId<String> id, ColumnId<String>... ids) {
+		List<ColumnOfStringsId> columns = new ArrayList<>();
+		columns.add(new ColumnOfStringsId(id));
+		
+		for(ColumnId<String> col : ids) 
+			columns.add(new ColumnOfStringsId(col));
+		
+		return columns.toArray(new ColumnOfStringsId[columns.size()]);
+	}
+	
+	/** @return a new {@code ColumnId} */
+	public static ColumnOfNumbersId n(ColumnId<? extends Number> id) {
+		return new ColumnOfNumbersId(id);
 	}
 }

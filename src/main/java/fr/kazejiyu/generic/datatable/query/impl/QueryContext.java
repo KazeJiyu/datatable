@@ -16,7 +16,8 @@ package fr.kazejiyu.generic.datatable.query.impl;
 
 import java.util.LinkedHashSet;
 
-import fr.kazejiyu.generic.datatable.core.impl.DataTable;
+import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
 
 /**
  * The context of a query.
@@ -26,26 +27,14 @@ import fr.kazejiyu.generic.datatable.core.impl.DataTable;
 class QueryContext {
 	
 	/** The DataTable that contains the rows to filter. */
-	public final DataTable table;
+	public Table table;
 	
 	/** The columns that will be returned by the final query. */
-	public final LinkedHashSet<String> selectedHeaders;
+	public final LinkedHashSet<String> selectedHeaders = new LinkedHashSet<>();
+	
+	public final LinkedHashSet<ColumnId<?>> selectedIds = new LinkedHashSet<>();
 	
 	/** The filters to apply on the table to obtain the desired result. */
-	public final Filters filters;
-
-	/**
-	 * Creates a new query's context.
-	 * 
-	 * @param table
-	 * 			The table on which process the query.
-	 * @param selectedHeaders
-	 * 			The headers selected by the query, will be returned at the query's end.
-	 */
-	public QueryContext(final DataTable table, final LinkedHashSet<String> selectedHeaders) {
-		this.table = table;
-		this.selectedHeaders = selectedHeaders;
-		this.filters = new Filters();
-	}
+	public final Filters filters = new Filters();
 	
 }

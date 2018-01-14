@@ -14,52 +14,19 @@
  */
 package fr.kazejiyu.generic.datatable.query;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import fr.kazejiyu.generic.datatable.core.Table;
-import fr.kazejiyu.generic.datatable.core.impl.DataTable;
-import fr.kazejiyu.generic.datatable.query.impl.GlazedSelect;
+import fr.kazejiyu.generic.datatable.query.impl.SimpleFrom;
 
 /**
- * Helper methods to start a new query.
+ * Helper method to start a new query.
  * 
  * TODO Describe the querying API in details
  * 
  * @author Emmanuel CHEBBI
  */
 public interface Query {
-
-	/**
-	 * Returns a new query that selects all the columns of a {@link Table}.
-	 * @return a new query that selects all the columns of a {@code Table}.
-	 */
-	public static Select<DataTable> select() {
-		return new GlazedSelect();
-	}
 	
-	/**
-	 * Returns a new query that selects the columns called {@code headers} of a {@link Table}.
-	 * 
-	 * @param headers
-	 * 			The name of the columns to select in the table.
-	 * 
-	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
-	 */
-	public static Select<DataTable> select(String... headers) {
-		return new GlazedSelect(Arrays.asList(headers));
+	public static From from(Table table) {
+		return new SimpleFrom(table);
 	}
-	
-	/**
-	 * Returns a new query that selects the columns called {@code headers} of a {@link Table}.
-	 * 
-	 * @param headers
-	 * 			The name of the columns to select in the table.
-	 * 
-	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
-	 */
-	public static Select<DataTable> select(Collection <String> headers) {
-		return new GlazedSelect(headers);
-	}
-	
 }

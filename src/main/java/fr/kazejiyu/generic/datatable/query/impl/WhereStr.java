@@ -24,7 +24,7 @@ import fr.kazejiyu.generic.datatable.query.Where;
  * 
  * @author Emmanuel CHEBBI
  */
-public class WhereStr extends GlazedWhere <String> {
+public class WhereStr extends SimpleWhere <String> {
 	
 	/**
 	 * Creates a new specialized Where &amp;String&amp;.

@@ -52,10 +52,23 @@ public class Filters implements Matcher<Row> {
 	@Override
 	public boolean matches(final Row row) {
 		for( Filter <?> filter : matchers ) 
-			for( String header : filter.headers() )
-//				if( ! filter.matches(row.get(header)) )
-					return false;
+			if( ! match(filter, row) )
+				return false;
 		
+		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	<T> boolean match(Filter<T> filter, Row row) {
+		for( String header : filter.headers() ) {
+			try {
+				if( ! filter.matches((T) row.get(header)) )
+					return false;
+			
+			} catch( ClassCastException e ) {
+				throw new IllegalArgumentException("When appling filter on column " + header, e);
+			}
+		}
 		return true;
 	}
 }

@@ -16,6 +16,12 @@ package fr.kazejiyu.generic.datatable.query;
 
 import java.util.Collection;
 
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnOfNumbersId;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnOfStringsId;
+import fr.kazejiyu.generic.datatable.query.impl.WhereNumber;
+import fr.kazejiyu.generic.datatable.query.impl.WhereStr;
+
 /**
  * Contribute to a query by selecting one or more column to filter.
  * <br><br>
@@ -31,7 +37,7 @@ public interface From {
 	 * Prepares to apply a filter on all the columns of the table.
 	 * @return a query set up to apply a filter on all the columns of the table.
 	 */
-	public Where<?> where();
+	Where<?> where();
 	
 	/**
 	 * Prepares to apply a filter on the specified columns.
@@ -51,7 +57,7 @@ public interface From {
 	 * 
 	 * @return a query set up to apply a filter on all the columns of the table.
 	 */
-	public Where<?> where(String... headers);
+	Where<?> where(String... headers);
 	
 	/**
 	 * Prepares to apply a filter on the specified columns.
@@ -71,6 +77,15 @@ public interface From {
 	 * 
 	 * @return a query set up to apply a filter on all the columns of the table.
 	 */
-	public Where<?> where(Collection <String> headers);
+	Where<?> where(Collection<String> headers);
 	
+	<T> Where<T> where(ColumnId<T> id);
+	
+	WhereStr where(ColumnOfStringsId id);
+
+	WhereNumber where(ColumnOfNumbersId id);
+
+	WhereStr where(ColumnOfStringsId[] ids);
+
+	WhereNumber where(ColumnOfNumbersId[] ids);
 }

@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.query;
 
+import java.util.Collection;
+
 import fr.kazejiyu.generic.datatable.core.Table;
 
 /**
@@ -23,16 +25,32 @@ import fr.kazejiyu.generic.datatable.core.Table;
  *
  * @param <T> The type of the {@link Table} to query.
  */
-public interface Select <T extends Table> {
-
+public interface Select {
+	
 	/**
-	 * Choose the table to filter.
-	 *  
-	 * @param table
-	 * 			The table to filter.
-	 * 
-	 * @return the next query's statement
+	 * Returns a new query that selects all the columns of a {@link Table}.
+	 * @return a new query that selects all the columns of a {@code Table}.
 	 */
-	public From from(T table);
+	public Table select();
+	
+	/**
+	 * Returns a new query that selects the columns called {@code headers} of a {@link Table}.
+	 * 
+	 * @param headers
+	 * 			The name of the columns to select in the table.
+	 * 
+	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
+	 */
+	public Table select(String... headers);
+	
+	/**
+	 * Returns a new query that selects the columns called {@code headers} of a {@link Table}.
+	 * 
+	 * @param headers
+	 * 			The name of the columns to select in the table.
+	 * 
+	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
+	 */
+	public Table select(Collection <String> headers);
 	
 }

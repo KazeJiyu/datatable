@@ -16,7 +16,11 @@ package fr.kazejiyu.generic.datatable.query;
 
 import java.util.Collection;
 
-import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnOfNumbersId;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnOfStringsId;
+import fr.kazejiyu.generic.datatable.query.impl.WhereNumber;
+import fr.kazejiyu.generic.datatable.query.impl.WhereStr;
 
 /**
  * Contribute to a query by selecting one or more column to filter.
@@ -30,7 +34,7 @@ import fr.kazejiyu.generic.datatable.core.Table;
  * 
  * @author Emmanuel CHEBBI
  */
-public interface And {
+public interface And extends Select {
 	
 	/**
 	 * Prepares to apply a filter on all the columns of the table.
@@ -58,6 +62,9 @@ public interface And {
 	 */
 	public Where<?> and(Collection <String> headers);
 	
-	/** @return the Table resulting of the query */
-	public Table queryTable();
+	<T> Where<T> and(ColumnId<T> id);
+	
+	WhereStr and(ColumnOfStringsId id);
+
+	WhereNumber and(ColumnOfNumbersId id);
 }
