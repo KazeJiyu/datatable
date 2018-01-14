@@ -1,3 +1,5 @@
+# Heterogeneous and type-safe tables
+
 ![build status](https://travis-ci.org/KazeJiyu/datatable.svg?branch=master)
 
 # Motivation
@@ -146,7 +148,7 @@ public class Main {
 }
 ```
 
-### SQL-like DSL
+## SQL-like DSL
 
 ### Standard way
 
