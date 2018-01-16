@@ -24,12 +24,10 @@ import fr.kazejiyu.generic.datatable.query.impl.WhereStr;
 
 /**
  * Contribute to a query by selecting one or more column to filter.
- * <br><br>
- * See {@link Query} for further details about the Querying API.
- * <br><br>
- * The DSL defined by the class is closed to the SQL "FROM" clause. 
  * 
  * @author Emmanuel CHEBBI
+ * 
+ * @see Query Query for further details about the Querying API
  */
 public interface From {
 	
@@ -40,52 +38,116 @@ public interface From {
 	Where<?> where();
 	
 	/**
-	 * Prepares to apply a filter on the specified columns.
-	 * <br><br>
+	 * Prepares to apply a filter on the specified columns. <br>
+	 * <br>
 	 * For instance, the code :
-	 * <pre>Query.select()
-	 *     .from(table)
+	 * <pre>Query.from(table)
 	 *     .where("A", "B").asNumber().isPositive();</pre>
 	 * It is semantically equal to:
-	 * <pre>Query.select()
-	 *     .from(table)
+	 * <pre>Query.from(table)
 	 *     .where("A").asNumber().isPositive();
-	 *     .where("B").asNumber().isPositive();</pre>
+	 *     .and("B").asNumber().isPositive();</pre>
 	 * 
 	 * @param headers
-	 * 			The columns on which apply a filter.
+	 * 			The header of the columns on which apply a filter.
 	 * 
-	 * @return a query set up to apply a filter on all the columns of the table.
+	 * @return a query set up to apply a filter on the specified columns.
 	 */
 	Where<?> where(String... headers);
 	
 	/**
-	 * Prepares to apply a filter on the specified columns.
-	 * <br><br>
+	 * Prepares to apply a filter on the specified columns. <br>
+	 * <br>
 	 * For instance, the code :
-	 * <pre>Query.select()
-	 *     .from(table)
-	 *     .where("A", "B").asNumber().isPositive();</pre>
+	 * <pre>
+	 *List<String> columns = Arrays.asList("A", "B");
+	 *Query.from(table)
+	 *     .where(columns).asNumber().isPositive();</pre>
 	 * It is semantically equal to:
-	 * <pre>Query.select()
-	 *     .from(table)
+	 * <pre>Query.from(table)
 	 *     .where("A").asNumber().isPositive();
-	 *     .where("B").asNumber().isPositive();</pre>
+	 *     .and("B").asNumber().isPositive();</pre>
 	 * 
 	 * @param headers
-	 * 			The columns on which apply a filter.
+	 * 			The header of the columns on which apply a filter.
 	 * 
-	 * @return a query set up to apply a filter on all the columns of the table.
+	 * @return a query set up to apply a filter on the specified columns.
 	 */
 	Where<?> where(Collection<String> headers);
 	
+	/**
+	 * Prepares to apply a filter on the specified column, keeping its type. <br>
+	 * <br>
+	 * This method should be favored over {@link #where(String...)}
+	 * because it keeps the type of the element of the column and hence
+	 * avoids casting in subsequent methods.
+	 * 
+	 * @param id
+	 * 			The id of the column on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on the specified column.
+	 * 
+	 * @param <T> The runtime type of the elements of the column
+	 */
 	<T> Where<T> where(ColumnId<T> id);
 	
+	/**
+	 * Prepares to apply a filter on the specified column of Strings. <br>
+	 * <br>
+	 * This method provides a query tailored to filter Strings, and hence should
+	 * be preferred when dealing with a column full of Strings. <br>
+	 * <br>
+	 * A {@code ColumnOfStringsId} instance can be built via {@link ColumnId#s(ColumnId)}.
+	 * 
+	 * @param id
+	 * 			The id of the column on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on a column of Strings.
+	 */
 	WhereStr where(ColumnOfStringsId id);
-
+	
+	/**
+	 * Prepares to apply a filter on the specified column of Numbers. <br>
+	 * <br>
+	 * This method provides a query tailored to filter Numbers, and hence should
+	 * be preferred when dealing with a column full of Numbers. <br>
+	 * <br>
+	 * A {@code ColumnOfNumbersId} instance can be built via {@link ColumnId#n(ColumnId)}.
+	 * 
+	 * @param id
+	 * 			The id of the column on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on a column of Numbers.
+	 */
 	WhereNumber where(ColumnOfNumbersId id);
-
+	
+	/**
+	 * Prepares to apply a filter on the specified columns of Strings. <br>
+	 * <br>
+	 * This method provides a query tailored to filter Strings, and hence should
+	 * be preferred when dealing with columns full of Strings. <br>
+	 * <br>
+	 * A {@code ColumnOfStringsId} array can be built via {@link ColumnId#s(ColumnId, ColumnId...)}.
+	 * 
+	 * @param ids
+	 * 			The ids of the columns on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on several columns of Strings.
+	 */
 	WhereStr where(ColumnOfStringsId[] ids);
-
+	
+	/**
+	 * Prepares to apply a filter on the specified columns of Numbers. <br>
+	 * <br>
+	 * This method provides a query tailored to filter Numbers, and hence should
+	 * be preferred when dealing with columns full of Numbers. <br>
+	 * <br>
+	 * A {@code ColumnOfStringsId} array can be built via {@link ColumnId#n(ColumnId, ColumnId...)}.
+	 * 
+	 * @param ids
+	 * 			The ids of the columns on which apply a filter.
+	 * 
+	 * @return a query set up to apply a filter on several columns of Numbers.
+	 */
 	WhereNumber where(ColumnOfNumbersId[] ids);
 }

@@ -24,22 +24,21 @@ import fr.kazejiyu.generic.datatable.query.impl.WhereNumber;
 import fr.kazejiyu.generic.datatable.query.impl.WhereStr;
 
 /**
- * Contribute to a query by adding a new filter.
- * <br><br>
- * See {@link Query} for further details about the Querying API.
- * <br><br>
- * The DSL defined by the class is closed to the SQL "WHERE" clause. 
+ * Contribute to a query by adding a new filter. <br>
+ * <br>
+ * The column(s) on which apply the filter should have been selected thanks to
+ * a previous {@link From} instance. <br>
  * 
  * @author Emmanuel CHEBBI
  *
- * @param <T> The type of the instances to filter.
+ * @param <T> The runtime type of the elements stored in the column(s) to filter
  * 
- * @see Query for further details about the Querying API
+ * @see Query Query for further details about the Querying API
  */
 public interface Where <T> {
 	
 	/**
-	 * Adds a filter to keep the rows that match {@code predicate}.
+	 * Adds a filter keeping the rows that match {@code predicate}.
 	 * 
 	 * @param predicate
 	 * 			The predicate to test against the table's rows.
@@ -51,9 +50,10 @@ public interface Where <T> {
 	public And match(Predicate <T> predicate);
 	
 	/**
-	 * Adds a filter to keep the rows that match {@code predicate}.
-	 * <br><br>
-	 * If the row's element is {@code null}, the row is not filtered.
+	 * Adds a filter keeping the rows that match {@code predicate}. <br>
+	 * <br>
+	 * If the row's element is {@code null}, the filter is not applied
+	 * and the row is kept.
 	 * 
 	 * @param predicate
 	 * 			The predicate to test against the table's rows.
@@ -67,7 +67,9 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows containing an element equal to {@code value}.
+	 * Adds a filter keeping the rows containing an element equal to {@code value}. <br>
+	 * <br>
+	 * The equality is tested via {@link Objects#equals(Object)}.
 	 * 
 	 * @param value
 	 * 			The value to keep on the selected columns.
@@ -81,7 +83,9 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows containing an element not equal to {@code value}.
+	 * Adds a filter keeping the rows containing an element that is not equal to {@code value}. <br>
+	 * <br>
+	 * The equality is tested via {@link Objects#equals(Object)}.
 	 * 
 	 * @param value
 	 * 			The value to avoid on the selected columns.
@@ -95,7 +99,7 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows containing {@code null} values.
+	 * Adds a filter keeping the rows containing {@code null} values.
 	 * 
 	 * @return a {@code And} instance to continue the query.
 	 * 
@@ -106,7 +110,7 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows containing non {@code null} values.
+	 * Adds a filter keeping the rows containing non {@code null} values.
 	 * 
 	 * @return a {@code And} instance to continue the query.
 	 * 
@@ -117,7 +121,7 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows containing values that are instances of {@code clazz}.
+	 * Adds a filter keeping the rows containing values that are instances of {@code clazz}.
 	 * 
 	 * @param clazz
 	 * 			The subclass of the values to keep.
@@ -129,7 +133,7 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows which values are contained into {@code elements}.
+	 * Adds a filter keeping the rows which values are contained into {@code elements}.
 	 * 
 	 * @param elements
 	 * 			The elements that must be kept on the selected columns.
@@ -146,7 +150,7 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows which values are contained into {@code elements}.
+	 * Adds a filter keeping the rows which values are contained into {@code elements}.
 	 * 
 	 * @param elements
 	 * 			The elements that must be kept on the selected columns.
@@ -162,7 +166,7 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows which values are not contained into {@code elements}.
+	 * Adds a filter keeping the rows which values are not contained into {@code elements}.
 	 * 
 	 * @param elements
 	 * 			The elements that must be kept on the selected columns.
@@ -179,7 +183,7 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Adds a filter to keep the rows which values are not contained into {@code elements}.
+	 * Adds a filter keeping the rows which values are not contained into {@code elements}.
 	 * 
 	 * @param elements
 	 * 			The elements that must be kept on the selected columns.

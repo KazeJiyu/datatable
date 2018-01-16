@@ -23,16 +23,14 @@ import fr.kazejiyu.generic.datatable.query.impl.WhereNumber;
 import fr.kazejiyu.generic.datatable.query.impl.WhereStr;
 
 /**
- * Contribute to a query by selecting one or more column to filter.
- * <br><br>
+ * Contribute to a query by selecting one or more column to filter. <br>
+ * <br>
  * This class is similar to {@link From}, except that the "where" method 
- * is renamed "and" in order to make the query's DSL cleaner.
- * <br><br>
- * See {@link Query} for further details about the Querying API.
- * <br><br>
- * The DSL defined by the class is closed to the SQL "FROM" clause. 
+ * is renamed "and" in order to make the query's DSL more consistent.
  * 
  * @author Emmanuel CHEBBI
+ * 
+ * @see Query Query for further details about the Querying API
  */
 public interface And extends Select {
 	

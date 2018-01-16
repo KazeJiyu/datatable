@@ -26,12 +26,13 @@ import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
  */
 class QueryContext {
 	
-	/** The DataTable that contains the rows to filter. */
+	/** The Table that contains the rows to filter. */
 	public Table table;
 	
 	/** The columns that will be returned by the final query. */
 	public final LinkedHashSet<String> selectedHeaders = new LinkedHashSet<>();
 	
+	/** The ids of the columns that will be returned by the final query. */
 	public final LinkedHashSet<ColumnId<?>> selectedIds = new LinkedHashSet<>();
 	
 	/** The filters to apply on the table to obtain the desired result. */

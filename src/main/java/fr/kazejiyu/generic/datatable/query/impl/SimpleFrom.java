@@ -25,10 +25,11 @@ import fr.kazejiyu.generic.datatable.core.impl.ColumnOfNumbersId;
 import fr.kazejiyu.generic.datatable.core.impl.ColumnOfStringsId;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
 import fr.kazejiyu.generic.datatable.query.From;
+import fr.kazejiyu.generic.datatable.query.Query;
 import fr.kazejiyu.generic.datatable.query.Where;
 
 /**
- * An implementation of {@link From} able to deal with {@link DataTable}s.
+ * An implementation of {@link From} able to deal with {@link Table}s.
  * 
  * @author Emmanuel CHEBBI
  */
@@ -38,10 +39,15 @@ public class SimpleFrom implements From {
 	private final QueryContext context = new QueryContext();
 
 	/**
-	 * Creates a new From.
+	 * Starts the construction of a new query. <br>
+	 * <br>
+	 * <strong>Caution</strong>: should not be called directly. The creation
+	 * of a new instance should be delegated to {@link Query#from(Table)}.
 	 * 
-	 * @param context
-	 * 			The context of the query.
+	 * @param table
+	 * 			The table to query.
+	 * 
+	 * @see Query#from(Table) Query.from(Table) to start a new query
 	 */
 	public SimpleFrom(final Table table) {
 		this.context.table = table;

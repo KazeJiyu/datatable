@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.query;
 
+import static java.util.Objects.requireNonNull;
+
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.query.impl.SimpleFrom;
 
@@ -26,7 +28,19 @@ import fr.kazejiyu.generic.datatable.query.impl.SimpleFrom;
  */
 public interface Query {
 	
+	/**
+	 * Starts a new query to filter the content of {@code table}.
+	 * 
+	 * @param table
+	 * 			The table to query. Must not be {@code null}.
+	 * 
+	 * @return an objet making able to continue the query
+	 * 
+	 * @throws NullPointerException if table == null
+	 */
 	public static From from(Table table) {
+		requireNonNull(table, "Cannot query a null table");
 		return new SimpleFrom(table);
 	}
+	
 }

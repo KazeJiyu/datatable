@@ -24,7 +24,7 @@ import fr.kazejiyu.generic.datatable.query.And;
 import fr.kazejiyu.generic.datatable.query.Where;
 
 /**
- * An implement of {@link Where} able to deal with {@link DataTable}s.
+ * An implement of {@link Where} able to deal with {@link Table}s.
  * 
  * @author Emmanuel CHEBBI
  *

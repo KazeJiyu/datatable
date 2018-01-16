@@ -29,7 +29,7 @@ import fr.kazejiyu.generic.datatable.query.And;
 import fr.kazejiyu.generic.datatable.query.Where;
 
 /**
- * An implementation of {@link And} able to deal with {@link DataTable}s.
+ * An implementation of {@link And} able to deal with {@link Table}s.
  * 
  * @author Emmanuel CHEBBI
  */

@@ -26,8 +26,8 @@ import ca.odell.glazedlists.matchers.Matcher;
 import fr.kazejiyu.generic.datatable.core.Table;
 
 /**
- * A filter that can be applied on multiple columns.
- * <br><br>
+ * A filter that can be applied on multiple columns. <br>
+ * <br>
  * Helps to select the rows to keep or remove when querying a {@link Table}.
  * 
  * @author Emmanuel CHEBBI

@@ -19,11 +19,9 @@ import java.util.Collection;
 import fr.kazejiyu.generic.datatable.core.Table;
 
 /**
- * First query's statement ; makes able to choose the table to filter.
+ * Last query's statement ; makes able to choose the columns of the original table to keep.
  * 
  * @author Emmanuel CHEBBI
- *
- * @param <T> The type of the {@link Table} to query.
  */
 public interface Select {
 	
