@@ -19,7 +19,7 @@ import static java.util.Arrays.asList;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import fr.kazejiyu.generic.datatable.core.impl.DataTable;
+import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.query.And;
 import fr.kazejiyu.generic.datatable.query.Where;
 

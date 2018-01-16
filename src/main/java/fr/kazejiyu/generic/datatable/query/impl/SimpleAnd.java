@@ -24,7 +24,6 @@ import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
 import fr.kazejiyu.generic.datatable.core.impl.ColumnOfNumbersId;
 import fr.kazejiyu.generic.datatable.core.impl.ColumnOfStringsId;
-import fr.kazejiyu.generic.datatable.core.impl.DataTable;
 import fr.kazejiyu.generic.datatable.query.And;
 import fr.kazejiyu.generic.datatable.query.Where;
 
