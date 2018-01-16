@@ -58,6 +58,16 @@ class DataTableTest {
 		void returnsNonNullColumns() {
 			assertThat(empty.columns()).isNotNull();
 		}
+		
+		@Test @DisplayName("is equal to itself")
+		void isEqualToItself() {
+			assertThat(empty).isEqualTo(empty);
+		}
+		
+		@Test @DisplayName("is equal to a new datatable")
+		void isEqualToANewDatatable() {
+			assertThat(empty).isEqualTo(new DataTable());
+		}
 	}
 	
 	@Nested
@@ -71,11 +81,17 @@ class DataTableTest {
 		
 		@BeforeEach
 		void initializePeopleTable() {
-			people = new DataTable();
-			people.columns()
+			people = createPeople();
+		}
+		
+		Table createPeople() {
+			Table table = new DataTable();
+			table.columns()
 					.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
 					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
 					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+			
+			return table;
 		}
 	
 		@Test @DisplayName("is not empty")
@@ -93,6 +109,11 @@ class DataTableTest {
 		void removesAllItsColumnsWhenCleared() {
 			people.clear();
 			assertThat(people.columns().isEmpty()).isTrue();
+		}
+		
+		@Test @DisplayName("is equal to another table that has the same content")
+		void isEqualToAnotherTableThatHasTheSameContent() {
+			assertThat(people).isEqualTo(createPeople());
 		}
 	}
 }

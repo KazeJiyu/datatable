@@ -124,4 +124,37 @@ public class DataTable implements Table {
 		return elements;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((rows == null) ? 0 : rows.hashCode());
+		return result;
+	}
+
+	/**
+	 * Returns whether {@code obj} is equal to {@code this}. <br>
+	 * <br>
+	 * Returns {@code true} when:
+	 * <ul>
+	 * 	<li>{@code obj} is a {@code DataTable},</li>
+	 * 	<li>and {@code obj} has the same <em>content</em> as {@code this}.</li>
+	 * </ul>
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof DataTable))
+			return false;
+		DataTable other = (DataTable) obj;
+		if (rows == null) {
+			if (other.rows != null)
+				return false;
+		} else if (!rows.equals(other.rows))
+			return false;
+		return true;
+	}
 }
