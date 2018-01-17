@@ -31,7 +31,7 @@ class DslTest {
 		}
 		
 		@Test @DisplayName("returns an empty table")
-		void returnsAnEmptyTable() {
+		void returns_an_empty_table() {
 			Table result = Query
 					.from(empty)
 					.where().isNonNull() // throwaway filter
@@ -60,7 +60,7 @@ class DslTest {
 		}
 		
 		@Test @DisplayName("can filter a table upon a criteria")
-		void returnsAFilteredTable() {
+		void returns_a_filtered_table() {
 			Table result = Query
 					.from(people)
 					.where("name").asStr().endsWith("e")

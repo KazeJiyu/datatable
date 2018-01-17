@@ -46,8 +46,8 @@ class SimpleRowsTest {
 			empty = new DataTable();
 		}
 		
-		@Test
-		void shouldBeEmptyByDefault() {
+		@Test @DisplayName("is empty")
+		void is_empty() {
 			assertThat(empty.rows()).isEmpty();
 		}
 		
@@ -56,7 +56,7 @@ class SimpleRowsTest {
 		@ParameterizedTest
 		@ValueSource(ints = {0, 1, 20, 100})
 		@DisplayName("has the right size")
-		void hasTheRightSize(int nbRows) {
+		void has_the_right_size(int nbRows) {
 			for( int i = 0 ; i < nbRows ; i++ )
 				empty.rows().create();
 			
@@ -66,26 +66,26 @@ class SimpleRowsTest {
 		}
 		
 		@Test @DisplayName("throws when asked for its first row")
-		void throwsWhenAskedForItsFirstColumn() {
+		void throws_when_asked_for_its_first_row() {
 			assertThatExceptionOfType(IndexOutOfBoundsException.class)
 				.isThrownBy(empty.rows()::first);
 		}
 		
 		@Test @DisplayName("throws when asked for its last row")
-		void shouldThrowWhenAskedForItsLastRow() {
+		void throws_when_asked_fpr_its_last_row() {
 			assertThatExceptionOfType(IndexOutOfBoundsException.class)
-			.isThrownBy(empty.rows()::last);
+				.isThrownBy(empty.rows()::last);
 		}
 		
 		@Test @DisplayName("returns a lone iterator")
-		void returnsALoneIterator() {
+		void returns_a_lone_iterator() {
 			assertThat(empty.rows().iterator())
 			.isNotNull()
 			.isEmpty();
 		}
 		
 		@Test @DisplayName("returns a lone stream")
-		void returnsALoneStream() {
+		void returns_a_lone_stream() {
 			assertThat(empty.rows().stream())
 				.isEmpty();
 		}
@@ -115,7 +115,7 @@ class SimpleRowsTest {
 		// isEmpty()
 		
 		@Test @DisplayName("is not empty")
-		void isNotEmpty() {
+		void is_not_empty() {
 			assertThat(people.rows()).isNotEmpty();
 		}
 		
@@ -124,12 +124,13 @@ class SimpleRowsTest {
 		@ParameterizedTest
 		@MethodSource("createWrongSizedRows")
 		@DisplayName("throws when creating a wrong-sized row")
-		void throwsWhenCreatingAWrongSizedRow(List<Object> row) {
+		void throws_when_creating_a_wrong_sized_row(List<Object> row) {
 			assertThatExceptionOfType(InconsistentRowSizeException.class)
 				.isThrownBy(() -> people.rows().create(row));
 		}
 		
 		@SuppressWarnings("unused")
+		/** Used as Method Source */
 		private Stream<List<Object>> createWrongSizedRows() {
 			return Stream.of(
 				asList(),
@@ -141,14 +142,14 @@ class SimpleRowsTest {
 		@ParameterizedTest
 		@CsvSource({"'name', 'age', 'M'", "12, 23, 'F'", "'name', 42, 12"})
 		@DisplayName("throws when creating a row with forbidden elements")
-		void throwsWhenCreatingARowWithWrongContent(Object name, Object age, Object sex) {
+		void throws_when_creating_a_row_with_wrong_content(Object name, Object age, Object sex) {
 			assertThatExceptionOfType(ClassCastException.class)
 				.isThrownBy(() -> people.rows().create(name, age, sex));
 		}
 		
 		@Test @DisplayName("appends created rows at the end")
 		@SuppressWarnings("unchecked")
-		void appendsCreatedRowsAtTheEnd() {
+		void appends_created_rows_at_the_end() {
 			people.rows().create("Eva", 21, "Female");
 			
 			assertThat(people.rows().last())
@@ -158,7 +159,7 @@ class SimpleRowsTest {
 		// first()
 		
 		@Test @DisplayName("can return its first row")
-		void canReturnItsFirstRow() {
+		void can_return_its_first_row() {
 			assertThat(people.rows().first())
 				.containsExactly("Luc", 23, "Male");
 		}
@@ -166,18 +167,18 @@ class SimpleRowsTest {
 		// last()
 		
 		@Test @DisplayName("can return its last row")
-		void canReturnItsLastRow() {
+		void can_return_its_last_row() {
 			assertThat(people.rows().last())
 				.containsExactly("Mathilde", 21, "Female");
 		}
 		
 		@Test @DisplayName("returns a well-sized iterator")
-		void returnsAWellSizeIterator() {
+		void returns_a_well_sized_iterator() {
 			assertThat(people.rows().iterator()).size().isEqualTo(4);
 		}
 		
 		@Test @DisplayName("returns an iterator containing all the rows in order")
-		void returnsAnOrderedIterator() {
+		void returns_an_ordered_iterator() {
 			Iterator<Row> itRows = people.rows().iterator();
 			
 			SoftAssertions softly = new SoftAssertions();
@@ -193,12 +194,12 @@ class SimpleRowsTest {
 		// stream()
 		
 		@Test @DisplayName("returns a well-sized stream")
-		void returnsAWellSizedStream() {
+		void returns_a_well_sized_stream() {
 			assertThat(people.rows().stream()).size().isEqualTo(4);
 		}
 		
 		@Test @DisplayName("returns a stream containing all the rows in order")
-		void returnsAnOrderedStream() {
+		void returns_an_ordered_stream() {
 			List<Row> rows = people.rows().stream().collect(toList());
 			
 			SoftAssertions softly = new SoftAssertions();
@@ -214,19 +215,19 @@ class SimpleRowsTest {
 		// clear()
 		
 		@Test @DisplayName("removes all its rows when cleared")
-		void removesAllItsRowsOnClear() {
+		void removes_all_its_rows_on_clear() {
 			people.rows().clear();
 			assertThat(people.rows()).isEmpty();
 		}
 		
 		@Test @DisplayName("does not alter the number of columns when cleared")
-		void avoidsAlteringNumberOfColumnsOnClear() {
+		void avoids_altering_the_number_of_columns_on_clear() {
 			people.rows().clear();
 			assertThat(people.columns()).size().isEqualTo(3);
 		}
 		
 		@Test @DisplayName("makes every column empty when cleared")
-		void shouldLeaveEmptyColumnsOnClear() {
+		void leaves_empty_columns_on_clear() {
 			people.rows().clear();
 			assertThat(people.columns()).allMatch(Column::isEmpty);
 		}

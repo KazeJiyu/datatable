@@ -51,14 +51,14 @@ class SimpleColumnsTest {
 		}
 		
 		@Test @DisplayName("is empty")
-		void isEmpty() {
+		void is_empty() {
 			assertThat(empty.columns()).isEmpty();
 		}
 
 		@ParameterizedTest 
 		@ValueSource(ints = {0, 1, 20, 100})
 		@DisplayName("has the right size")
-		void hasTheRightSize(int nbRows) {
+		void has_the_right_size(int nbRows) {
 			for( int i = 0 ; i < nbRows ; i++ )
 				empty.columns().create("Empty Column #" + i);
 			
@@ -71,7 +71,7 @@ class SimpleColumnsTest {
 		@ValueSource(strings = {"", "UPPERCASE", "lowercase", "camelCase", "snake_case", 
 								"  space before", "space after   ", "with space"})
 		@DisplayName("throws when adding duplicate headers")
-		void throwsOnDuplicateHeaders(String header) {
+		void throws_on_duplicate_headers(String header) {
 			assertThatExceptionOfType(HeaderAlreadyExistsException.class)
 				.as("with header \"" + header + "\"")
 				.isThrownBy(addingTheSameHeaderTwice(empty, header));
@@ -80,7 +80,7 @@ class SimpleColumnsTest {
 		@ParameterizedTest 
 		@CsvSource({"'heLLo', 'HellO'", "'HELLO', 'hello'", "'he LO', 'HE lo'"})
 		@DisplayName("throws when adding duplicate headers (case insensitively)")
-		void throwsOnDuplicateHeadersIgnoringCase(String header) {
+		void throws_on_duplicate_headers_ignoring_case(String header) {
 			assertThatExceptionOfType(HeaderAlreadyExistsException.class)
 				.as("with header \"" + header + "\"")
 				.isThrownBy(addingTheSameHeaderTwice(empty, header));
@@ -95,32 +95,32 @@ class SimpleColumnsTest {
 		}
 		
 		@Test @DisplayName("has no header")
-		void hasNoHeader() {
+		void has_no_header() {
 			assertThat(empty.columns().headers()).isEmpty();
 		}
 		
 		@Test @DisplayName("throws when asked for its first column")
-		void throwWhenAskedForItsFirstColumn() {
+		void throws_when_asked_for_its_first_column() {
 			assertThatExceptionOfType(IndexOutOfBoundsException.class)
 				.isThrownBy(empty.columns()::first);
 		}
 		
 		@Test @DisplayName("throws when asked for its last column")
-		void throwsWhenAskedForItsLastColumn() {
+		void throws_when_asked_for_its_last_column() {
 			assertThatExceptionOfType(IndexOutOfBoundsException.class)
-			.isThrownBy(empty.columns()::last);
+				.isThrownBy(empty.columns()::last);
 		}
 		
 		@Test @DisplayName("returns a lone iterator")
-		void returnsALoneIterator() {
+		void returns_a_lone_iterator() {
 			assertThat(empty.columns().iterator())
 				.isEmpty();
 		}
 		
 		@Test @DisplayName("returns a lone stream")
-		void returnsALoneStream() {
+		void returns_a_lone_stream() {
 			assertThat(empty.columns().stream())
-			.isEmpty();
+				.isEmpty();
 		}
 	}
 	
@@ -146,7 +146,7 @@ class SimpleColumnsTest {
 		// isEmpty()
 		
 		@Test @DisplayName("is not empty")
-		void isNotEmpty() {
+		void is_not_empty() {
 			assertThat(people.columns()).isNotEmpty();
 		}
 		
@@ -155,13 +155,14 @@ class SimpleColumnsTest {
 		@ParameterizedTest
 		@MethodSource("createWrongSizedColumns")
 		@DisplayName("throws when creating a wrong-sized column")
-		void throwsWhenCreatingAWrongSizedColumn(List<Object> column) {
+		void throws_when_creating_a_wrong_sized_column(List<Object> column) {
 			assertThatExceptionOfType(InconsistentColumnSizeException.class)
 				.as("creating a column of " + column.size() + " elements")
 				.isThrownBy(() -> people.columns().create(Object.class, "Illegal Column", column)); 
 		}
 		
 		@SuppressWarnings("unused")
+		/** Used as Method Source */
 		private Stream<List<Object>> createWrongSizedColumns() {
 			return Stream.of(
 				asList(),
@@ -172,7 +173,7 @@ class SimpleColumnsTest {
 		
 		@Test @DisplayName("appends created columns at the end")
 		@SuppressWarnings("unchecked")
-		void appendsCreatedColumnsAtTheEnd() {
+		void appends_created_columns_at_the_end() {
 			people.columns().create(Double.class, "SomeValue", 0.6, 12d, 0d, 42d);
 			
 			assertThat((Column<Double>) people.columns().last())
@@ -182,25 +183,25 @@ class SimpleColumnsTest {
 		// headers()
 		
 		@Test @DisplayName("provides its headers in order")
-		void providesItsHeadersInOrder() {
+		void provides_its_headers_in_order() {
 			assertThat(people.columns().headers())
 				.containsExactly(NAME_HEADER, AGE_HEADER, SEX_HEADER);
 		}
 		
 		// first()
 		
-		@Test @DisplayName("can returns its first column")
+		@Test @DisplayName("can return its first column")
 		@SuppressWarnings("unchecked")
-		void canReturnItsFirstColumn() {
+		void can_return_its_first_column() {
 			assertThat((Column<Object>) people.columns().first())
 				.containsExactly("Luc", "Baptiste", "Anya", "Mathilde");
 		}
 		
 		// last()
 		
-		@Test @DisplayName("can returns its last column")
+		@Test @DisplayName("can return its last column")
 		@SuppressWarnings("unchecked")
-		void canReturnItsLastColumn() {
+		void can_return_its_last_column() {
 			assertThat((Column<Object>) people.columns().last())
 				.containsExactly("Male", "Male", "Female", "Female");
 		}
@@ -209,34 +210,34 @@ class SimpleColumnsTest {
 		
 		@ParameterizedTest
 		@CsvSource({"'name', 0", "'age', 1", "'sex', 2"})
-		@DisplayName("can returns the index of a column from its header")
-		void canReturnTheIndexOfAColumn(String header, int expectedIndex) {
+		@DisplayName("can return the index of a column from its header")
+		void can_return_the_index_of_a_column(String header, int expectedIndex) {
 			assertThat(people.columns().indexOf(header))
 				.isEqualTo(expectedIndex);
 		}
 		
 		@Test @DisplayName("throws when asked for the index of a non existing header")
-		void throwsWhenAskedForTheIndexOfANonExistingHeader() {
+		void throws_when_asked_for_the_index_of_a_non_existing_header() {
 			assertThatExceptionOfType(HeaderNotFoundException.class)
 				.isThrownBy(() -> people.columns().indexOf("wrong header"));
 		}
 
 		@ParameterizedTest
 		@CsvSource({"'name', 'java.lang.String', 0", "'age', 'java.lang.Integer', 1", "'sex', 'java.lang.String', 2"})
-		@DisplayName("can returns the index of a column from its id")
-		void canReturnTheIndexOfAColumnFromItsId(String header, String className, int expectedIndex) throws ClassNotFoundException {
+		@DisplayName("can return the index of a column from its id")
+		void can_return_the_index_of_a_column_from_its_id(String header, String className, int expectedIndex) throws ClassNotFoundException {
 			assertThat(people.columns().indexOf(id(Class.forName(className), header)))
 				.isEqualTo(expectedIndex);
 		}
 		
 		@Test @DisplayName("throws when asked for the index of a column which id's type is wrong")
-		void throwsWhenAskedForTheIndexOfAnIdWithWrongType() {
+		void throws_when_asked_for_the_index_of_an_id_with_wrong_type() {
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
 				.isThrownBy(() -> people.columns().indexOf(id(String.class, "age")));
 		}
 		
 		@Test @DisplayName("throws when asked for the index of a column which id's header is wrong")
-		void throwsWhenAskedForTheIndexOfAnIdWithWrongHeader() {
+		void throws_when_asked_for_the_index_of_an_id_with_wrong_header() {
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
 				.isThrownBy(() -> people.columns().indexOf(id(Integer.class, "name")));
 		}
@@ -244,13 +245,13 @@ class SimpleColumnsTest {
 		// iterator()
 		
 		@Test @DisplayName("returns a well-sized iterator")
-		void returnsAWellSizedIterator() {
+		void returns_a_well_sized_iterator() {
 			assertThat(people.columns().iterator()).size().isEqualTo(3);
 		}
 		
 		@Test @DisplayName("returns an iterator containing all the columns in order")
 		@SuppressWarnings("unchecked")
-		void returnsAnOrderedIterator() {
+		void returns_an_ordered_iterator() {
 			Iterator<Column<?>> itRows = people.columns().iterator();
 			
 			SoftAssertions softly = new SoftAssertions();
@@ -265,13 +266,13 @@ class SimpleColumnsTest {
 		// stream()
 		
 		@Test @DisplayName("returns a well-sized stream")
-		void returnsAWellSizedStream() {
+		void returns_a_well_sized_stream() {
 			assertThat(people.columns().stream()).size().isEqualTo(3);
 		}
 		
 		@Test @DisplayName("returns a stream containing all the columns in order")
 		@SuppressWarnings("unchecked")
-		void returnAnOrderedStream() {
+		void returns_an_ordered_stream() {
 			List<Column<?>> columns = people.columns().stream().collect(toList());
 			
 			SoftAssertions softly = new SoftAssertions();
@@ -286,19 +287,19 @@ class SimpleColumnsTest {
 		// clear()
 		
 		@Test @DisplayName("removes all its columns when cleared")
-		void removesAllItsColumnsOnClear() {
+		void removes_all_its_columns_on_clear() {
 			people.columns().clear();
 			assertThat(people.columns()).isEmpty();
 		}
 		
 		@Test @DisplayName("does not alter the number of rows when cleared")
-		void avoidsAlteringNumberOfRowsOnClear() {
+		void avoids_altering_the_number_of_rows_on_clear() {
 			people.columns().clear();
 			assertThat(people.rows()).size().isEqualTo(4);
 		}
 		
 		@Test @DisplayName("makes every row empty when cleared")
-		void leavesEmptyRowsOnClear() {
+		void leaves_empty_rows_on_clear() {
 			people.columns().clear();
 			assertThat(people.rows()).allMatch(Row::isEmpty);
 		}
