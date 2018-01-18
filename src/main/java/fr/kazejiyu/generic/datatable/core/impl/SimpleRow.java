@@ -40,6 +40,9 @@ class SimpleRow extends ModifiableRow {
 	/** The content of the row. */
 	private final List<Object> elements;
 	
+	/** Checks methods' preconditions. */
+	private final RowPreconditions preconditions;
+	
 	/**
 	 * Creates a new empty row.
 	 * 
@@ -70,6 +73,7 @@ class SimpleRow extends ModifiableRow {
 		this.id = id;
 		this.table = requireNonNull(table, "The table that owns the row must not be null");
 		this.elements = eventList(requireNonNull(elements, "The elements of the row must not be null"));
+		this.preconditions = new RowPreconditions(table);
 	}
 
 	@Override
@@ -107,6 +111,26 @@ class SimpleRow extends ModifiableRow {
 	public <T> T get(final ColumnId<T> id) {
 		int index = table.columns().indexOf(id);
 		return id.type().cast( elements.get(index) );
+	}
+	
+	@Override
+	public void set(final int column, Object element) {
+		preconditions.assertIsAValidIndex(column);
+		preconditions.assertIsAValidElementForIndex(column, element);
+		this.elements.set(column, element);
+	}
+	
+	@Override
+	public <T> void set(final ColumnId<T> id, T element) {
+		preconditions.assertIsAValidColumnId(id);
+		this.set(id.header(), element);
+	}
+	
+	@Override
+	public void set(final String header, Object element) {
+		preconditions.assertHeaderExist(header);
+		preconditions.assertIsAValidElementForHeader(header, element);
+		this.set(table.columns().indexOf(header), element);
 	}
 
 	@Override

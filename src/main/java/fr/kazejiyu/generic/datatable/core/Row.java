@@ -16,6 +16,7 @@ package fr.kazejiyu.generic.datatable.core;
 
 import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
 import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
+import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * A row that belongs to a {@link Table}. <br>
@@ -50,7 +51,7 @@ public interface Row extends Iterable <Object> {
 	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
-	<T> Object get(int column);
+	Object get(int column);
 	
 	/**
 	 * Returns the element located at the column identified by the given id. <br>
@@ -80,5 +81,42 @@ public interface Row extends Iterable <Object> {
 	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
-	public <T> Object get(String header);
+	Object get(String header);
+
+	/**
+	 * Sets the element located at {@code index}.
+	 * 
+	 * @param column
+	 * 			The index of the element to set.
+	 * @param element
+	 * 			The new value.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || (0 < index <= size())
+	 * @throws ClassCastException if {@code element} is not of the type expected by the column
+	 */
+	void set(int column, Object element);
+
+	/**
+	 * Sets the element located at the column identified by {@code id}.
+	 * 
+	 * @param id
+	 * 			Identify the column of the element to set.
+	 * @param element
+	 * 			The new value.
+	 * 
+	 * @throws ColumnIdNotFoundException if {@code id} does not match any column
+	 */
+	<T> void set(ColumnId<T> id, T element);
+
+	/**
+	 * Sets the element located at {@code index}.
+	 * 
+	 * @param index
+	 * 			The index of the element to set.
+	 * @param element
+	 * 			The new value.
+	 * 
+	 * @throws HeaderNotFoundException if {@code header} does not match any header in the column
+	 */
+	void set(String header, Object element);
 }
