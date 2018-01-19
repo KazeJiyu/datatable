@@ -65,4 +65,16 @@ public interface Column <T> extends Iterable <T> {
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
 	T get(int row);
+	
+	/**
+	 * Sets the element at {@code row}.
+	 * 
+	 * @param row
+	 * 			The index of the row where the new element is set.
+	 * @param element
+	 * 			The element to put in the column.
+	 * 
+	 * @throws IndexOutOfBoundsException if isEmpty || row < 0 || size <= row
+	 */
+	void set(int row, T element);
 }

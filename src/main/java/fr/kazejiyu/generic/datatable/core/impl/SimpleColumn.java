@@ -87,4 +87,8 @@ class SimpleColumn <T> implements Column <T> {
 		return id.type().cast(element);
 	}
 
+	@Override
+	public void set(final int row, final T element) {
+		table.rows().get(row).set(id, element);
+	}
 }
