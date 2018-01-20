@@ -119,7 +119,7 @@ public interface From {
 	 * 
 	 * @return a query set up to apply a filter on a column of Numbers.
 	 */
-	WhereNumber where(ColumnOfNumbersId id);
+	WhereNumber where(ColumnOfNumbersId<?> id);
 	
 	/**
 	 * Prepares to apply a filter on the specified columns of Strings. <br>
@@ -149,5 +149,5 @@ public interface From {
 	 * 
 	 * @return a query set up to apply a filter on several columns of Numbers.
 	 */
-	WhereNumber where(ColumnOfNumbersId[] ids);
+	WhereNumber where(ColumnOfNumbersId<?>[] ids);
 }

@@ -64,5 +64,5 @@ public interface And extends Select {
 	
 	WhereStr and(ColumnOfStringsId id);
 
-	WhereNumber and(ColumnOfNumbersId id);
+	WhereNumber and(ColumnOfNumbersId<?> id);
 }

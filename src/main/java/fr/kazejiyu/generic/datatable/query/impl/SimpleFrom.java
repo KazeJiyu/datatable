@@ -83,7 +83,7 @@ public class SimpleFrom implements From {
 	}
 	
 	@Override
-	public WhereNumber where(ColumnOfNumbersId[] ids) {
+	public WhereNumber where(ColumnOfNumbersId<?>[] ids) {
 		return new WhereNumber(context, headersOf(ids));
 	}
 	
@@ -97,7 +97,7 @@ public class SimpleFrom implements From {
 	}
 	
 	@Override
-	public WhereNumber where(ColumnOfNumbersId id) {
+	public WhereNumber where(ColumnOfNumbersId<?> id) {
 		return new WhereNumber(context, id.header());
 	}
 }

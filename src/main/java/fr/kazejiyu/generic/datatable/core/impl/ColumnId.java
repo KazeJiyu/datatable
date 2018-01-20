@@ -66,7 +66,7 @@ public class ColumnId<T> {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (! (obj instanceof ColumnId))
 			return false;
 		ColumnId<?> other = (ColumnId<?>) obj;
 		if (!header.equalsIgnoreCase(other.header))
@@ -131,7 +131,7 @@ public class ColumnId<T> {
 	 * 
 	 * @return a new {@code ColumnId} 
 	 */
-	public static ColumnOfNumbersId n(ColumnId<? extends Number> id) {
-		return new ColumnOfNumbersId(id);
+	public static <T extends Number> ColumnOfNumbersId<T> n(ColumnId<T> id) {
+		return new ColumnOfNumbersId<T>(id);
 	}
 }

@@ -73,7 +73,7 @@ class SimpleAnd implements And {
 	}
 	
 	@Override
-	public WhereNumber and(ColumnOfNumbersId id) {
+	public WhereNumber and(ColumnOfNumbersId<?> id) {
 		return new WhereNumber(context, id.header());
 	}
 
