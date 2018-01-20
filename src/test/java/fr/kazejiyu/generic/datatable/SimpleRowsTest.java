@@ -148,7 +148,6 @@ class SimpleRowsTest {
 		}
 		
 		@Test @DisplayName("appends created rows at the end")
-		@SuppressWarnings("unchecked")
 		void appends_created_rows_at_the_end() {
 			people.rows().create("Eva", 21, "Female");
 			
@@ -230,6 +229,13 @@ class SimpleRowsTest {
 		void leaves_empty_columns_on_clear() {
 			people.rows().clear();
 			assertThat(people.columns()).allMatch(Column::isEmpty);
+		}
+		
+		// equals()
+		
+		@Test @DisplayName("is not equal to a non Rows object")
+		void is_not_equal_to_a_non_rows_object() {
+			assertThat(people.rows()).isNotEqualTo(12);
 		}
 	}
 }

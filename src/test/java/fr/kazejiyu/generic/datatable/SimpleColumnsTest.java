@@ -1,10 +1,10 @@
 package fr.kazejiyu.generic.datatable;
 
+import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.id;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.id;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +26,7 @@ import fr.kazejiyu.generic.datatable.core.Column;
 import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Row;
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
 import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderAlreadyExistsException;
@@ -50,10 +51,14 @@ class SimpleColumnsTest {
 			empty = new DataTable();
 		}
 		
+		// isEmpty()
+		
 		@Test @DisplayName("is empty")
 		void is_empty() {
 			assertThat(empty.columns()).isEmpty();
 		}
+		
+		// size()
 
 		@ParameterizedTest 
 		@ValueSource(ints = {0, 1, 20, 100})
@@ -66,6 +71,8 @@ class SimpleColumnsTest {
 				.as("with " + nbRows + " rows")
 				.isEqualTo(nbRows);
 		}
+		
+		// create()
 		
 		@ParameterizedTest 
 		@ValueSource(strings = {"", "UPPERCASE", "lowercase", "camelCase", "snake_case", 
@@ -94,10 +101,14 @@ class SimpleColumnsTest {
 			};
 		}
 		
+		// headers()
+		
 		@Test @DisplayName("has no header")
 		void has_no_header() {
 			assertThat(empty.columns().headers()).isEmpty();
 		}
+		
+		// first()
 		
 		@Test @DisplayName("throws when asked for its first column")
 		void throws_when_asked_for_its_first_column() {
@@ -105,11 +116,15 @@ class SimpleColumnsTest {
 				.isThrownBy(empty.columns()::first);
 		}
 		
+		// last()
+		
 		@Test @DisplayName("throws when asked for its last column")
 		void throws_when_asked_for_its_last_column() {
 			assertThatExceptionOfType(IndexOutOfBoundsException.class)
 				.isThrownBy(empty.columns()::last);
 		}
+		
+		// iterator()
 		
 		@Test @DisplayName("returns a lone iterator")
 		void returns_a_lone_iterator() {
@@ -117,10 +132,20 @@ class SimpleColumnsTest {
 				.isEmpty();
 		}
 		
+		// stream()
+		
 		@Test @DisplayName("returns a lone stream")
 		void returns_a_lone_stream() {
 			assertThat(empty.columns().stream())
 				.isEmpty();
+		}
+		
+		// get()
+		
+		@Test @DisplayName("throws when getting a column")
+		void throws_when_getting_a_column() {
+			assertThatExceptionOfType(IndexOutOfBoundsException.class)
+				.isThrownBy(() -> empty.columns().get(0));
 		}
 	}
 	
@@ -209,7 +234,7 @@ class SimpleColumnsTest {
 		// indexOf
 		
 		@ParameterizedTest
-		@CsvSource({"'name', 0", "'age', 1", "'sex', 2"})
+		@CsvSource({"'name', 0", "'aGe', 1", "'SEX', 2"})
 		@DisplayName("can return the index of a column from its header")
 		void can_return_the_index_of_a_column(String header, int expectedIndex) {
 			assertThat(people.columns().indexOf(header))
@@ -223,7 +248,7 @@ class SimpleColumnsTest {
 		}
 
 		@ParameterizedTest
-		@CsvSource({"'name', 'java.lang.String', 0", "'age', 'java.lang.Integer', 1", "'sex', 'java.lang.String', 2"})
+		@CsvSource({"'NAme', 'java.lang.String', 0", "'agE', 'java.lang.Integer', 1", "'sex', 'java.lang.String', 2"})
 		@DisplayName("can return the index of a column from its id")
 		void can_return_the_index_of_a_column_from_its_id(String header, String className, int expectedIndex) throws ClassNotFoundException {
 			assertThat(people.columns().indexOf(id(Class.forName(className), header)))
@@ -304,5 +329,37 @@ class SimpleColumnsTest {
 			assertThat(people.rows()).allMatch(Row::isEmpty);
 		}
 		
+		// get()
+		
+		@Test @DisplayName("throws when getting a column from an id with non existing header")
+		void throws_when_getting_a_column_from_an_id_with_non_existing_header() {
+			ColumnId<String> nonExisting = id(String.class, "string");
+			assertThatExceptionOfType(ColumnIdNotFoundException.class)
+				.isThrownBy(() -> people.columns().get(nonExisting));
+		}
+		
+		@Test @DisplayName("throws when getting a column with index < 0")
+		void throws_when_getting_a_column_from_an_id_with_index_lt_0() {
+			assertThatExceptionOfType(IndexOutOfBoundsException.class)
+				.isThrownBy(() -> people.columns().get(-1));
+		}
+		
+		@Test @DisplayName("throws when asked for a column with index == size")
+		void throws_when_asked_for_a_column_with_index_eq_size() {
+			assertThatExceptionOfType(IndexOutOfBoundsException.class)
+				.isThrownBy(() -> people.columns().get(people.columns().size()));
+		}
+		
+		@Test @DisplayName("throws when asked for a column with index > size")
+		void throws_when_asked_for_a_column_with_index_gt_0() {
+			assertThatExceptionOfType(IndexOutOfBoundsException.class)
+				.isThrownBy(() -> people.columns().get(people.columns().size() + 1));
+		}
+		
+		@Test @DisplayName("can return a column from its id")
+		void can_return_a_column_from_its_id() {
+			ColumnId<Integer> age = id(Integer.class, AGE_HEADER);
+			assertThat(people.columns().get(age)).containsExactly(23, 32, 0, 21);
+		}
 	}
 }

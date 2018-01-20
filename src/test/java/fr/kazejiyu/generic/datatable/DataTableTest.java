@@ -1,6 +1,9 @@
 package fr.kazejiyu.generic.datatable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
+import java.util.LinkedHashSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
+import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * Tests the behavior of {@link DataTable} instances.
@@ -59,6 +63,15 @@ class DataTableTest {
 			assertThat(empty.columns()).isNotNull();
 		}
 		
+		// hashCode()
+		
+		@Test @DisplayName("has the same hashCode as a new datatable")
+		void has_the_same_hashCode_as_a_new_datatable() {
+			assertThat(empty.hashCode()).isEqualTo(new DataTable().hashCode());
+		}
+		
+		// equals()
+		
 		@Test @DisplayName("is equal to itself")
 		void is_equal_to_itself() {
 			assertThat(empty).isEqualTo(empty);
@@ -93,11 +106,15 @@ class DataTableTest {
 			
 			return table;
 		}
+		
+		// empty()
 	
 		@Test @DisplayName("is not empty")
 		void is_not_empty() {
 			assertThat(people.isEmpty()).isFalse();
 		}
+		
+		// clear()
 		
 		@Test @DisplayName("removes all its rows when cleared")
 		void removes_all_its_rows_when_cleared() {
@@ -111,9 +128,49 @@ class DataTableTest {
 			assertThat(people.columns().isEmpty()).isTrue();
 		}
 		
+		// hashCode
+		
+		@Test @DisplayName("has the same hashCode as an identical table")
+		void has_the_same_hashCode_as_an_identical_table() {
+			assertThat(people.hashCode()).isEqualTo(createPeople().hashCode());
+		}
+		
+		// equals()
+		
 		@Test @DisplayName("is equal to another table that has the same content")
 		void is_equal_to_another_table_that_has_the_same_content() {
 			assertThat(people).isEqualTo(createPeople());
+		}
+		
+		@Test @DisplayName("is not equal to another table that almost has the same content")
+		void is_not_equal_to_another_table_that_almost_has_the_same_content() {
+			Table almostPeople = createPeople();
+			almostPeople.rows().last().set(AGE_HEADER, 200);
+			
+			assertThat(people).isNotEqualTo(almostPeople);
+		}
+		
+		@Test @DisplayName("is not equal to null")
+		void is_not_equal_to_null() {
+			assertThat(people).isNotEqualTo(null);
+		}
+		
+		@Test @DisplayName("is not equal to a non DataTable object")
+		void is_not_equal_to_a_non_DataTable_object() {
+			assertThat(people).isNotEqualTo("not a datatable");
+		}
+		
+		// filter()
+		
+		@Test @DisplayName("throws when filter on non existing header")
+		void throws_when_filtering_on_non_existing_header() {
+			LinkedHashSet<String> headers = new LinkedHashSet<>();
+			headers.add(NAME_HEADER);
+			headers.add("non existing");
+			headers.add(SEX_HEADER);
+			
+			assertThatExceptionOfType(HeaderNotFoundException.class)
+				.isThrownBy(() -> people.filter(r -> true, headers));
 		}
 	}
 }
