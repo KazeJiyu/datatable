@@ -1,6 +1,6 @@
 # Heterogeneous and type-safe tables
 
-![build status](https://travis-ci.org/KazeJiyu/datatable.svg?branch=master)
+![build status](https://travis-ci.org/KazeJiyu/datatable.svg?branch=master) [![codecov](https://codecov.io/gh/KazeJiyu/datatable/branch/master/graph/badge.svg)](https://codecov.io/gh/KazeJiyu/datatable)
 
 # Motivation
 This project is aimed to experiment with the implementation of heterogeneous yet type-safe table structure.
