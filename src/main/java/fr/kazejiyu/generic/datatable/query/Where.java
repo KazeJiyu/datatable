@@ -199,10 +199,10 @@ public interface Where <T> {
 	}
 	
 	/**
-	 * Returns a specialized instance of {@code Where} to ease lambda's writing.
-	 * <br><br>
-	 * This method makes possible to write:
-	 * <br><br>
+	 * Returns a specialized instance of {@code Where} to ease lambda's writing.<br>
+	 * <br>
+	 * This method makes possible to write:<br>
+	 * <br>
 	 * <pre>Query.select()
 	 *     .from(table)
 	 *     .where("A").as(MyCustomClass.class).match(MyCustomClass::myCondition)</pre>
@@ -211,7 +211,7 @@ public interface Where <T> {
 	 * 
 	 * <pre>Query.select()
 	 *     .from(table)
-	 *     .where("A").match(o -> ((MyCustomClass) o).myCondition())</pre>     
+	 *     .where("A").match(o -&gt; ((MyCustomClass) o).myCondition())</pre>     
 	 * 
 	 * @param clazz
 	 * 			The type of the elements contained by the column to filter.

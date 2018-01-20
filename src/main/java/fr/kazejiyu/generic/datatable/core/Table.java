@@ -81,7 +81,7 @@ public interface Table {
 	 * 
 	 * @return a new {@code Table} containing the filtered rows.
 	 * 
-	 * @throws {@link NullPointerException} if any of the arguments is {@code null}.
+	 * @throws NullPointerException if any of the arguments is {@code null}.
 	 * @throws HeaderNotFoundException if ! columns().headers().containsAll(columnsToKeep)
 	 */
 	Table filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep);

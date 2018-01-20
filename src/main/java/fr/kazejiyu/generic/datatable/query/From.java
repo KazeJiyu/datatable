@@ -60,7 +60,7 @@ public interface From {
 	 * <br>
 	 * For instance, the code :
 	 * <pre>
-	 *List<String> columns = Arrays.asList("A", "B");
+	 *List&lt;String&gt; columns = Arrays.asList("A", "B");
 	 *Query.from(table)
 	 *     .where(columns).asNumber().isPositive();</pre>
 	 * It is semantically equal to:
@@ -142,7 +142,7 @@ public interface From {
 	 * This method provides a query tailored to filter Numbers, and hence should
 	 * be preferred when dealing with columns full of Numbers. <br>
 	 * <br>
-	 * A {@code ColumnOfStringsId} array can be built via {@link ColumnId#n(ColumnId, ColumnId...)}.
+	 * A {@code ColumnOfStringsId} array can be built via {@link ColumnId#s(ColumnId, ColumnId...)}.
 	 * 
 	 * @param ids
 	 * 			The ids of the columns on which apply a filter.

@@ -41,7 +41,7 @@ class SimpleRow extends ModifiableRow {
 	private final List<Object> elements;
 	
 	/** Checks methods' preconditions. */
-	private final RowPreconditions preconditions;
+	private final ColumnsPreconditions preconditions;
 	
 	/**
 	 * Creates a new empty row.
@@ -73,7 +73,7 @@ class SimpleRow extends ModifiableRow {
 		this.id = id;
 		this.table = requireNonNull(table, "The table that owns the row must not be null");
 		this.elements = eventList(requireNonNull(elements, "The elements of the row must not be null"));
-		this.preconditions = new RowPreconditions(table);
+		this.preconditions = new ColumnsPreconditions(table, table.columns());
 	}
 
 	@Override
@@ -149,7 +149,7 @@ class SimpleRow extends ModifiableRow {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((elements == null) ? 0 : elements.hashCode());
+		result = prime * result + elements.hashCode();
 		return result;
 	}
 
@@ -162,11 +162,6 @@ class SimpleRow extends ModifiableRow {
 		if (!(obj instanceof SimpleRow))
 			return false;
 		SimpleRow other = (SimpleRow) obj;
-		if (elements == null) {
-			if (other.elements != null)
-				return false;
-		} else if (!elements.equals(other.elements))
-			return false;
-		return true;
+		return elements.equals(other.elements);
 	}
 }

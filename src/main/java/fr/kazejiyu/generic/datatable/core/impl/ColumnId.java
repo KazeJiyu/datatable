@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.core.impl;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +37,8 @@ public class ColumnId<T> {
 
 	public ColumnId(Class<T> type, String header) {
 		super();
-		this.type = type;
-		this.header = header;
+		this.type = requireNonNull(type, "The type of a ColumnId must not be null");
+		this.header = requireNonNull(header, "The header of a ColumnId must not be null");
 	}
 
 	/** @return the type of column's elements */
@@ -53,8 +55,8 @@ public class ColumnId<T> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((header == null) ? 0 : header.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.getName().hashCode());
+		result = prime * result + header.toLowerCase().hashCode();
+		result = prime * result + type.getName().hashCode();
 		return result;
 	}
 
@@ -67,30 +69,49 @@ public class ColumnId<T> {
 		if (getClass() != obj.getClass())
 			return false;
 		ColumnId<?> other = (ColumnId<?>) obj;
-		if (header == null) {
-			if (other.header != null)
-				return false;
-		} else if (!header.equals(other.header))
+		if (!header.equalsIgnoreCase(other.header))
 			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.getName().equals(other.type.getName()))
-			return false;
-		return true;
+		return type.equals(other.type);
 	}
 	
-	/** @return a new {@code ColumnId} */
+	/**
+	 * Creates a new {@code ColumnId} with a specific type and header.
+	 * 
+	 * @param type
+	 * 			The class of the elements contained by the column.
+	 * @param header
+	 * 			The header of the column.
+	 * 
+	 * @return a new {@code ColumnId}
+	 * 
+	 * @param <T> the type of the elements contained by the column
+	 */
 	public static <T> ColumnId<T> id(Class<T> type, String header) {
 		return new ColumnId<>(type, header);
 	}
 	
-	/** @return a new {@code ColumnId} */
+	/** 
+	 * Wraps a {@code ColumnId} into a new object to ease DSL's build.
+	 * 
+	 * @param id
+	 * 			The column id to wrap.
+	 * 
+	 * @return a new {@code ColumnId} 
+	 */
 	public static ColumnOfStringsId s(ColumnId<String> id) {
 		return new ColumnOfStringsId(id);
 	}
 	
-	/** @return a new {@code ColumnId} */
+	/** 
+	 * Wraps several {@code ColumnId}s into a new object to ease DSL's build.
+	 * 
+	 * @param id
+	 * 			The first id.
+	 * @param ids
+	 * 			The other ids.
+	 * 
+	 * @return a new {@code ColumnId} 
+	 */
 	@SafeVarargs
 	public static ColumnOfStringsId[] s(ColumnId<String> id, ColumnId<String>... ids) {
 		List<ColumnOfStringsId> columns = new ArrayList<>();
@@ -102,7 +123,14 @@ public class ColumnId<T> {
 		return columns.toArray(new ColumnOfStringsId[columns.size()]);
 	}
 	
-	/** @return a new {@code ColumnId} */
+	/**
+	 * Wraps a {@code ColumnId} into a new object to ease DSL's build.
+	 * 
+	 * @param id
+	 * 			The column id to wrap.
+	 * 
+	 * @return a new {@code ColumnId} 
+	 */
 	public static ColumnOfNumbersId n(ColumnId<? extends Number> id) {
 		return new ColumnOfNumbersId(id);
 	}

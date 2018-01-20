@@ -123,7 +123,7 @@ class SimpleRows implements Rows {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((elements == null) ? 0 : elements.hashCode());
+		result = prime * result + elements.hashCode();
 		return result;
 	}
 
@@ -136,11 +136,6 @@ class SimpleRows implements Rows {
 		if (!(obj instanceof SimpleRows))
 			return false;
 		SimpleRows other = (SimpleRows) obj;
-		if (elements == null) {
-			if (other.elements != null)
-				return false;
-		} else if (!elements.equals(other.elements))
-			return false;
-		return true;
+		return elements.equals(other.elements);
 	}
 }

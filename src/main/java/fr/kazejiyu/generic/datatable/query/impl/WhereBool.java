@@ -17,6 +17,7 @@ package fr.kazejiyu.generic.datatable.query.impl;
 import java.util.Collection;
 
 import fr.kazejiyu.generic.datatable.query.And;
+import fr.kazejiyu.generic.datatable.query.Where;
 
 /**
  * A specialized {@link Where} aimed to deal with booleans.

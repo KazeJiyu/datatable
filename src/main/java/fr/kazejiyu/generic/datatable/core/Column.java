@@ -61,7 +61,7 @@ public interface Column <T> extends Iterable <T> {
 	 * 
 	 * @return the element of the column located in {@code row}.
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || row < 0 || size <= row)
+	 * @throws IndexOutOfBoundsException if isEmpty || row &lt; 0 || size &lt;= row)
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
 	T get(int row);
@@ -74,7 +74,7 @@ public interface Column <T> extends Iterable <T> {
 	 * @param element
 	 * 			The element to put in the column.
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || row < 0 || size <= row
+	 * @throws IndexOutOfBoundsException if isEmpty || row &lt; 0 || size &lt;= row
 	 */
 	void set(int row, T element);
 }

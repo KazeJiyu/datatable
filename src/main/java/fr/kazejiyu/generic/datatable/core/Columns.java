@@ -20,6 +20,7 @@ import java.util.LinkedHashSet;
 import java.util.stream.Stream;
 
 import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.InconsistentColumnSizeException;
 
@@ -39,7 +40,14 @@ public interface Columns extends Iterable <Column<?>> {
 	/** @return the headers of the columns */
 	LinkedHashSet <String> headers();
 	
-	/** @return whether {@code header} is a valid header */
+	/**
+	 * Returns whether any column is named under a specific header.
+	 * 
+	 * @param header
+	 * 			The header to look for. 
+	 * 
+	 * @return whether {@code header} is a valid header 
+	 */
 	boolean hasHeader(String header);
 	
 	/**
@@ -84,7 +92,7 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 
 	 * @return the column located at the specified index
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty() || (index < 0 || size() <= index)
+	 * @throws IndexOutOfBoundsException if isEmpty() || (index &lt; 0 || size() &lt;= index)
 	 */
 	Column<?> get(int index);
 	
@@ -95,6 +103,8 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 			Identifies the column to get. Must not be {@code null}.
 	 * 
 	 * @return a type-safe {@code Column}.
+	 * 
+	 * @param <T> the type of the column
 	 */
 	<T> Column<T> get(ColumnId<T> id);
 	
@@ -232,7 +242,7 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || (index < 0 || size <= index)
+	 * @throws IndexOutOfBoundsException if isEmpty || (index &lt; 0 || size &lt;= index)
 	 */
 	Columns remove(int index);
 	

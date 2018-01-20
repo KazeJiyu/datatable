@@ -69,7 +69,7 @@ public interface Rows extends Iterable <Row> {
 	 * 
 	 * @return the row located at {@code index}.
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || (index < 0 || size <= index)
+	 * @throws IndexOutOfBoundsException if isEmpty || (index &lt; 0 || size &lt;= index)
 	 * 
 	 * @see #first()
 	 * @see #last()
@@ -107,8 +107,7 @@ public interface Rows extends Iterable <Row> {
 	 * @see #create()
 	 * @see #create(List)
 	 */
-	@SuppressWarnings("unchecked")
-	default <T> Rows create( T... row) {
+	default Rows create(Object... row) {
 		return create(asList(row));
 	}
 	
@@ -164,7 +163,7 @@ public interface Rows extends Iterable <Row> {
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || (index < 0 || size <= index)
+	 * @throws IndexOutOfBoundsException if isEmpty || (index &lt; 0 || size &lt;= index)
 	 */
 	Rows remove(int index);
 	

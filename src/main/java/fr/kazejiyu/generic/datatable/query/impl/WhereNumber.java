@@ -43,8 +43,8 @@ public class WhereNumber extends SimpleWhere <Number> {
 	 * 
 	 * @param context
 	 * 			The context of the query.
-	 * @param header
-	 * 			The name of the column to filter.
+	 * @param headers
+	 * 			The name of the columns to filter.
 	 */
 	public WhereNumber(final QueryContext context, final Collection<String> headers) {
 		super(context, headers);

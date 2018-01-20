@@ -46,9 +46,7 @@ public interface Row extends Iterable <Object> {
 	 * 
 	 * @return the element of the row located in {@code column}.
 	 * 
-	 * @param <T> The runtime type of the element
-	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
+	 * @throws IndexOutOfBoundsException if isEmpty || column &lt; 0 || size &lt;= column)
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
 	Object get(int column);
@@ -63,6 +61,8 @@ public interface Row extends Iterable <Object> {
 	 * 
 	 * @return the element located at the column identified by the given id.
 	 * 
+	 * @param <T> the runtime type of the element to get
+	 * 
 	 * @throws ColumnIdNotFoundException if id does not match any column
 	 * @throws NullPointerException if id == null
 	 */
@@ -76,9 +76,6 @@ public interface Row extends Iterable <Object> {
 	 * 
 	 * @return the element of the row located in the column called {@code header}.
 	 * 
-	 * @param <T> The runtime type of the element
-	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || column < 0 || size <= column)
 	 * @throws ClassCastException if the element cannot be casted to {@code T}.
 	 */
 	Object get(String header);
@@ -91,7 +88,7 @@ public interface Row extends Iterable <Object> {
 	 * @param element
 	 * 			The new value.
 	 * 
-	 * @throws IndexOutOfBoundsException if isEmpty || (0 < index <= size())
+	 * @throws IndexOutOfBoundsException if isEmpty || (0 &lt; index &lt;= size())
 	 * @throws ClassCastException if {@code element} is not of the type expected by the column
 	 */
 	void set(int column, Object element);
@@ -105,14 +102,16 @@ public interface Row extends Iterable <Object> {
 	 * 			The new value.
 	 * 
 	 * @throws ColumnIdNotFoundException if {@code id} does not match any column
+	 * 
+	 * @param <T> The runtime type of the elements of the column
 	 */
 	<T> void set(ColumnId<T> id, T element);
 
 	/**
 	 * Sets the element located at {@code index}.
 	 * 
-	 * @param index
-	 * 			The index of the element to set.
+	 * @param header
+	 * 			The name of the column containing the element to set.
 	 * @param element
 	 * 			The new value.
 	 * 

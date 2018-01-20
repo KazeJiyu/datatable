@@ -43,8 +43,8 @@ public class WhereStr extends SimpleWhere <String> {
 	 * 
 	 * @param context
 	 * 			The context of the query.
-	 * @param header
-	 * 			The name of the column to filter.
+	 * @param headers
+	 * 			The name of the columns to filter.
 	 */
 	public WhereStr(QueryContext context, Collection<String> headers) {
 		super(context, headers);

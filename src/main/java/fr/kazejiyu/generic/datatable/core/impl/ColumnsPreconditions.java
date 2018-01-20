@@ -18,6 +18,7 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.Iterables;
 
+import fr.kazejiyu.generic.datatable.core.Column;
 import fr.kazejiyu.generic.datatable.core.Columns;
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
@@ -88,5 +89,23 @@ class ColumnsPreconditions {
 		if( ! table.columns().hasHeader(id.header())
 		 || ! id.type().isAssignableFrom(table.columns().get(id.header()).type()) )
 			throw new ColumnIdNotFoundException("The id with header [" + id.header() + "] and type [" + id.type() + "] does not match any column");
+	}
+
+	public void assertIsAValidElementForIndex(int index, Object element) {
+		Column<?> column = table.columns().get(index);
+		
+		if( ! column.type().isInstance(element) )
+			throw new ClassCastException(
+					element + " cannot be added to column " + column.header() + ": "
+					+ "expected type is " + column.type() + " but was " + (element == null ? "null" : element.getClass()));
+	}
+
+	public void assertIsAValidElementForHeader(String header, Object element) {
+		Column<?> column = table.columns().get(header);
+		
+		if( ! column.type().isInstance(element) )
+			throw new ClassCastException(
+					element + " cannot be added to column " + column.header() + ": "
+					+ "expected type is " + column.type() + " but was " + (element == null ? "null" : element.getClass()));
 	}
 }

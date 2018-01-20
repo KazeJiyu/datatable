@@ -55,7 +55,7 @@ class RowsPreconditions {
 	 * @throws InconsistentRowSizeException if table.columns().size() != row.size()
 	 * @throws ClassCastException if row's elements have not the type expected by table's columns
 	 */
-	<N> void assertIsAValidNewRow(List<Object> row) {
+	void assertIsAValidNewRow(List<Object> row) {
 		requireNonNull(row, "The content of the new row must not be null");
 		assertRowSizeIsConsistent(row);
 		assertRowElementsAreOfTheExpectedTypes(row);
