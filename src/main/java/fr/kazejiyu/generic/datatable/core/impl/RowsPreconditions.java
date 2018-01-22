@@ -47,7 +47,7 @@ class RowsPreconditions {
 			if( ! table.columns().get(i).accepts(elements.get(i)) )
 				throw new ClassCastException(
 						"Row's " + i + "th element has not the expected type "
-					  + "(got: " + elements.getClass() + " expecting: " + table.columns().get(i).type() + ")");
+					  + "(got: " + elements.get(i).getClass() + " expecting: " + table.columns().get(i).type() + ")");
 	}
 
 	/**

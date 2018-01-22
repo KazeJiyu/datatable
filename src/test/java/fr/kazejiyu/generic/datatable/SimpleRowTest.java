@@ -21,7 +21,7 @@ import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
  * 
  * @author Emmanuel CHEBBI
  */
-@DisplayName("A DataTable's Row")
+@DisplayName("A Row")
 class SimpleRowTest {
 	
 	@Nested

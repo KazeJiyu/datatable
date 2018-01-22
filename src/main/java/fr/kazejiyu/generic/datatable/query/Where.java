@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import com.google.common.base.Predicates;
+
 import fr.kazejiyu.generic.datatable.query.impl.WhereBool;
 import fr.kazejiyu.generic.datatable.query.impl.WhereNumber;
 import fr.kazejiyu.generic.datatable.query.impl.WhereStr;
@@ -53,7 +55,7 @@ public interface Where <T> {
 	 * Adds a filter keeping the rows that match {@code predicate}. <br>
 	 * <br>
 	 * If the row's element is {@code null}, the filter is not applied
-	 * and the row is kept.
+	 * and the row is not kept.
 	 * 
 	 * @param predicate
 	 * 			The predicate to test against the table's rows.
@@ -106,7 +108,7 @@ public interface Where <T> {
 	 * @see #isNonNull()
 	 */
 	public default And isNull() {
-		return match(Objects::isNull);
+		return match(Objects::nonNull);
 	}
 	
 	/**
@@ -117,11 +119,13 @@ public interface Where <T> {
 	 * @see #isNull()
 	 */
 	public default And isNonNull() {
-		return match(Objects::nonNull);
+		return match(Objects::isNull);
 	}
 	
 	/**
-	 * Adds a filter keeping the rows containing values that are instances of {@code clazz}.
+	 * Adds a filter keeping the rows containing values that are instances of {@code clazz}. <br>
+	 * <br>
+	 * {@code null} values are not kept.
 	 * 
 	 * @param clazz
 	 * 			The subclass of the values to keep.
@@ -195,7 +199,7 @@ public interface Where <T> {
 	 * @see #notIn(Object...)
 	 */
 	public default And notIn(Collection <T> elements) {
-		return match(elements::contains);
+		return match(Predicates.not(elements::contains));
 	}
 	
 	/**

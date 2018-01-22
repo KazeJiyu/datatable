@@ -77,7 +77,7 @@ class SimpleColumn <T> implements Column <T> {
 	
 	@Override
 	public boolean accepts(Object object) {
-		return id.type().isInstance(object);
+		return object == null || id.type().isInstance(object);
 	}
 
 	@Override

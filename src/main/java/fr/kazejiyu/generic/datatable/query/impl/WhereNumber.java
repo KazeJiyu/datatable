@@ -100,8 +100,22 @@ public class WhereNumber extends SimpleWhere <Number> {
 	 * 
 	 * @return a {@code And} instance to continue the query.
 	 */
-	public And inRange(double min, double max) {
+	public And inClosedInterval(double min, double max) {
 		return matchSafe(n -> min <= n.doubleValue() && n.doubleValue() <= max);
+	}
+
+	/**
+	 * Adds a filter to keep the rows containing a number comprised between {@code min} and {@code max}.
+	 * 
+	 * @param min
+	 * 			The lower bound of the range.
+	 * @param max
+	 * 			The upper bound of the range.
+	 * 
+	 * @return a {@code And} instance to continue the query.
+	 */
+	public And inOpenInterval(double min, double max) {
+		return matchSafe(n -> min < n.doubleValue() && n.doubleValue() < max);
 	}
 
 	/**

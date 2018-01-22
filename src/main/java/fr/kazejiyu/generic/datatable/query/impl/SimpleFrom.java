@@ -87,10 +87,19 @@ public class SimpleFrom implements From {
 		return new WhereNumber(context, headersOf(ids));
 	}
 	
-	private <T extends ColumnId<?>> LinkedHashSet<String> headersOf(T[] ids) {
+	private LinkedHashSet<String> headersOf(ColumnOfStringsId[] ids) {
 		LinkedHashSet<String> headers = new LinkedHashSet<>();
 		
-		for(ColumnId<?> id : ids)
+		for(ColumnOfStringsId id : ids)
+			headers.add(id.header());
+		
+		return headers;
+	}
+	
+	private LinkedHashSet<String> headersOf(ColumnOfNumbersId<?>[] ids) {
+		LinkedHashSet<String> headers = new LinkedHashSet<>();
+		
+		for(ColumnOfNumbersId<?> id : ids)
 			headers.add(id.header());
 		
 		return headers;

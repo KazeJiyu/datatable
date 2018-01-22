@@ -70,17 +70,7 @@ class SimpleWhere <T> implements Where <T> {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public <N> Where<N> as(final Class <N> clazz) {
-		if( clazz == String.class )
-			return (Where <N>) asStr();
-		
-		else if( clazz == Number.class ) 
-			return (Where <N>) asNumber();
-		
-		else if( clazz == Boolean.class ) 
-			return (Where <N>) asBool();
-		
 		return new SimpleWhere<>(context, headers);
 	}
 

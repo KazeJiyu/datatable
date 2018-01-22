@@ -19,7 +19,7 @@ import fr.kazejiyu.generic.datatable.core.impl.DataTable;
  * 
  * @author Emmanuel CHEBBI
  */
-@DisplayName("A DataTable's Column")
+@DisplayName("A Column")
 class SimpleColumnTest {
 	
 	@Nested
@@ -193,12 +193,19 @@ class SimpleColumnTest {
 		
 		@Test @DisplayName("is not equal to null")
 		void is_not_equal_to_null() {
-			assertThat(people.rows()).isNotEqualTo(null);
+			assertThat(people.columns()).noneMatch(col -> col.equals(null));
 		}
 		
 		@Test @DisplayName("is equal to self")
 		void is_equal_to_self() {
-			assertThat(people.rows()).isEqualTo(people.rows());
+			assertThat(people.columns()).allMatch(col -> col.equals(col));
+		}
+		
+		// accepts
+		
+		@Test @DisplayName("accepts null values")
+		void accepts_null_values() {
+			assertThat(people.columns()).allMatch(col -> col.accepts(null));
 		}
 	}
 }
