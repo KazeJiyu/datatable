@@ -5,6 +5,7 @@ import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.n;
 import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.s;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,8 +84,13 @@ class ColumnIdTest {
 	@ValueSource(strings = {"HEADER", "header", "hEADER"})
 	@DisplayName("is equal to an identical id without case consideration")
 	void is_equal_to_an_identical_id_without_case_consideration(String otherHeader) {
-		ColumnId<String> otherId = id(String.class, otherHeader);
-		assertThat(id).isEqualTo(otherId);
+		ColumnId<String> str = id(String.class, otherHeader);
+		SoftAssertions softly = new SoftAssertions();
+		
+		softly.assertThat(s(str)).isEqualTo(str);
+		softly.assertThat(str).isEqualTo(s(str));
+		
+		softly.assertAll();
 	}
 	
 	// s()
@@ -92,6 +98,11 @@ class ColumnIdTest {
 	@Test @DisplayName("can create an identical column of strings id")
 	void can_create_an_identical_column_of_strings_id() {
 		assertThat(s(id)).isEqualTo(id);
+	}
+	
+	@Test @DisplayName("has the same hashCode than an identical column of strings id")
+	void has_the_same_hashCode_than_an_identical_column_of_strings_id() {
+		assertThat(id.hashCode()).isEqualTo(s(id).hashCode());
 	}
 	
 	@Test @DisplayName("can create an array of column of strings with identical id")
@@ -104,12 +115,47 @@ class ColumnIdTest {
 		assertThat(s(s1, s2, s3, s4)).containsExactly(s(s1), s(s2), s(s3), s(s4));
 	}
 	
+	@Test @DisplayName("is not equal to a similar column of strings id with a different header")
+	void is_not_equal_to_a_similar_column_of_strings_id_with_a_different_header() {
+		ColumnId<String> different = id(String.class, header + "#");
+		assertThat(different).isNotEqualTo(s(id));
+		assertThat(s(id)).isNotEqualTo(different);
+	}
+	
 	// n()
 	
 	@Test @DisplayName("can create an identical column of numbers id")
 	void can_create_an_identical_column_of_numbers_id() {
 		ColumnId<Double> dbl = id(Double.class, "double");
-		assertThat(n(dbl)).isEqualTo(dbl);
+		SoftAssertions softly = new SoftAssertions();
+		
+		softly.assertThat(n(dbl)).isEqualTo(dbl);
+		softly.assertThat(dbl).isEqualTo(n(dbl));
+		
+		softly.assertAll();
+	}
+	
+	@Test @DisplayName("has the same hashCode than an identical column of numbers id")
+	void has_the_same_hash_code_than_an_identical_column_of_numbers_id() {
+		ColumnId<Double> dbl = id(Double.class, "double");
+		assertThat(dbl.hashCode()).isEqualTo(n(dbl).hashCode());
+	}
+	
+	@Test @DisplayName("is not equal to a similar column of numbers id with a different header")
+	void is_not_equal_to_a_similar_column_of_numbers_id_with_a_different_header() {
+		ColumnId<Double> nbr = id(Double.class, header);
+		ColumnId<Double> dbl = id(Double.class, header + "#");
+		
+		assertThat(nbr).isNotEqualTo(n(dbl));
+		assertThat(n(dbl)).isNotEqualTo(nbr);
+	}
+	
+	@Test @DisplayName("has not the same hashCode than a different column of numbers id")
+	void has_not_the_same_hash_code_than_a_different_column_of_numbers_id() {
+		ColumnId<Double> nbr = id(Double.class, header);
+		ColumnId<Double> dbl = id(Double.class, header + "#");
+		
+		assertThat(dbl.hashCode()).isNotEqualTo(nbr.hashCode());
 	}
 	
 }

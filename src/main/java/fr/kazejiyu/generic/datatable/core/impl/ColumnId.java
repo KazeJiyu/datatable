@@ -23,20 +23,22 @@ import fr.kazejiyu.generic.datatable.core.Column;
 
 /**
  * Identifies uniquely a {@link Column}. Also helps to turn a column
- * into an heterogeneous type-safe container.
+ * into an heterogeneous type-safe container. <br>
+ * <br>
+ * Instances of this class are strictly immutable and hence, once built,
+ * are unconditionally <em>thread-safe</em>.  
  * 
  * @author Emmanuel CHEBBI
  *
  * @param <T> The type of column's elements.
  */
-public class ColumnId<T> {
+public final class ColumnId<T> {
 
 	private final Class<T> type;
 	
 	private final String header;
 
 	public ColumnId(Class<T> type, String header) {
-		super();
 		this.type = requireNonNull(type, "The type of a ColumnId must not be null");
 		this.header = requireNonNull(header, "The header of a ColumnId must not be null");
 	}
@@ -56,7 +58,7 @@ public class ColumnId<T> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + header.toLowerCase().hashCode();
-		result = prime * result + type.getName().hashCode();
+		result = prime * result + type.hashCode();
 		return result;
 	}
 
@@ -66,12 +68,17 @@ public class ColumnId<T> {
 			return true;
 		if (obj == null)
 			return false;
-		if (! (obj instanceof ColumnId))
+		if( obj instanceof ColumnId )
+			return this.equals((ColumnId<?>) obj);
+		if( obj instanceof ColumnIdDecorator )
+			return this.equals(((ColumnIdDecorator<?>) obj).id);
+		return false;
+	}
+	
+	public boolean equals(ColumnId<?> other) {
+		if (!header.equalsIgnoreCase(other.header()))
 			return false;
-		ColumnId<?> other = (ColumnId<?>) obj;
-		if (!header.equalsIgnoreCase(other.header))
-			return false;
-		return type.equals(other.type);
+		return type.equals(other.type());
 	}
 	
 	/**
@@ -132,6 +139,6 @@ public class ColumnId<T> {
 	 * @return a new {@code ColumnId} 
 	 */
 	public static <T extends Number> ColumnOfNumbersId<T> n(ColumnId<T> id) {
-		return new ColumnOfNumbersId<T>(id);
+		return new ColumnOfNumbersId<>(id);
 	}
 }
