@@ -117,10 +117,10 @@ class WhereTest {
 					.select();
 			
 			SoftAssertions softly = new SoftAssertions();
-			softly.assertThat(result.rows()).size().isEqualTo(3);
-			softly.assertThat(result.columns().get(AGE)).containsExactly(23, 0, 21);
-			softly.assertThat(result.columns().get(NAME)).containsExactly("Luc", "Anya", "Mathilde");
-			softly.assertThat(result.columns().get(SEX)).containsExactly("Male", "Female", "Female");
+			softly.assertThat(result.rows()).size().isEqualTo(1);
+			softly.assertThat(result.columns().get(AGE)).containsExactly(32);
+			softly.assertThat(result.columns().get(NAME)).containsExactly(new String[] { null });
+			softly.assertThat(result.columns().get(SEX)).containsExactly("Male");
 			softly.assertAll();
 		}
 		
@@ -132,10 +132,10 @@ class WhereTest {
 					.select();
 			
 			SoftAssertions softly = new SoftAssertions();
-			softly.assertThat(result.rows()).size().isEqualTo(1);
-			softly.assertThat(result.columns().get(AGE)).containsExactly(32);
-			softly.assertThat(result.columns().get(NAME)).containsExactly(new String[] { null });
-			softly.assertThat(result.columns().get(SEX)).containsExactly("Male");
+			softly.assertThat(result.rows()).size().isEqualTo(3);
+			softly.assertThat(result.columns().get(AGE)).containsExactly(23, 0, 21);
+			softly.assertThat(result.columns().get(NAME)).containsExactly("Luc", "Anya", "Mathilde");
+			softly.assertThat(result.columns().get(SEX)).containsExactly("Male", "Female", "Female");
 			softly.assertAll();
 		}
 		

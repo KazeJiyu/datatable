@@ -248,6 +248,14 @@ class SimpleRowTest {
 			assertThat(people.rows().first().get(0)).isEqualTo("Gandalf");
 		}
 		
+		@Test @DisplayName("can set an element to null")
+		void can_set_an_element_to_null() {
+			for( Row row : people.rows() ) {
+				row.set(0,  null);
+				assertThat(row.get(0)).isNull();
+			}
+		}
+		
 		// equals()
 		
 		@Test @DisplayName("is not equal to null")

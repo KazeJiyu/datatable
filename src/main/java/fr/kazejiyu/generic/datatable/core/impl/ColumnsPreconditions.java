@@ -94,7 +94,7 @@ class ColumnsPreconditions {
 	public void assertIsAValidElementForIndex(int index, Object element) {
 		Column<?> column = table.columns().get(index);
 		
-		if( ! column.type().isInstance(element) )
+		if( ! column.accepts(element) )
 			throw new ClassCastException(
 					element + " cannot be added to column " + column.header() + ": "
 					+ "expected type is " + column.type() + " but was " + (element == null ? "null" : element.getClass()));
@@ -103,7 +103,7 @@ class ColumnsPreconditions {
 	public void assertIsAValidElementForHeader(String header, Object element) {
 		Column<?> column = table.columns().get(header);
 		
-		if( ! column.type().isInstance(element) )
+		if( ! column.accepts(element) )
 			throw new ClassCastException(
 					element + " cannot be added to column " + column.header() + ": "
 					+ "expected type is " + column.type() + " but was " + (element == null ? "null" : element.getClass()));

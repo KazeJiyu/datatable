@@ -108,7 +108,7 @@ public interface Where <T> {
 	 * @see #isNonNull()
 	 */
 	public default And isNull() {
-		return match(Objects::nonNull);
+		return match(Objects::isNull);
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public interface Where <T> {
 	 * @see #isNull()
 	 */
 	public default And isNonNull() {
-		return match(Objects::isNull);
+		return match(Objects::nonNull);
 	}
 	
 	/**
