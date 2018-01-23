@@ -18,6 +18,7 @@ import static java.util.Arrays.asList;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.function.Function;
 
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
@@ -79,28 +80,19 @@ public class SimpleFrom implements From {
 	
 	@Override
 	public WhereStr where(ColumnOfStringsId[] ids) {
-		return new WhereStr(context, headersOf(ids));
+		return new WhereStr(context, headersOf(ids, ColumnOfStringsId::header));
 	}
 	
 	@Override
 	public WhereNumber where(ColumnOfNumbersId<?>[] ids) {
-		return new WhereNumber(context, headersOf(ids));
+		return new WhereNumber(context, headersOf(ids, ColumnOfNumbersId::header));
 	}
 	
-	private LinkedHashSet<String> headersOf(ColumnOfStringsId[] ids) {
+	private <T> LinkedHashSet<String> headersOf(T[] ids, Function<T,String> headerOf) {
 		LinkedHashSet<String> headers = new LinkedHashSet<>();
 		
-		for(ColumnOfStringsId id : ids)
-			headers.add(id.header());
-		
-		return headers;
-	}
-	
-	private LinkedHashSet<String> headersOf(ColumnOfNumbersId<?>[] ids) {
-		LinkedHashSet<String> headers = new LinkedHashSet<>();
-		
-		for(ColumnOfNumbersId<?> id : ids)
-			headers.add(id.header());
+		for(T id : ids)
+			headers.add(headerOf.apply(id));
 		
 		return headers;
 	}
