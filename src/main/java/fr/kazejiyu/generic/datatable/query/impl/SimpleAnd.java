@@ -19,6 +19,7 @@ import static java.util.Arrays.asList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.function.Function;
 
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
@@ -29,6 +30,8 @@ import fr.kazejiyu.generic.datatable.query.Where;
 
 /**
  * An implementation of {@link And} able to deal with {@link Table}s.
+ * 
+ * TODO SimpleAnd & SimpleWhere should be decorators of a common class
  * 
  * @author Emmanuel CHEBBI
  */
@@ -75,6 +78,25 @@ class SimpleAnd implements And {
 	@Override
 	public WhereNumber and(ColumnOfNumbersId<?> id) {
 		return new WhereNumber(context, id.header());
+	}
+	
+	@Override
+	public WhereStr and(ColumnOfStringsId[] ids) {
+		return new WhereStr(context, headersOf(ids, ColumnOfStringsId::header));
+	}
+	
+	@Override
+	public WhereNumber and(ColumnOfNumbersId<?>[] ids) {
+		return new WhereNumber(context, headersOf(ids, ColumnOfNumbersId::header));
+	}
+	
+	private <T> LinkedHashSet<String> headersOf(T[] ids, Function<T,String> headerOf) {
+		LinkedHashSet<String> headers = new LinkedHashSet<>();
+		
+		for(T id : ids)
+			headers.add(headerOf.apply(id));
+		
+		return headers;
 	}
 
 	@Override
