@@ -122,10 +122,10 @@ public final class ColumnId<T> {
 	@SafeVarargs
 	public static ColumnOfStringsId[] s(ColumnId<String> id, ColumnId<String>... ids) {
 		List<ColumnOfStringsId> columns = new ArrayList<>();
-		columns.add(new ColumnOfStringsId(id));
+		columns.add(s(id));
 		
 		for(ColumnId<String> col : ids) 
-			columns.add(new ColumnOfStringsId(col));
+			columns.add(s(col));
 		
 		return columns.toArray(new ColumnOfStringsId[columns.size()]);
 	}
@@ -140,5 +140,27 @@ public final class ColumnId<T> {
 	 */
 	public static <T extends Number> ColumnOfNumbersId<T> n(ColumnId<T> id) {
 		return new ColumnOfNumbersId<>(id);
+	}
+	
+	/** 
+	 * Wraps several {@code ColumnId}s into a new object to ease DSL's build.
+	 * 
+	 * @param id
+	 * 			The first id.
+	 * @param ids
+	 * 			The other ids.
+	 * 
+	 * @return a new {@code ColumnId} 
+	 */
+	@SafeVarargs
+	@SuppressWarnings("unchecked")
+	public static <T extends Number> ColumnOfNumbersId<T>[] n(ColumnId<T> id, ColumnId<T>... ids) {
+		List<ColumnOfNumbersId<T>> columns = new ArrayList<>();
+		columns.add(n(id));
+		
+		for(ColumnId<T> col : ids) 
+			columns.add(n(col));
+		
+		return columns.toArray(new ColumnOfNumbersId[columns.size()]);
 	}
 }

@@ -241,20 +241,37 @@ class WhereTest {
 			softly.assertAll();
 		}
 		
-//		@Test @DisplayName("can filter from a ColumnOfNumbersId")
+		@Test @DisplayName("can filter from a ColumnOfNumbersId")
 		void can_filter_from_a_column_of_numbers_id() {
-			/*Table result =*/ Query
+			Table result = Query
 					.from(people)
-					.where(n(AGE));
-//			.isZero()
-//					.select();
+					.where(n(AGE)).isZero()
+					.select();
 			
-//			SoftAssertions softly = new SoftAssertions();
-//			softly.assertThat(result.rows()).size().isEqualTo(1);
-//			softly.assertThat(result.columns().get(AGE)).containsExactly(0);
-//			softly.assertThat(result.columns().get(NAME)).containsExactly("Anya");
-//			softly.assertThat(result.columns().get(SEX)).containsExactly("Female");
-//			softly.assertAll();
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(result.rows()).size().isEqualTo(1);
+			softly.assertThat(result.columns().get(AGE)).containsExactly(0);
+			softly.assertThat(result.columns().get(NAME)).containsExactly("Anya");
+			softly.assertThat(result.columns().get(SEX)).containsExactly("Female");
+			softly.assertAll();
+		}
+		
+		@Test @DisplayName("can filter from an array of ColumnOfNumbersIds")
+		void can_filter_from_an_array_of_column_of_numbers_ids() {
+			people.columns().create(Integer.class, "Size", 122, 0, 42, -45);
+			ColumnId<Integer> SIZE = id(Integer.class, "Size");
+			
+			Table result = Query
+					.from(people)
+					.where(n(AGE, SIZE)).isPositive()
+					.select();
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(result.rows()).size().isEqualTo(1);
+			softly.assertThat(result.columns().get(AGE)).containsExactly(23);
+			softly.assertThat(result.columns().get(NAME)).containsExactly("Luc");
+			softly.assertThat(result.columns().get(SEX)).containsExactly("Male");
+			softly.assertAll();
 		}
 	}
 }
