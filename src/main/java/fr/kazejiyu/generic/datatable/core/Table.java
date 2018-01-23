@@ -68,21 +68,20 @@ public interface Table {
 	 * @throws NullPointerException if {@code matcher} is {@code null}.
 	 */
 	default Table filter(Matcher<Row> matcher) {
-		return filter(matcher, columns().headers());
+		return filter(columns().headers(), matcher);
 	}
 	
 	/**
 	 * Filters the table keeping only specific columns.
-	 * 
-	 * @param matcher
-	 * 			Selects the rows to keep. Must not be {@code null}.
 	 * @param columnsToKeep
 	 * 			The headers of the columns to keep. Must not be {@code null}
+	 * @param matcher
+	 * 			Selects the rows to keep. Must not be {@code null}.
 	 * 
 	 * @return a new {@code Table} containing the filtered rows.
 	 * 
 	 * @throws NullPointerException if any of the arguments is {@code null}.
 	 * @throws HeaderNotFoundException if ! columns().headers().containsAll(columnsToKeep)
 	 */
-	Table filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep);
+	Table filter(LinkedHashSet<String> columnsToKeep, Matcher<Row> matcher);
 }

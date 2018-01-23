@@ -113,7 +113,7 @@ class SimpleAnd implements And {
 	public Table select(Collection<String> headers) {
 		LinkedHashSet<String> selectedHeaders = new LinkedHashSet<>();
 		selectedHeaders.addAll(headers);
-		return context.table.filter(context.filters, selectedHeaders);
+		return context.table.filter(selectedHeaders, context.filters);
 	}
 
 }

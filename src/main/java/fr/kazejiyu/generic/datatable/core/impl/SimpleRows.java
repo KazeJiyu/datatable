@@ -101,11 +101,11 @@ class SimpleRows implements Rows {
 		return this;
 	}
 
-	@Override
-	public Rows insert(final int position, final Row row) {
-		elements.add(position, requireNonNull(row, "The row to insert must not be null"));
-		return this;
-	}
+//	@Override
+//	public Rows insert(final int position, final Row row) {
+//		elements.add(position, requireNonNull(row, "The row to insert must not be null"));
+//		return this;
+//	}
 
 	@Override
 	public Rows remove(final int index) {

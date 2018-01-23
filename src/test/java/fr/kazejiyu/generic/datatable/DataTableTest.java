@@ -2,15 +2,18 @@ package fr.kazejiyu.generic.datatable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
 
 import java.util.LinkedHashSet;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
@@ -31,6 +34,8 @@ class DataTableTest {
 		void initializeEmptyTable() {
 			empty = new DataTable();
 		}
+		
+		// isEmpty()
 		
 		@Test @DisplayName("is empty")
 		void is_empty() {
@@ -53,14 +58,25 @@ class DataTableTest {
 			assertThat(empty.isEmpty()).isTrue();
 		}
 		
+		// rows()
+		
 		@Test @DisplayName("returns a non-null Rows instance")
 		void returns_non_null_rows() {
 			assertThat(empty.rows()).isNotNull();
 		}
 		
+		// columns()
+		
 		@Test @DisplayName("returns a non-null Columns instance")
 		void returns_non_null_columns() {
 			assertThat(empty.columns()).isNotNull();
+		}
+		
+		// filter()
+		
+		@Test @DisplayName("returns an an equivalent table when filtered")
+		void returns_an_empty_table_when_filtered() {
+			assertThat(empty.filter(row -> true)).isEqualTo(empty);
 		}
 		
 		// hashCode()
@@ -87,6 +103,8 @@ class DataTableTest {
 	@DisplayName("when not empty")
 	class NonEmpty {
 		private Table people;
+		
+		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
 		
 		private static final String AGE_HEADER = "AGE";
 		private static final String NAME_HEADER = "name";
@@ -170,7 +188,25 @@ class DataTableTest {
 			headers.add(SEX_HEADER);
 			
 			assertThatExceptionOfType(HeaderNotFoundException.class)
-				.isThrownBy(() -> people.filter(r -> true, headers));
+				.isThrownBy(() -> people.filter(headers, r -> true));
+		}
+		
+		@Test @DisplayName("can filter only specific columns")
+		void can_filter_only_specific_columns() {
+			LinkedHashSet<String> headers = new LinkedHashSet<>();
+			headers.add(NAME_HEADER);
+			headers.add(AGE_HEADER);
+			
+			Table result = people.filter(headers, row ->
+				row.get(NAME).endsWith("e")
+			);
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(result.rows().size()).isEqualTo(2);
+			softly.assertThat(result.columns().size()).isEqualTo(2);
+			softly.assertThat(result.rows().get(0)).containsExactly("Baptiste", 32);
+			softly.assertThat(result.rows().get(1)).containsExactly("Mathilde", 21);
+			softly.assertAll();	
 		}
 	}
 }

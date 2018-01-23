@@ -77,7 +77,7 @@ public class DataTable implements Table {
 	}
 	
 	@Override
-	public DataTable filter(Matcher<Row> matcher, LinkedHashSet<String> columnsToKeep) {
+	public DataTable filter(LinkedHashSet<String> columnsToKeep, Matcher<Row> matcher) {
 		requireNonNull(matcher, "The matcher must not be null");
 		requireNonNull(columnsToKeep, "The columns to keep must not be null");
 		preconditions.assertAreExistingHeaders(columnsToKeep);

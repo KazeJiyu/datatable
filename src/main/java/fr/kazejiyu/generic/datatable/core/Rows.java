@@ -152,8 +152,9 @@ public interface Rows extends Iterable <Row> {
 	 * @return a reference to the instance to enable method chaining.
 	 * 
 	 * @throws NullPointerException if {@code row} is {@code null}.
+	 * @throws 
 	 */
-	Rows insert(int position, Row row);
+//	Rows insert(int position, Row row);
 	
 	/**
 	 * Removes a row from the table.

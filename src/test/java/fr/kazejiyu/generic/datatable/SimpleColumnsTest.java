@@ -159,6 +159,9 @@ class SimpleColumnsTest {
 		private static final String NAME_HEADER = "name";
 		private static final String SEX_HEADER = "sEx";
 		
+		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
+		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
+		
 		@BeforeEach
 		void initializePeopleTable() {
 			people = new DataTable();
@@ -360,6 +363,25 @@ class SimpleColumnsTest {
 		void can_return_a_column_from_its_id() {
 			ColumnId<Integer> age = id(Integer.class, AGE_HEADER);
 			assertThat(people.columns().get(age)).containsExactly(23, 32, 0, 21);
+		}
+		
+		// remove()
+		
+		@Test @DisplayName("can remove a column from the column's header")
+		void can_remove_a_column_from_the_column_header() {
+			people.columns().remove(SEX_HEADER);
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(people.columns().size()).isEqualTo(2);
+			softly.assertThat(people.columns().get(AGE)).containsExactly(23, 32, 0, 21);
+			softly.assertThat(people.columns().get(NAME)).containsExactly("Luc", "Baptiste", "Anya", "Mathilde");
+			softly.assertAll();
+		}
+		
+		@Test @DisplayName("throws when removing a column from a non existing header")
+		void throws_when_removing_a_column_from_a_non_existing_header() {
+			assertThatExceptionOfType(HeaderNotFoundException.class)
+				.isThrownBy(() -> people.columns().remove("non existing"));
 		}
 	}
 }

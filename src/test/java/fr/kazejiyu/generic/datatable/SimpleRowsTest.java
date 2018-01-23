@@ -65,17 +65,23 @@ class SimpleRowsTest {
 				.isEqualTo(nbRows);
 		}
 		
+		// first()
+		
 		@Test @DisplayName("throws when asked for its first row")
 		void throws_when_asked_for_its_first_row() {
 			assertThatExceptionOfType(IndexOutOfBoundsException.class)
 				.isThrownBy(empty.rows()::first);
 		}
 		
+		// last()
+		
 		@Test @DisplayName("throws when asked for its last row")
 		void throws_when_asked_fpr_its_last_row() {
 			assertThatExceptionOfType(IndexOutOfBoundsException.class)
 				.isThrownBy(empty.rows()::last);
 		}
+		
+		// iterator()
 		
 		@Test @DisplayName("returns a lone iterator")
 		void returns_a_lone_iterator() {
@@ -84,12 +90,21 @@ class SimpleRowsTest {
 			.isEmpty();
 		}
 		
+		// iterator()
+		
 		@Test @DisplayName("returns a lone stream")
 		void returns_a_lone_stream() {
 			assertThat(empty.rows().stream())
 				.isEmpty();
 		}
 		
+		// remove()
+		
+		@Test @DisplayName("throws when removing a row")
+		void throws_when_removing_a_row() {
+			assertThatExceptionOfType(IndexOutOfBoundsException.class)
+				.isThrownBy(() -> empty.rows().remove(0));
+		}
 	}
 	
 	@Nested
@@ -211,6 +226,22 @@ class SimpleRowsTest {
 			softly.assertAll();
 		}
 		
+		// remove()
+		
+		@Test @DisplayName("can remove a row")
+		void can_remove_a_row() {
+			people.rows().remove(1);
+			
+			SoftAssertions softly = new SoftAssertions();
+			
+			softly.assertThat(people.rows().size()).isEqualTo(3);
+			softly.assertThat(people.rows().get(0)).containsExactly("Luc", 23, "Male");
+			softly.assertThat(people.rows().get(1)).containsExactly("Anya", 0, "Female");
+			softly.assertThat(people.rows().get(2)).containsExactly("Mathilde", 21, "Female");
+		
+			softly.assertAll();			
+		}
+		
 		// clear()
 		
 		@Test @DisplayName("removes all its rows when cleared")
@@ -236,6 +267,16 @@ class SimpleRowsTest {
 		@Test @DisplayName("is not equal to a non Rows object")
 		void is_not_equal_to_a_non_rows_object() {
 			assertThat(people.rows()).isNotEqualTo(12);
+		}
+		
+		@Test @DisplayName("is not equal to null")
+		void is_not_equal_to_null() {
+			assertThat(people.rows()).isNotEqualTo(null);
+		}
+		
+		@Test @DisplayName("is equal to self")
+		void is_equal_to_self() {
+			assertThat(people.rows()).isEqualTo(people.rows());
 		}
 	}
 }
