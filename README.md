@@ -8,12 +8,12 @@ This project is aimed to experiment with the implementation of heterogeneous yet
 As of now, the API makes able to:
 
 - create heterogeneous tables,
-- modify them by adding either rows or columns,
+- modify them and their content,
 - query their content in a type-safe way. 
 
 # Full example
 
-Because code is better than words, here is an overview of the API:
+Because code is better than words, here is a quick overview of the API:
 
 ```java
 Table people = new DataTable();
@@ -32,6 +32,24 @@ Table adultsWhoseNameEndsWithLetterE = people.filter(row ->
 ```
 
 # Quick start
+
+## Understanding ids
+
+Ids are a trick used to provide a type-safe way to access the content of a table.
+
+Basically, they are simple data structure containing:
+
+- a `type`, that is the Java class of the column's elements
+- a `header`, that is the name of the column.
+
+An id is represented by the [ColumnId](https://github.com/KazeJiyu/datatable/blob/master/src/main/java/fr/kazejiyu/generic/datatable/core/impl/ColumnIterator.java) class can be created with the `id` static method :
+```java
+// name is an id that matches any column containing Strings and which header is "col1"
+ColumnId<String> name = ColumnId.id(String.class, "col1");
+```
+
+> In the following document, ids are used everywhere.
+> However, although they are the advised way to deal with a table, indexes and column names can be used instead.
 
 ## Populating a `Table`
 
@@ -102,32 +120,7 @@ Notice how the last row has been removed first in order to avoid bugs related to
 
 ## Querying a `Table`
 
-### Standard way
-
-The `filter` method makes easy to retrieve the rows of a table that match a specific criterion :
-
-```java
-Table adultsWhoseNameEndsWithLetterE(Table people) {
-    return people.filter( row ->
-        (int) row.get("age") > 18 &&
-        ((String) row.get("name")).endsWith("e")
-    );
-}
-```
-
-Since the type of a column's elements is only known at runtime, the cast is mandatory within the lambda expression. However, since dealing with numerous casts can be really tedious, the API provides a type-safe way to query a `Table`. 
-
-### Type safety
-
-A column can be identified by a [ColumnId](https://github.com/KazeJiyu/datatable/blob/master/src/main/java/fr/kazejiyu/generic/datatable/core/impl/ColumnIterator.java), which is a simple structure containing the type of the column's elements and its header.
-
-An id can be get with the `id` static method :
-```java
-// Matches any column that contains Strings and which header is "name"
-ColumnId<String> name = ColumnId.id(String.class, "name");
-```
-
-The following snippet shows how the `filter` method can benefit from this feature:
+The `filter` method makes easy to retrieve the rows of a table that match a specific criterion:
 
 ```java
 import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
@@ -138,7 +131,6 @@ public class Main {
     private static final ColumnId<Integer> AGE = id(Integer.class, "age");
     private static final ColumnId<String> NAME = id(String.class, "name");
     
-    // no need for casting anymore
     Table adultsWhoseNameEndsWithLetterE(Table people) {
         return people.filter(row ->
             row.get(AGE) > 18 &&
@@ -150,36 +142,7 @@ public class Main {
 
 ## SQL-like DSL
 
-### Standard way
-
 For more complex cases, the API also brings a SQL-like DSL that makes possible to apply a same filter to multiple columns. It can be used as follows :
-
-```java
-// Retrieve all european adults whose name and surename ends with the letter "e"
-Table adultsWhoseNameEndsWithLetterE(Table people) {
-    return Query
-        .from(people)
-        .where("Name", "Surename").asStr().endsWith("e")
-        .and("Age").asNumber().gt(18)
-        .and("Country").match(country -> ((Country) country).isInEurope())
-        .select();
-}
-```
-
-The `as*` methods provide tailored methods, making easier to build explicit queries. As of now, four of them are available :
-
-- `asStr()` to indicate that the column contains `String`s,
-- `asBool()` to indicate that the column contains `Boolean`s,
-- `asNumber()` to indicate that the column contains `Number`s,
-- `as(Class<T>)` to indicate that the column contains `T`s.
-
-__Important__: these methods do not perform dynamic casts. If the column's elements are not of the right type, a `ClassCastException` is thrown.
-
-Again, the API provides a way to avoid the explicit cast.
-
-### Type safety
-
-A clearer way to use the DSL is the following:
 
 ```java
 import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
@@ -191,7 +154,7 @@ public class Main {
     private static final ColumnId<String> NAME = id(String.class, "name");
     private static final ColumnId<String> SURENAME = id(String.class, "surename");
 
-    // Retrieve all european adults whose name and surename ends with the letter "e"
+    // Retrieve all european adults whose both name and surename ends with the letter "e"
     Table adultsWhoseNameEndsWithLetterE(Table people) {
         return Query
             .from(people)
@@ -205,5 +168,5 @@ public class Main {
 
 Notice how the `s` method is used to specify several columns of type String to the `WHERE`clause. Due to Java's type erasure, this trick is mandatory. This static method is defined in the `ColumnId` class, as well as the methods:
 
-- `n`: used to specify several methods of type Number,
-- `b`: used to specify several methods of type Boolean.
+- `n`: used to apply a same filter to several columns of numbers,
+- `b`: used to apply a same filter to several columns of booleans.
