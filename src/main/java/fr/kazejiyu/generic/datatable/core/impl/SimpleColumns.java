@@ -82,7 +82,7 @@ class SimpleColumns implements Columns {
 	}
 	
 	@Override
-	public boolean hasHeader(String header) {
+	public boolean contains(String header) {
 		return headerToIndex.containsKey(normalize(header));
 	}
 

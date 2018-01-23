@@ -3,6 +3,7 @@ package fr.kazejiyu.generic.datatable.core.impl;
 import java.util.LinkedHashSet;
 
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 public class TablePreconditions {
@@ -16,8 +17,15 @@ public class TablePreconditions {
 	/** @throws HeaderNotFoundException if an element of {@ode columnsToKeep} does not match any column */
 	void assertAreExistingHeaders(LinkedHashSet<String> columnsToKeep) {
 		for(final String columnToKeep : columnsToKeep)
-			if( ! table.columns().hasHeader(columnToKeep) )
+			if( ! table.columns().contains(columnToKeep) )
 				throw new HeaderNotFoundException("The header " + columnToKeep + " does not exist in the table");
+	}
+
+	/** @throws ColumnIdNotFoundException if an element of {@ode idsOfColumnsToKeep} does not match any column */
+	public void assertAreExistingIds(LinkedHashSet<ColumnId<?>> idsOfColumnsToKeep) {
+		for(final ColumnId<?> columnToKeep : idsOfColumnsToKeep)
+			if( ! table.columns().contains(columnToKeep) )
+				throw new ColumnIdNotFoundException("The id " + columnToKeep + " does not match any column in the table");
 	}
 
 }

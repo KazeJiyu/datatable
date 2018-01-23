@@ -161,6 +161,7 @@ class SimpleColumnsTest {
 		
 		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
 		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
+		private final ColumnId<String> SEX = id(String.class, SEX_HEADER);
 		
 		@BeforeEach
 		void initializePeopleTable() {
@@ -382,6 +383,32 @@ class SimpleColumnsTest {
 		void throws_when_removing_a_column_from_a_non_existing_header() {
 			assertThatExceptionOfType(HeaderNotFoundException.class)
 				.isThrownBy(() -> people.columns().remove("non existing"));
+		}
+		
+		// contains()
+		
+		@Test @DisplayName("knows when it contains a column with a specific name")
+		void knows_when_it_contains_a_column_with_a_specific_name() {
+			for( String header : asList(NAME_HEADER.toUpperCase(), SEX_HEADER.toLowerCase(), AGE_HEADER) )
+				assertThat(people.columns().contains(header)).isTrue();
+		}
+		
+		@Test @DisplayName("knows when it does not contain any column with a specific name")
+		void knows_when_it_does_not_contain_any_column_with_a_specific_name() {
+			for( String header : asList("  " + NAME_HEADER, "non existing", AGE_HEADER + " ") )
+				assertThat(people.columns().contains(header)).isFalse();
+		}
+		
+		@Test @DisplayName("knows when it contains a column with a specific id")
+		void knows_when_it_contains_a_column_with_a_specific_id() {
+			for( ColumnId<?> id : asList(NAME, SEX, AGE) )
+				assertThat(people.columns().contains(id)).isTrue();
+		}
+		
+		@Test @DisplayName("knows when it does not contain a column with a specific id")
+		void knows_when_it_does_not_contain_any_column_with_a_specific_id() {
+			for( ColumnId<?> id : asList(id(Integer.class, NAME_HEADER), id(String.class, AGE_HEADER)) )
+				assertThat(people.columns().contains(id)).isFalse();
 		}
 	}
 }

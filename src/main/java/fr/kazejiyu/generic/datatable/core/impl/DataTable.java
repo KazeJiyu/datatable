@@ -78,14 +78,39 @@ public class DataTable implements Table {
 	
 	@Override
 	public DataTable filter(LinkedHashSet<String> columnsToKeep, Matcher<Row> matcher) {
-		requireNonNull(matcher, "The matcher must not be null");
 		requireNonNull(columnsToKeep, "The columns to keep must not be null");
 		preconditions.assertAreExistingHeaders(columnsToKeep);
 		
-		FilterList <Row> filtered = new FilterList<>(rows.internal(), matcher);
-		DataTable filteredTable = emptyTable(columnsToKeep);
+		return filter(indexesOfHeaders(columnsToKeep), matcher);
+	}
+	
+	/** @return the indexes of the selected columns */
+	private List<Integer> indexesOfHeaders(Set<String> headers) {
+		return headers.stream()
+				.map(columns::indexOf)
+				.collect(toList());
+	}
+	
+	@Override
+	public DataTable filterById(LinkedHashSet<ColumnId<?>> idsOfColumnsToKeep, Matcher<Row> matcher) {
+		requireNonNull(idsOfColumnsToKeep, "The ids of the columns to keep must not be null");
+		preconditions.assertAreExistingIds(idsOfColumnsToKeep);
 		
-		List<Integer> indexesOfColumnsToKeep = indexesOf(columnsToKeep);
+		return filter(indexesOfIds(idsOfColumnsToKeep), matcher);
+	}
+	
+	/** @return the indexes of the selected columns */
+	private List<Integer> indexesOfIds(Set<ColumnId<?>> ids) {
+		return ids.stream()
+				.map(columns::indexOf)
+				.collect(toList());
+	}
+		
+	private DataTable filter(List<Integer> indexesOfColumnsToKeep, Matcher<Row> matcher) {
+		requireNonNull(matcher, "The matcher must not be null");
+		
+		FilterList <Row> filtered = new FilterList<>(rows.internal(), matcher);
+		DataTable filteredTable = emptyTable(indexesOfColumnsToKeep);
 		
 		for( Row row : filtered ) {
 			List<Object> filteredRow = pickElementsAtIndexes(row, indexesOfColumnsToKeep);
@@ -96,19 +121,13 @@ public class DataTable implements Table {
 		return filteredTable;
 	}
 	
-	/** @return the indexes of the selected columns */
-	private List<Integer> indexesOf(Set<String> headers) {
-		return headers.stream()
-				.map(columns::indexOf)
-				.collect(toList());
-	}
-	
 	/** @return a new empty Table with the selected columns */
-	private DataTable emptyTable(LinkedHashSet<String> headers) {
+	private DataTable emptyTable(List<Integer> indexesOfColumnsToKeep) {
 		DataTable empty = new DataTable();
 		
-		for( String header : headers ) 
-			empty.columns().create(columns.get(header).type(), header);
+		indexesOfColumnsToKeep.stream()
+			.map(columns::get)
+			.forEach(col -> empty.columns.create(col.type(), col.header()));
 		
 		return empty;
 	}

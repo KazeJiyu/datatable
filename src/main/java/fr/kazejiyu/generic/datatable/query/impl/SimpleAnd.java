@@ -108,6 +108,21 @@ class SimpleAnd implements And {
 	public Table select(String... headers) {
 		return select(asList(headers));
 	}
+	
+	@Override
+	public Table select(ColumnId<?> id) {
+		LinkedHashSet<ColumnId<?>> selectedIds = new LinkedHashSet<>();
+		selectedIds.add(id);
+		return context.table.filterById(selectedIds, context.filters);
+	}
+	
+	@Override
+	public Table select(ColumnId<?> first, ColumnId<?>... nexts) {
+		LinkedHashSet<ColumnId<?>> selectedIds = new LinkedHashSet<>();
+		selectedIds.add(first);
+		selectedIds.addAll(asList(nexts));
+		return context.table.filterById(selectedIds, context.filters);
+	}
 
 	@Override
 	public Table select(Collection<String> headers) {

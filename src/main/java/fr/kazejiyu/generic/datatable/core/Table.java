@@ -17,6 +17,9 @@ package fr.kazejiyu.generic.datatable.core;
 import java.util.LinkedHashSet;
 
 import ca.odell.glazedlists.matchers.Matcher;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
+import fr.kazejiyu.generic.datatable.core.impl.DataTable;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
@@ -73,8 +76,9 @@ public interface Table {
 	
 	/**
 	 * Filters the table keeping only specific columns.
+	 * 
 	 * @param columnsToKeep
-	 * 			The headers of the columns to keep. Must not be {@code null}
+	 * 			The name of the columns to keep. Must not be {@code null}
 	 * @param matcher
 	 * 			Selects the rows to keep. Must not be {@code null}.
 	 * 
@@ -84,4 +88,19 @@ public interface Table {
 	 * @throws HeaderNotFoundException if ! columns().headers().containsAll(columnsToKeep)
 	 */
 	Table filter(LinkedHashSet<String> columnsToKeep, Matcher<Row> matcher);
+	
+	/**
+	 * Filters the table keeping only specific columns.
+	 * 
+	 * @param idsOfColumnsToKeep
+	 * 			The ids of the columns to keep. Must not be {@code null}
+	 * @param matcher
+	 * 			Selects the rows to keep. Must not be {@code null}.
+	 * 
+	 * @return a new {@code Table} containing the filtered rows.
+	 * 
+	 * @throws NullPointerException if any of the arguments is {@code null}.
+	 * @throws ColumnIdNotFoundException if one of the given ids does not match any column
+	 */
+	DataTable filterById(LinkedHashSet<ColumnId<?>> idsOfColumnsToKeep, Matcher<Row> matcher);
 }

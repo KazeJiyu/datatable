@@ -43,13 +43,13 @@ class ColumnsPreconditions {
 
 	/** @throws HeaderAlreadyExistsException if columns.hasHeader(header) */
 	void assertHeaderDoesNotExist(String header) {
-		if( columns.hasHeader(header) )
+		if( columns.contains(header) )
 			throw new HeaderAlreadyExistsException("The header " + header + " already exist in the table");
 	}
 
 	/** @throws HeaderNotFoundException if ! columns.hasHeader(header) */
 	void assertHeaderExist(String header) {
-		if( ! columns.hasHeader(header) )
+		if( ! columns.contains(header) )
 			throw new HeaderNotFoundException("The header " + header + " does not exist in the table");
 	}
 
@@ -86,7 +86,7 @@ class ColumnsPreconditions {
 	<T> void assertIsAValidColumnId(ColumnId<T> id) {
 		requireNonNull(id, "The index must not be null");
 		
-		if( ! table.columns().hasHeader(id.header())
+		if( ! table.columns().contains(id.header())
 		 || ! id.type().isAssignableFrom(table.columns().get(id.header()).type()) )
 			throw new ColumnIdNotFoundException("The id with header [" + id.header() + "] and type [" + id.type() + "] does not match any column");
 	}

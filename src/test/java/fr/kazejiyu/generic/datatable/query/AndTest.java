@@ -165,14 +165,48 @@ class AndTest {
 					.from(people)
 					.where().isNonNull()
 					.and(s(NAME, SEX)).startsWith("M")
-					.select("age");
+					.select("name", "age");
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(result.columns().size()).isEqualTo(2);
+			softly.assertThat(result.rows().size()).isEqualTo(1);
+			softly.assertThat(result.columns().get(AGE)).containsExactly(32);
+			softly.assertThat(result.columns().get(NAME)).containsExactly("Martin");
+			softly.assertThat(result.columns().contains(SEX_HEADER)).isFalse();
+			softly.assertAll();
+		}
+		
+		@Test @DisplayName("can select only one id")
+		void can_select_only_one_id() {
+			Table result = Query
+					.from(people)
+					.where().isNonNull()
+					.and(s(NAME, SEX)).startsWith("M")
+					.select(AGE);
 			
 			SoftAssertions softly = new SoftAssertions();
 			softly.assertThat(result.columns().size()).isEqualTo(1);
 			softly.assertThat(result.rows().size()).isEqualTo(1);
 			softly.assertThat(result.columns().get(AGE)).containsExactly(32);
-			softly.assertThat(result.columns().hasHeader(NAME_HEADER)).isFalse();
-			softly.assertThat(result.columns().hasHeader(SEX_HEADER)).isFalse();
+			softly.assertThat(result.columns().contains(NAME)).isFalse();
+			softly.assertThat(result.columns().contains(SEX_HEADER)).isFalse();
+			softly.assertAll();
+		}
+		
+		@Test @DisplayName("can select only specific ids")
+		void can_select_only_specific_ids() {
+			Table result = Query
+					.from(people)
+					.where().isNonNull()
+					.and(s(NAME, SEX)).startsWith("M")
+					.select(NAME, AGE);
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(result.columns().size()).isEqualTo(2);
+			softly.assertThat(result.rows().size()).isEqualTo(1);
+			softly.assertThat(result.columns().get(AGE)).containsExactly(32);
+			softly.assertThat(result.columns().get(NAME)).containsExactly("Martin");
+			softly.assertThat(result.columns().contains(SEX_HEADER)).isFalse();
 			softly.assertAll();
 		}
 	}

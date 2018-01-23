@@ -17,6 +17,9 @@ package fr.kazejiyu.generic.datatable.query;
 import java.util.Collection;
 
 import fr.kazejiyu.generic.datatable.core.Table;
+import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
+import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
  * Last query's statement ; makes able to choose the columns of the original table to keep.
@@ -26,29 +29,76 @@ import fr.kazejiyu.generic.datatable.core.Table;
 public interface Select {
 	
 	/**
-	 * Returns a new query that selects all the columns of a {@link Table}.
-	 * @return a new query that selects all the columns of a {@code Table}.
+	 * Returns a new table resulting of the previously built query. <br>
+	 * <br>
+	 * This new table has the same columns as its original, and only differs
+	 * from its rows.
+	 * 
+	 * @return a new table resulting of the previously built query.
 	 */
-	public Table select();
+	Table select();
 	
 	/**
-	 * Returns a new query that selects the columns called {@code headers} of a {@link Table}.
+	 * Returns a new table resulting of the previously built query. <br>
+	 * <br>
+	 * This new table only contains the columns of the original table which
+	 * name is specified in {@code headers}. The order is relevant.
 	 * 
 	 * @param headers
-	 * 			The name of the columns to select in the table.
+	 * 			The name of the columns to keep in the final table.
 	 * 
-	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
+	 * @return a new table resulting of the previously built query.
+	 * 
+	 * @throws HeaderNotFoundException if one of the specified header does not match any column name.
 	 */
-	public Table select(String... headers);
+	Table select(String... headers);
 	
 	/**
-	 * Returns a new query that selects the columns called {@code headers} of a {@link Table}.
+	 * Returns a new table resulting of the previously built query. <br>
+	 * <br>
+	 * This new table only contains the columns of the original table which
+	 * name is specified in {@code headers}. The order is relevant.
 	 * 
 	 * @param headers
-	 * 			The name of the columns to select in the table.
+	 * 			The name of the columns to keep in the final table.
+	 * 			Must not be {@code null}.
 	 * 
-	 * @return a new query that selects the columns called {@code headers} of a {@code Table}.
+	 * @return a new table resulting of the previously built query.
+	 * 
+	 * @throws HeaderNotFoundException if one of the specified header does not match any column name.
 	 */
-	public Table select(Collection <String> headers);
+	Table select(Collection <String> headers);
 	
+	/**
+	 * Returns a new table resulting of the previously built query. <br>
+	 * <br>
+	 * This new table only contains the column identified by {@code id}.
+	 * 
+	 * @param id
+	 * 			The name of the columns to keep in the final table.
+	 * 			Must not be {@code null}.
+	 * 
+	 * @return a new table resulting of the previously built query.
+	 * 
+	 * @throws ColumnIdNotFoundException if id does not match any column
+	 */
+	Table select(ColumnId<?> id);
+	
+	/**
+	 * Returns a new table resulting of the previously built query. <br>
+	 * <br>
+	 * This new table only contains the columns identified by the arguments.
+	 * The order is relevant.
+	 *
+	 * @param first
+	 * 			The id of first the column to keep.
+	 * 			Must not be {@code null}.
+	 * @param nexts
+	 * 			The ids of the others columns to keep.
+	 * 
+	 * @return a new table resulting of the previously built query.
+	 * 
+	 * @throws ColumnIdNotFoundException if id does not match any column
+	 */
+	Table select(ColumnId<?> first, ColumnId<?>... nexts);
 }

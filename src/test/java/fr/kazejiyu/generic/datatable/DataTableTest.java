@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import fr.kazejiyu.generic.datatable.core.Table;
 import fr.kazejiyu.generic.datatable.core.impl.ColumnId;
 import fr.kazejiyu.generic.datatable.core.impl.DataTable;
+import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
@@ -105,6 +106,8 @@ class DataTableTest {
 		private Table people;
 		
 		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
+		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
+		private final ColumnId<Integer> SEX = id(Integer.class, SEX_HEADER);
 		
 		private static final String AGE_HEADER = "AGE";
 		private static final String NAME_HEADER = "name";
@@ -180,8 +183,8 @@ class DataTableTest {
 		
 		// filter()
 		
-		@Test @DisplayName("throws when filter on non existing header")
-		void throws_when_filtering_on_non_existing_header() {
+		@Test @DisplayName("throws when filtering non existing header")
+		void throws_when_filtering_non_existing_header() {
 			LinkedHashSet<String> headers = new LinkedHashSet<>();
 			headers.add(NAME_HEADER);
 			headers.add("non existing");
@@ -198,6 +201,37 @@ class DataTableTest {
 			headers.add(AGE_HEADER);
 			
 			Table result = people.filter(headers, row ->
+				row.get(NAME).endsWith("e")
+			);
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(result.rows().size()).isEqualTo(2);
+			softly.assertThat(result.columns().size()).isEqualTo(2);
+			softly.assertThat(result.rows().get(0)).containsExactly("Baptiste", 32);
+			softly.assertThat(result.rows().get(1)).containsExactly("Mathilde", 21);
+			softly.assertAll();	
+		}
+		
+		// filterById()
+		
+		@Test @DisplayName("throws when filtering non existing ids")
+		void throws_when_filtering_non_existing_ids() {
+			LinkedHashSet<ColumnId<?>> ids = new LinkedHashSet<>();
+			ids.add(NAME);
+			ids.add(id(String.class, "non existing"));
+			ids.add(SEX);
+			
+			assertThatExceptionOfType(ColumnIdNotFoundException.class)
+				.isThrownBy(() -> people.filterById(ids, r -> true));
+		}
+		
+		@Test @DisplayName("can filter only specific ids")
+		void can_filter_only_specific_ids() {
+			LinkedHashSet<ColumnId<?>> ids = new LinkedHashSet<>();
+			ids.add(NAME);
+			ids.add(AGE);
+			
+			Table result = people.filterById(ids, row ->
 				row.get(NAME).endsWith("e")
 			);
 			

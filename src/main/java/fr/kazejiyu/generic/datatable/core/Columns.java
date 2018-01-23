@@ -14,6 +14,8 @@
  */
 package fr.kazejiyu.generic.datatable.core;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -44,11 +46,31 @@ public interface Columns extends Iterable <Column<?>> {
 	 * Returns whether any column is named under a specific header.
 	 * 
 	 * @param header
-	 * 			The header to look for. 
+	 * 			The name of the column to look for. 
 	 * 
 	 * @return whether {@code header} is a valid header 
 	 */
-	boolean hasHeader(String header);
+	boolean contains(String header);
+	
+	/**
+	 * Returns whether a column match given {@code id}. <br>
+	 * <br>
+	 * A column match if it has the same header and the same
+	 * id as {@code id}.
+	 * 
+	 * @param id
+	 * 			Identifies the column to find. Must not be {@code null}.
+	 * 
+	 * @return whether any column has been found.
+	 */
+	default boolean contains(ColumnId<?> id) {
+		requireNonNull(id, "The id must not be null");
+		
+		return stream().anyMatch(col -> 
+			col.header().equalsIgnoreCase(id.header()) &&
+			col.type().equals(id.type())
+		);
+	}
 	
 	/**
 	 * Returns the first column of the table. 
