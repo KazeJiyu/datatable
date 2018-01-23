@@ -42,7 +42,7 @@ Basically, they are simple data structure containing:
 - a `type`, that is the Java class of the column's elements
 - a `header`, that is the name of the column.
 
-An id is represented by the [ColumnId](https://github.com/KazeJiyu/datatable/blob/master/src/main/java/fr/kazejiyu/generic/datatable/core/impl/ColumnIterator.java) class can be created with the `id` static method :
+An id is represented by the [ColumnId](https://github.com/KazeJiyu/datatable/blob/master/src/main/java/fr/kazejiyu/generic/datatable/core/impl/ColumnId.java) class and can be created with the `id` static method :
 ```java
 // name is an id that matches any column containing Strings and which header is "col1"
 ColumnId<String> name = ColumnId.id(String.class, "col1");
