@@ -151,7 +151,7 @@ class SimpleColumns implements Columns {
 	}
 
 	@Override
-	public <N> Columns create(final Class<N> type, final String header, final Iterable<N> column) {
+	public <N> Columns create(final String header, final Class<N> type, final Iterable<N> column) {
 		preconditions.assertIsAValidNewColumn(type, header, column);
 		
 		Iterator<N> itElement = column.iterator();
@@ -165,14 +165,14 @@ class SimpleColumns implements Columns {
 				((ModifiableRow) row).add(itElement.next());
 		}
 		
-		createLastColumn(id(type, header));
+		createLastColumn(id(header, type));
 		return this;
 	}
 	
 	private void createLastColumn(ColumnId<?> id) {
 		int nextIndex = size();
 		
-		idToIndex.put(id(id.type(), normalize(id.header())), nextIndex);
+		idToIndex.put(id(normalize(id.header()), id.type()), nextIndex);
 		headerToIndex.put(normalize(id.header()), nextIndex);
 		elements.add( new SimpleColumn<>(id, table) );
 	}

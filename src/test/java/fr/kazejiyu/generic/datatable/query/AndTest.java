@@ -29,9 +29,9 @@ class AndTest {
 		private static final String NAME_HEADER = "name";
 		private static final String SEX_HEADER = "sEx";
 		
-		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
-		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
-		private final ColumnId<String> SEX = id(String.class, SEX_HEADER);
+		private final ColumnId<String> NAME = id(NAME_HEADER, String.class);
+		private final ColumnId<Integer> AGE = id(AGE_HEADER, Integer.class);
+		private final ColumnId<String> SEX = id(SEX_HEADER, String.class);
 		
 		@BeforeEach
 		void initializePeopleTable() {
@@ -143,7 +143,7 @@ class AndTest {
 		@Test @DisplayName("can apply a filter on an array of ColumnOfNumbersIds")
 		void can_apply_a_filter_on_an_array_of_column_of_numbers_ids() {
 			people.columns().create("Size", Integer.class, 122, 0, 42, -45);
-			ColumnId<Integer> SIZE = id(Integer.class, "Size");
+			ColumnId<Integer> SIZE = id("Size", Integer.class);
 			
 			Table result = Query
 					.from(people)

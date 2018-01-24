@@ -206,7 +206,7 @@ public interface Columns extends Iterable <Column<?>> {
 	 * @throws InconsistentColumnSizeException if ! rows.isEmpty()
 	 */
 	default Columns create(String header, Class<?> type) {
-		return create(type, header, Collections.emptyList());
+		return create(header, type, Collections.emptyList());
 	}
 	
 	/**
@@ -253,17 +253,16 @@ public interface Columns extends Iterable <Column<?>> {
 	 */
 	@SuppressWarnings("unchecked")
 	default <N> Columns create(String header, Class<N> type, N... column) {
-		return create(type, header, Arrays.asList(column));
+		return create(header, type, Arrays.asList(column));
 	}
 
 	/**
 	 * Creates a new {@code Column} from a given iterable.
-	 * 
-	 * @param type
-	 * 			The type of the elements in the new column.
-	 * 			Must not be {@code null}. 
 	 * @param header
 	 * 			The column's header.
+	 * 			Must not be {@code null}. 
+	 * @param type
+	 * 			The type of the elements in the new column.
 	 * 			Must not be {@code null}. 
 	 * @param column
 	 * 			The elements of the column.
@@ -276,7 +275,7 @@ public interface Columns extends Iterable <Column<?>> {
 	 * @throws NullPointerException if any of the parameters is {@code null}.
 	 * @throws InconsistentColumnSizeException if {@code column.size()} != {@code this.size()}
 	 */
-	<N> Columns create(Class<N> type, String header, Iterable<N> column);
+	<N> Columns create(String header, Class<N> type, Iterable<N> column);
 	
 	/**
 	 * Removes a column from the table.

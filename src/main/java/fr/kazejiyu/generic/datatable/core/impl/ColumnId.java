@@ -38,7 +38,7 @@ public final class ColumnId<T> {
 	
 	private final String header;
 
-	public ColumnId(Class<T> type, String header) {
+	public ColumnId(String header, Class<T> type) {
 		this.type = requireNonNull(type, "The type of a ColumnId must not be null");
 		this.header = requireNonNull(header, "The header of a ColumnId must not be null");
 	}
@@ -83,18 +83,17 @@ public final class ColumnId<T> {
 	
 	/**
 	 * Creates a new {@code ColumnId} with a specific type and header.
-	 * 
-	 * @param type
-	 * 			The class of the elements contained by the column.
 	 * @param header
 	 * 			The header of the column.
+	 * @param type
+	 * 			The class of the elements contained by the column.
 	 * 
 	 * @return a new {@code ColumnId}
 	 * 
 	 * @param <T> the type of the elements contained by the column
 	 */
-	public static <T> ColumnId<T> id(Class<T> type, String header) {
-		return new ColumnId<>(type, header);
+	public static <T> ColumnId<T> id(String header, Class<T> type) {
+		return new ColumnId<>(header, type);
 	}
 	
 	/** 

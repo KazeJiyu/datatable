@@ -51,9 +51,9 @@ class WhereNumberTest {
 		private static final String NAME_HEADER = "name";
 		private static final String SEX_HEADER = "sEx";
 		
-		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
-		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
-		private final ColumnId<String> SEX = id(String.class, SEX_HEADER);
+		private final ColumnId<String> NAME = id(NAME_HEADER, String.class);
+		private final ColumnId<Integer> AGE = id(AGE_HEADER, Integer.class);
+		private final ColumnId<String> SEX = id(SEX_HEADER, String.class);
 		
 		@BeforeEach
 		void initializePeopleTable() {

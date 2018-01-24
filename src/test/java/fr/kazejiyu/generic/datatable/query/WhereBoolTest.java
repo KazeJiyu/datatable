@@ -51,9 +51,9 @@ class WhereBoolTest {
 		private static final String NAME_HEADER = "name";
 		private static final String SEX_HEADER = "isFemale";
 		
-		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
-		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
-		private final ColumnId<Boolean> SEX = id(Boolean.class, SEX_HEADER);
+		private final ColumnId<String> NAME = id(NAME_HEADER, String.class);
+		private final ColumnId<Integer> AGE = id(AGE_HEADER, Integer.class);
+		private final ColumnId<Boolean> SEX = id(SEX_HEADER, Boolean.class);
 		
 		@BeforeEach
 		void initializePeopleTable() {

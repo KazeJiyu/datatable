@@ -156,7 +156,7 @@ class SimpleRowTest {
 		
 		@Test @DisplayName("throws when asked for an element at id with wrong header")
 		void throws_when_asked_for_an_element_at_id_with_wrong_header() {
-			ColumnId<String> nonExisting = id(String.class, "nonExisting");
+			ColumnId<String> nonExisting = id("nonExisting", String.class);
 			
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
 				.isThrownBy(() -> people.rows().first().get(nonExisting));
@@ -164,7 +164,7 @@ class SimpleRowTest {
 		
 		@Test @DisplayName("throws when asked for an element at id with wrong type")
 		void throws_when_asked_for_an_element_at_id_with_wrong_type() {
-			ColumnId<Integer> nonExisting = id(Integer.class, NAME_HEADER);
+			ColumnId<Integer> nonExisting = id(NAME_HEADER, Integer.class);
 			
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
 				.isThrownBy(() -> people.rows().first().get(nonExisting));
@@ -172,7 +172,7 @@ class SimpleRowTest {
 		
 		@Test @DisplayName("returns an element from its column's id")
 		void returns_an_element_from_its_column_id() {
-			ColumnId<String> name = id(String.class, NAME_HEADER);
+			ColumnId<String> name = id(NAME_HEADER, String.class);
 			assertThat(people.rows().first().get(name)).isEqualTo("Luc");
 		}
 		
@@ -208,7 +208,7 @@ class SimpleRowTest {
 		
 		@Test @DisplayName("throws when asked to_set an element at id at wrong header")
 		void throws_when_asked_to_set_an_element_at_id_at_wrong_header() {
-			ColumnId<String> nonExisting = id(String.class, "nonExisting");
+			ColumnId<String> nonExisting = id("nonExisting", String.class);
 			
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
 				.isThrownBy(() -> people.rows().first().set(nonExisting, null));
@@ -216,7 +216,7 @@ class SimpleRowTest {
 		
 		@Test @DisplayName("throws when asked to_set an element at id at wrong type")
 		void throws_when_asked_to_set_an_element_at_id_at_wrong_type() {
-			ColumnId<Integer> nonExisting = id(Integer.class, NAME_HEADER);
+			ColumnId<Integer> nonExisting = id(NAME_HEADER, Integer.class);
 			
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
 				.isThrownBy(() -> people.rows().first().set(nonExisting, null));
@@ -236,7 +236,7 @@ class SimpleRowTest {
 		
 		@Test @DisplayName("can set an element from its column's id")
 		void can_set_an_element_from_its_column_id() {
-			ColumnId<String> name = id(String.class, NAME_HEADER);
+			ColumnId<String> name = id(NAME_HEADER, String.class);
 			people.rows().first().set(name, "Gandalf");
 			
 			assertThat(people.rows().first().get(name)).isEqualTo("Gandalf");

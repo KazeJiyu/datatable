@@ -31,7 +31,7 @@ class ColumnIdTest {
 	void createId() {
 		type = String.class;
 		header = "Header";
-		id = id(type, header);
+		id = id(header, type);
 	}
 	
 	// type()
@@ -62,12 +62,12 @@ class ColumnIdTest {
 	
 	@Test @DisplayName("is not equal to a similar id with different header")
 	void is_not_equal_to_a_similar_id_with_different_header() {
-		assertThat(id).isNotEqualTo(id(type, " " + header));
+		assertThat(id).isNotEqualTo(id(" " + header, type));
 	}
 	
 	@Test @DisplayName("is not equal to a similar id with different type")
 	void is_not_equal_to_a_similar_id_with_different_type() {
-		assertThat(id).isNotEqualTo(id(this.getClass(), header));
+		assertThat(id).isNotEqualTo(id(header, this.getClass()));
 	}
 	
 	@Test @DisplayName("is equal to self")
@@ -77,14 +77,14 @@ class ColumnIdTest {
 	
 	@Test @DisplayName("is equal to an identical id")
 	void is_equal_to_an_identical_id() {
-		assertThat(id).isEqualTo(id(type, header));
+		assertThat(id).isEqualTo(id(header, type));
 	}
 	
 	@ParameterizedTest 
 	@ValueSource(strings = {"HEADER", "header", "hEADER"})
 	@DisplayName("is equal to an identical id without case consideration")
 	void is_equal_to_an_identical_id_without_case_consideration(String otherHeader) {
-		ColumnId<String> str = id(String.class, otherHeader);
+		ColumnId<String> str = id(otherHeader, String.class);
 		SoftAssertions softly = new SoftAssertions();
 		
 		softly.assertThat(s(str)).isEqualTo(str);
@@ -107,17 +107,17 @@ class ColumnIdTest {
 	
 	@Test @DisplayName("can create an array of column of strings with identical id")
 	void can_create_an_array_of_column_of_strings_with_identical_id() {
-		ColumnId<String> s1 = id(String.class, "headER1");
-		ColumnId<String> s2 = id(String.class, "  headER 2");
-		ColumnId<String> s3 = id(String.class, "  ");
-		ColumnId<String> s4 = id(String.class, "HEADER 4");
+		ColumnId<String> s1 = id("headER1", String.class);
+		ColumnId<String> s2 = id("  headER 2", String.class);
+		ColumnId<String> s3 = id("  ", String.class);
+		ColumnId<String> s4 = id("HEADER 4", String.class);
 		
 		assertThat(s(s1, s2, s3, s4)).containsExactly(s(s1), s(s2), s(s3), s(s4));
 	}
 	
 	@Test @DisplayName("is not equal to a similar column of strings id with a different header")
 	void is_not_equal_to_a_similar_column_of_strings_id_with_a_different_header() {
-		ColumnId<String> different = id(String.class, header + "#");
+		ColumnId<String> different = id(header + "#", String.class);
 		assertThat(different).isNotEqualTo(s(id));
 		assertThat(s(id)).isNotEqualTo(different);
 	}
@@ -126,7 +126,7 @@ class ColumnIdTest {
 	
 	@Test @DisplayName("can create an identical column of numbers id")
 	void can_create_an_identical_column_of_numbers_id() {
-		ColumnId<Double> dbl = id(Double.class, "double");
+		ColumnId<Double> dbl = id("double", Double.class);
 		SoftAssertions softly = new SoftAssertions();
 		
 		softly.assertThat(n(dbl)).isEqualTo(dbl);
@@ -137,14 +137,14 @@ class ColumnIdTest {
 	
 	@Test @DisplayName("has the same hashCode than an identical column of numbers id")
 	void has_the_same_hash_code_than_an_identical_column_of_numbers_id() {
-		ColumnId<Double> dbl = id(Double.class, "double");
+		ColumnId<Double> dbl = id("double", Double.class);
 		assertThat(dbl.hashCode()).isEqualTo(n(dbl).hashCode());
 	}
 	
 	@Test @DisplayName("is not equal to a similar column of numbers id with a different header")
 	void is_not_equal_to_a_similar_column_of_numbers_id_with_a_different_header() {
-		ColumnId<Double> nbr = id(Double.class, header);
-		ColumnId<Double> dbl = id(Double.class, header + "#");
+		ColumnId<Double> nbr = id(header, Double.class);
+		ColumnId<Double> dbl = id(header + "#", Double.class);
 		
 		assertThat(nbr).isNotEqualTo(n(dbl));
 		assertThat(n(dbl)).isNotEqualTo(nbr);
@@ -152,8 +152,8 @@ class ColumnIdTest {
 	
 	@Test @DisplayName("has not the same hashCode than a different column of numbers id")
 	void has_not_the_same_hash_code_than_a_different_column_of_numbers_id() {
-		ColumnId<Double> nbr = id(Double.class, header);
-		ColumnId<Double> dbl = id(Double.class, header + "#");
+		ColumnId<Double> nbr = id(header, Double.class);
+		ColumnId<Double> dbl = id(header + "#", Double.class);
 		
 		assertThat(dbl.hashCode()).isNotEqualTo(nbr.hashCode());
 	}

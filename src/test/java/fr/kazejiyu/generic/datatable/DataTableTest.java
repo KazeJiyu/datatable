@@ -105,9 +105,9 @@ class DataTableTest {
 	class NonEmpty {
 		private Table people;
 		
-		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
-		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
-		private final ColumnId<Integer> SEX = id(Integer.class, SEX_HEADER);
+		private final ColumnId<String> NAME = id(NAME_HEADER, String.class);
+		private final ColumnId<Integer> AGE = id(AGE_HEADER, Integer.class);
+		private final ColumnId<Integer> SEX = id(SEX_HEADER, Integer.class);
 		
 		private static final String AGE_HEADER = "AGE";
 		private static final String NAME_HEADER = "name";
@@ -218,7 +218,7 @@ class DataTableTest {
 		void throws_when_filtering_non_existing_ids() {
 			LinkedHashSet<ColumnId<?>> ids = new LinkedHashSet<>();
 			ids.add(NAME);
-			ids.add(id(String.class, "non existing"));
+			ids.add(id("non existing", String.class));
 			ids.add(SEX);
 			
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)

@@ -103,7 +103,7 @@ class SimpleColumnsTest {
 		
 		@Test @DisplayName("can create empty columns at the end")
 		void can_create_empty_columns_at_the_end() {
-			ColumnId<Integer> height = id(Integer.class, "height");
+			ColumnId<Integer> height = id("height", Integer.class);
 			empty.columns().create(height);
 			Column<?> last = empty.columns().last();
 			
@@ -172,9 +172,9 @@ class SimpleColumnsTest {
 		private static final String NAME_HEADER = "name";
 		private static final String SEX_HEADER = "sEx";
 		
-		private final ColumnId<Integer> AGE = id(Integer.class, AGE_HEADER);
-		private final ColumnId<String> NAME = id(String.class, NAME_HEADER);
-		private final ColumnId<String> SEX = id(String.class, SEX_HEADER);
+		private final ColumnId<Integer> AGE = id(AGE_HEADER, Integer.class);
+		private final ColumnId<String> NAME = id(NAME_HEADER, String.class);
+		private final ColumnId<String> SEX = id(SEX_HEADER, String.class);
 		
 		@BeforeEach
 		void initializePeopleTable() {
@@ -200,7 +200,7 @@ class SimpleColumnsTest {
 		void throws_when_creating_a_wrong_sized_column(List<Object> column) {
 			assertThatExceptionOfType(InconsistentColumnSizeException.class)
 				.as("creating a column of " + column.size() + " elements")
-				.isThrownBy(() -> people.columns().create(Object.class, "Illegal Column", column)); 
+				.isThrownBy(() -> people.columns().create("Illegal Column", Object.class, column)); 
 		}
 		
 		@SuppressWarnings("unused")
@@ -229,7 +229,7 @@ class SimpleColumnsTest {
 		@Test @DisplayName("appends columns created from an id at the end")
 		@SuppressWarnings("unchecked")
 		void appends_columns_created_from_an_id_at_the_end() {
-			ColumnId<String> str = id(String.class, "str");
+			ColumnId<String> str = id("str", String.class);
 			people.columns().create(str, "a", "c", "b", "d");
 			Column<String> last = (Column<String>) people.columns().last();
 			
@@ -287,20 +287,20 @@ class SimpleColumnsTest {
 		@CsvSource({"'NAme', 'java.lang.String', 0", "'agE', 'java.lang.Integer', 1", "'sex', 'java.lang.String', 2"})
 		@DisplayName("can return the index of a column from its id")
 		void can_return_the_index_of_a_column_from_its_id(String header, String className, int expectedIndex) throws ClassNotFoundException {
-			assertThat(people.columns().indexOf(id(Class.forName(className), header)))
+			assertThat(people.columns().indexOf(id(header, Class.forName(className))))
 				.isEqualTo(expectedIndex);
 		}
 		
 		@Test @DisplayName("throws when asked for the index of a column which id's type is wrong")
 		void throws_when_asked_for_the_index_of_an_id_with_wrong_type() {
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
-				.isThrownBy(() -> people.columns().indexOf(id(String.class, "age")));
+				.isThrownBy(() -> people.columns().indexOf(id("age", String.class)));
 		}
 		
 		@Test @DisplayName("throws when asked for the index of a column which id's header is wrong")
 		void throws_when_asked_for_the_index_of_an_id_with_wrong_header() {
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
-				.isThrownBy(() -> people.columns().indexOf(id(Integer.class, "name")));
+				.isThrownBy(() -> people.columns().indexOf(id("name", Integer.class)));
 		}
 		
 		// iterator()
@@ -369,7 +369,7 @@ class SimpleColumnsTest {
 		
 		@Test @DisplayName("throws when getting a column from an id with non existing header")
 		void throws_when_getting_a_column_from_an_id_with_non_existing_header() {
-			ColumnId<String> nonExisting = id(String.class, "string");
+			ColumnId<String> nonExisting = id("string", String.class);
 			assertThatExceptionOfType(ColumnIdNotFoundException.class)
 				.isThrownBy(() -> people.columns().get(nonExisting));
 		}
@@ -394,7 +394,7 @@ class SimpleColumnsTest {
 		
 		@Test @DisplayName("can return a column from its id")
 		void can_return_a_column_from_its_id() {
-			ColumnId<Integer> age = id(Integer.class, AGE_HEADER);
+			ColumnId<Integer> age = id(AGE_HEADER, Integer.class);
 			assertThat(people.columns().get(age)).containsExactly(23, 32, 0, 21);
 		}
 		
@@ -439,7 +439,7 @@ class SimpleColumnsTest {
 		
 		@Test @DisplayName("knows when it does not contain a column with a specific id")
 		void knows_when_it_does_not_contain_any_column_with_a_specific_id() {
-			for( ColumnId<?> id : asList(id(Integer.class, NAME_HEADER), id(String.class, AGE_HEADER)) )
+			for( ColumnId<?> id : asList(id(NAME_HEADER, Integer.class), id(AGE_HEADER, String.class)) )
 				assertThat(people.columns().contains(id)).isFalse();
 		}
 	}
