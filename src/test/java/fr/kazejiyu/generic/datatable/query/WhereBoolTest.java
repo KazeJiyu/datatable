@@ -59,9 +59,9 @@ class WhereBoolTest {
 		void initializePeopleTable() {
 			people = new DataTable();
 			people.columns()
-					.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
-					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-					.create(Boolean.class, SEX_HEADER, false, false, true, true);
+					.create(NAME_HEADER, String.class, "Luc", "Baptiste", "Anya", "Mathilde")
+					.create(AGE_HEADER, Integer.class, 23, 32, 0, 21)
+					.create(SEX_HEADER, Boolean.class, false, false, true, true);
 		}
 		
 		@Test @DisplayName("can keep only true values")

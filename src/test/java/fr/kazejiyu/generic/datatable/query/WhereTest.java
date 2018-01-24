@@ -59,9 +59,9 @@ class WhereTest {
 		void initializePeopleTable() {
 			people = new DataTable();
 			people.columns()
-					.create(String.class, NAME_HEADER, "Luc", null, "Anya", "Mathilde")
-					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+					.create(NAME_HEADER, String.class, "Luc", null, "Anya", "Mathilde")
+					.create(AGE_HEADER, Integer.class, 23, 32, 0, 21)
+					.create(SEX_HEADER, String.class, "Male", "Male", "Female", "Female");
 		}
 		
 		@Test @DisplayName("can apply filters on null values without throwing")
@@ -258,7 +258,7 @@ class WhereTest {
 		
 		@Test @DisplayName("can filter from an array of ColumnOfNumbersIds")
 		void can_filter_from_an_array_of_column_of_numbers_ids() {
-			people.columns().create(Integer.class, "Size", 122, 0, 42, -45);
+			people.columns().create("Size", Integer.class, 122, 0, 42, -45);
 			ColumnId<Integer> SIZE = id(Integer.class, "Size");
 			
 			Table result = Query

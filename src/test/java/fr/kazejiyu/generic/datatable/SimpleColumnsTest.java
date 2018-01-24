@@ -101,6 +101,19 @@ class SimpleColumnsTest {
 			};
 		}
 		
+		@Test @DisplayName("can create empty columns at the end")
+		void can_create_empty_columns_at_the_end() {
+			ColumnId<Integer> height = id(Integer.class, "height");
+			empty.columns().create(height);
+			Column<?> last = empty.columns().last();
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(last.header()).isEqualTo("height");
+			softly.assertThat(last.type()).isEqualTo(Integer.class);
+			softly.assertThat(last).isEmpty();
+			softly.assertAll();
+		}
+		
 		// headers()
 		
 		@Test @DisplayName("has no header")
@@ -167,9 +180,9 @@ class SimpleColumnsTest {
 		void initializePeopleTable() {
 			people = new DataTable();
 			people.columns()
-					.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
-					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+					.create(NAME_HEADER, String.class, "Luc", "Baptiste", "Anya", "Mathilde")
+					.create(AGE_HEADER, Integer.class, 23, 32, 0, 21)
+					.create(SEX_HEADER, String.class, "Male", "Male", "Female", "Female");
 		}
 		
 		// isEmpty()
@@ -203,11 +216,30 @@ class SimpleColumnsTest {
 		@Test @DisplayName("appends created columns at the end")
 		@SuppressWarnings("unchecked")
 		void appends_created_columns_at_the_end() {
-			people.columns().create(Double.class, "SomeValue", 0.6, 12d, 0d, 42d);
+			people.columns().create("SomeValue", Double.class, 0.6, 12d, 0d, 42d);
+			Column<Double> last = (Column<Double>) people.columns().last();
 			
-			assertThat((Column<Double>) people.columns().last())
-				.containsExactly(.6, 12d, 0d, 42d);
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(last.header()).isEqualTo("SomeValue");
+			softly.assertThat(last.type()).isEqualTo(Double.class);
+			softly.assertThat(last).containsExactly(.6, 12d, 0d, 42d);
+			softly.assertAll();
 		}
+		
+		@Test @DisplayName("appends columns created from an id at the end")
+		@SuppressWarnings("unchecked")
+		void appends_columns_created_from_an_id_at_the_end() {
+			ColumnId<String> str = id(String.class, "str");
+			people.columns().create(str, "a", "c", "b", "d");
+			Column<String> last = (Column<String>) people.columns().last();
+			
+			SoftAssertions softly = new SoftAssertions();
+			softly.assertThat(last.header()).isEqualTo("str");
+			softly.assertThat(last.type()).isEqualTo(String.class);
+			softly.assertThat(last).containsExactly("a", "c", "b", "d");
+			softly.assertAll();
+		}
+		
 		
 		// headers()
 		

@@ -45,7 +45,7 @@ class SimpleRowTest {
 		
 		@Test @DisplayName("is not empty anymore when columns are added to the table")
 		void is_empty_with_only_empty_rows() {
-			table.columns().create(Integer.class, "ints", 12);
+			table.columns().create("ints", Integer.class, 12);
 			assertThat(empty.isEmpty()).isFalse();
 		}
 		
@@ -97,9 +97,9 @@ class SimpleRowTest {
 		Table createPeople() {
 			Table table = new DataTable();
 			table.columns()
-					.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
-					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+					.create(NAME_HEADER, String.class, "Luc", "Baptiste", "Anya", "Mathilde")
+					.create(AGE_HEADER, Integer.class, 23, 32, 0, 21)
+					.create(SEX_HEADER, String.class, "Male", "Male", "Female", "Female");
 			
 			return table;
 		}

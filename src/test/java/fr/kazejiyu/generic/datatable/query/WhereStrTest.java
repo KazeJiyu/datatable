@@ -59,9 +59,9 @@ class WhereStrTest {
 		void initializePeopleTable() {
 			people = new DataTable();
 			people.columns()
-					.create(String.class, NAME_HEADER, "Luc", "", "anya", "MATHILDE")
-					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+					.create(NAME_HEADER, String.class, "Luc", "", "anya", "MATHILDE")
+					.create(AGE_HEADER, Integer.class, 23, 32, 0, 21)
+					.create(SEX_HEADER, String.class, "Male", "Male", "Female", "Female");
 		}
 		
 		@Test @DisplayName("can keep only empty Strings")

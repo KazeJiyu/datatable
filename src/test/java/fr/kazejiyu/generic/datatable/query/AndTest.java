@@ -37,9 +37,9 @@ class AndTest {
 		void initializePeopleTable() {
 			people = new DataTable();
 			people.columns()
-					.create(String.class, NAME_HEADER, "Luc", "Martin", "Anya", "Mathilde")
-					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+					.create(NAME_HEADER, String.class, "Luc", "Martin", "Anya", "Mathilde")
+					.create(AGE_HEADER, Integer.class, 23, 32, 0, 21)
+					.create(SEX_HEADER, String.class, "Male", "Male", "Female", "Female");
 		}
 		
 		@Test @DisplayName("can apply a filter on all columns")
@@ -142,7 +142,7 @@ class AndTest {
 		
 		@Test @DisplayName("can apply a filter on an array of ColumnOfNumbersIds")
 		void can_apply_a_filter_on_an_array_of_column_of_numbers_ids() {
-			people.columns().create(Integer.class, "Size", 122, 0, 42, -45);
+			people.columns().create("Size", Integer.class, 122, 0, 42, -45);
 			ColumnId<Integer> SIZE = id(Integer.class, "Size");
 			
 			Table result = Query

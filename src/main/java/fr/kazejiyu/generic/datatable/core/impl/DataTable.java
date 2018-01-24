@@ -121,13 +121,13 @@ public class DataTable implements Table {
 		return filteredTable;
 	}
 	
-	/** @return a new empty Table with the selected columns */
+	/** @return a new empty Table containing the columns which indexes are given as argument */
 	private DataTable emptyTable(List<Integer> indexesOfColumnsToKeep) {
 		DataTable empty = new DataTable();
 		
 		indexesOfColumnsToKeep.stream()
 			.map(columns::get)
-			.forEach(col -> empty.columns.create(col.type(), col.header()));
+			.forEach(col -> empty.columns.create(col.header(), col.type()));
 		
 		return empty;
 	}

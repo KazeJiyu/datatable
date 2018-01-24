@@ -163,7 +163,7 @@ public interface Columns extends Iterable <Column<?>> {
 	int indexOf(ColumnId<?> id);
 	
 	/**
-	 * Creates a new empty column that accepts elements of any type.
+	 * Creates a new empty column that can contain objects of any type.
 	 * 
 	 * @param header
 	 * 			The header of the column. Must not be {@code null}.
@@ -171,38 +171,74 @@ public interface Columns extends Iterable <Column<?>> {
 	 * @return a reference to the instance to enable method chaining.
 	 * 
 	 * @throws NullPointerException if header == null
-	 * @throws InconsistentColumnSizeException if ! isEmpty()
+	 * @throws InconsistentColumnSizeException if ! rows.isEmpty()
 	 */
 	default Columns create(String header) {
-		return create(Object.class, header);
+		return create(header, Object.class);
+	}
+	
+	/**
+	 * Creates a new empty column.
+	 * 
+	 * @param id
+	 * 			Defines the name and the type of the column to create.
+	 * 			Must not be {@code null}.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @throws NullPointerException if id == null
+	 * @throws InconsistentColumnSizeException if ! rows.isEmpty()
+	 */
+	default  Columns create(ColumnId<?> id) {
+		return create(id.header(), id.type());
 	}
 	
 	/**
 	 * Creates a new empty column that accepts elements of the given type.
-	 * 
-	 * @param type
-	 * 			The type of the elements of the column. Must not be {@code null}.
 	 * @param header
 	 * 			The header of the column.
+	 * @param type
+	 * 			The type of the elements of the column. Must not be {@code null}.
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 * 
 	 * @throws NullPointerException if type == null || header == null
-	 * @throws InconsistentColumnSizeException if ! isEmpty()
+	 * @throws InconsistentColumnSizeException if ! rows.isEmpty()
 	 */
-	default Columns create(Class<?> type, String header) {
+	default Columns create(String header, Class<?> type) {
 		return create(type, header, Collections.emptyList());
+	}
+	
+	/**
+	 * Creates a new {@code Column} with an initial content.
+	 * 
+	 * @param id
+	 * 			Defines the name of the column and the type of its elements.
+	 * 			Must not be {@code null}.	
+	 * @param column
+	 * 			The elements of the column.
+	 * 
+	 * @return a reference to the instance to enable method chaining.
+	 * 
+	 * @param <N> The type of the elements in the new column.
+	 * 
+	 * @throws NullPointerException if id == null
+	 * @throws InconsistentColumnSizeException if {@code column.length != rows.size()}
+	 */
+	@SuppressWarnings("unchecked")
+	default <N> Columns create(ColumnId<N> id, N... column) {
+		return create(id.header(), id.type(), column);
 	}
 	
 	
 	/**
-	 * Creates a new {@code Column} from a given iterable.
+	 * Creates a new {@code Column} with an initial content.
 	 * 
+	 * @param header
+	 * 			The name of the column.
+	 * 			Must not be {@code null}.
 	 * @param type
 	 * 			The type of the elements stored in the column.
-	 * 			Must not be {@code null}.
-	 * @param header
-	 * 			The column's header.
 	 * 			Must not be {@code null}.
 	 * @param column
 	 * 			The elements of the column.
@@ -210,13 +246,13 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 * 
-	 * @param <N> The type of the elements in the new column
+	 * @param <N> The type of the elements in the new column.
 	 * 
 	 * @throws NullPointerException if any of the parameters is {@code null}
-	 * @throws InconsistentColumnSizeException if {@code column.length} != {@code rows.size()}
+	 * @throws InconsistentColumnSizeException if {@code column.length != rows.size()}
 	 */
 	@SuppressWarnings("unchecked")
-	default <N> Columns create(Class<N> type, String header, N... column) {
+	default <N> Columns create(String header, Class<N> type, N... column) {
 		return create(type, header, Arrays.asList(column));
 	}
 
@@ -250,7 +286,7 @@ public interface Columns extends Iterable <Column<?>> {
 	 * 
 	 * @return a reference to the instance to enable method chaining.
 	 * 
-	 * @throws HeaderNotFoundException if ! hasHeader(header)
+	 * @throws HeaderNotFoundException if ! contains(header)
 	 */
 	default Columns remove(String header) {
 		return remove(indexOf(header));

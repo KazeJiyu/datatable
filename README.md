@@ -16,14 +16,13 @@ As of now, the API makes able to:
 Because code is better than words, here is a quick overview of the API:
 
 ```java
-Table people = new DataTable();
-people.columns()
-    .create(String.class, "Name", "Luc", "Baptiste", "Marie")
-    .create(Integer.class, "Age", 23, 32, 42);
-
-// Used to identify table's columns in a type-safe way    
 ColumnId<Integer> AGE = id(Integer.class, "age");
 ColumnId<String> NAME = id(String.class, "name");
+
+Table people = new DataTable();
+people.columns()
+    .create(NAME, "Luc", "Baptiste", "Marie")
+    .create(AGE, 23, 32, 42);
 	
 Table adultsWhoseNameEndsWithLetterE = people.filter(row ->
     row.get(AGE) > 18 &&
@@ -49,7 +48,7 @@ ColumnId<String> name = ColumnId.id(String.class, "col1");
 ```
 
 > In the following document, ids are used everywhere.
-> However, although they are the advised way to deal with a table, indexes and column names can be used instead.
+> However, although they are the advised way to deal with a table, they always can be replaced by indexes or column names.
 
 ## Populating a `Table`
 
@@ -63,8 +62,8 @@ A table can be filled either by adding new columns :
 
 ```java
 people.columns()
-    .create(String.class, "Name", "Luc", "Baptiste", "Marie")
-    .create(Integer.class, "Age", 23, 32, 42);
+    .create("Name", String.class, "Luc", "Baptiste", "Marie")
+    .create("Age", Integer.class, 23, 32, 42);
 ```
 
 or by adding new rows : 
@@ -126,8 +125,8 @@ The `filter` method makes easy to retrieve the rows of a table that match a spec
 import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
 
 public class Main {
-	
-    // Ids that match table's columns
+
+    // Reference table's columns
     private static final ColumnId<Integer> AGE = id(Integer.class, "age");
     private static final ColumnId<String> NAME = id(String.class, "name");
     
@@ -149,7 +148,7 @@ import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
 
 public class Main {
 	
-    // Ids that match table's columns
+    // Reference table's columns
     private static final ColumnId<Integer> AGE = id(Integer.class, "age");
     private static final ColumnId<String> NAME = id(String.class, "name");
     private static final ColumnId<String> SURENAME = id(String.class, "surename");

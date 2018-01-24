@@ -121,9 +121,9 @@ class DataTableTest {
 		Table createPeople() {
 			Table table = new DataTable();
 			table.columns()
-					.create(String.class, NAME_HEADER, "Luc", "Baptiste", "Anya", "Mathilde")
-					.create(Integer.class, AGE_HEADER, 23, 32, 0, 21)
-					.create(String.class, SEX_HEADER, "Male", "Male", "Female", "Female");
+					.create(NAME_HEADER, String.class, "Luc", "Baptiste", "Anya", "Mathilde")
+					.create(AGE_HEADER, Integer.class, 23, 32, 0, 21)
+					.create(SEX_HEADER, String.class, "Male", "Male", "Female", "Female");
 			
 			return table;
 		}
