@@ -23,7 +23,9 @@ import java.util.stream.Stream;
 import fr.kazejiyu.generic.datatable.exceptions.InconsistentRowSizeException;
 
 /**
- * An ordered collection of {@link Row}s that belongs to a {@link Table}.
+ * An ordered collection of {@link Row}s that belongs to a {@link Table}. <br>
+ * <br>
+ * See {@link fr.kazejiyu.generic.datatable.core} for further details.
  * 
  * @author Emmanuel CHEBBI
  */

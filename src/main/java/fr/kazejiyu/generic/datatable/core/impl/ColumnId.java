@@ -135,7 +135,9 @@ public final class ColumnId<T> {
 	 * @param id
 	 * 			The column id to wrap.
 	 * 
-	 * @return a new {@code ColumnId} 
+	 * @return a new {@code ColumnId}
+	 * 
+	 * @param <T> The type of the column's elements.
 	 */
 	public static <T extends Number> ColumnOfNumbersId<T> n(ColumnId<T> id) {
 		return new ColumnOfNumbersId<>(id);
@@ -150,6 +152,8 @@ public final class ColumnId<T> {
 	 * 			The other ids.
 	 * 
 	 * @return a new {@code ColumnId} 
+	 * 
+	 * @param <T> The type of the column's elements.
 	 */
 	@SafeVarargs
 	@SuppressWarnings("unchecked")

@@ -14,14 +14,14 @@ public class TablePreconditions {
 		this.table = table;
 	}
 
-	/** @throws HeaderNotFoundException if an element of {@ode columnsToKeep} does not match any column */
+	/** @throws HeaderNotFoundException if an element of {@code columnsToKeep} does not match any column */
 	void assertAreExistingHeaders(LinkedHashSet<String> columnsToKeep) {
 		for(final String columnToKeep : columnsToKeep)
 			if( ! table.columns().contains(columnToKeep) )
 				throw new HeaderNotFoundException("The header " + columnToKeep + " does not exist in the table");
 	}
 
-	/** @throws ColumnIdNotFoundException if an element of {@ode idsOfColumnsToKeep} does not match any column */
+	/** @throws ColumnIdNotFoundException if an element of {@code idsOfColumnsToKeep} does not match any column */
 	public void assertAreExistingIds(LinkedHashSet<ColumnId<?>> idsOfColumnsToKeep) {
 		for(final ColumnId<?> columnToKeep : idsOfColumnsToKeep)
 			if( ! table.columns().contains(columnToKeep) )

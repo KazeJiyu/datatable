@@ -27,7 +27,9 @@ import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.InconsistentColumnSizeException;
 
 /**
- * A collection of {@link Column} that belongs to a {@link Table}.
+ * A collection of {@link Column} that belongs to a {@link Table}. <br>
+ * <br>
+ * See {@link fr.kazejiyu.generic.datatable.core} for further details.
  * 
  * @author Emmanuel CHEBBI
  */

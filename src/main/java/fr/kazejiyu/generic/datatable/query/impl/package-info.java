@@ -1,5 +1,5 @@
 /**
- * Provides a SQL-like DSL to query the content of a {@link fr.kazejiyu.generic.datatable.core.Table Table}.
+ * Concrete implementation of a {@link fr.kazejiyu.generic.datatable.query.Query Query}.
  * 
  * @author Emmanuel CHEBBI 
  */

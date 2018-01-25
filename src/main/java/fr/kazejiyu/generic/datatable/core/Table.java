@@ -23,7 +23,9 @@ import fr.kazejiyu.generic.datatable.exceptions.ColumnIdNotFoundException;
 import fr.kazejiyu.generic.datatable.exceptions.HeaderNotFoundException;
 
 /**
- * A table containing {@link Rows} and {@link Columns}.
+ * A table containing {@link Rows} and {@link Columns}. <br>
+ * <br>
+ * See {@link fr.kazejiyu.generic.datatable.core} for further details.
  * 
  * @author Emmanuel CHEBBI
  */
