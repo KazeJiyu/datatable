@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.kazejiyu.generic</groupId>
 	<artifactId>datatable</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>datatable</name>
 	<description>Heterogeneous and type-safe table structure</description>
 
@@ -73,7 +73,8 @@
 
 	<build>
 		<plugins>
-			<!-- A workaround, waiting for maven-surefire-plugin to support JUnit 5 -->
+			<!-- A workaround, waiting for maven-surefire-plugin to support JUnit 
+				5 -->
 			<!-- See issue : https://issues.apache.org/jira/browse/SUREFIRE-1330 -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -109,6 +110,33 @@
 						</excludes>
 					</instrumentation>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.3</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
