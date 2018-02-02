@@ -16,8 +16,8 @@ As of now, the API makes able to:
 Because code is better than words, here is a quick overview of the API:
 
 ```java
-ColumnId<Integer> AGE = id(Integer.class, "age");
-ColumnId<String> NAME = id(String.class, "name");
+ColumnId<Integer> AGE = id("age", Integer.class);
+ColumnId<String> NAME = id("name", String.class);
 
 Table people = new DataTable();
 people.columns()
@@ -44,7 +44,7 @@ Basically, they are simple data structure containing:
 An id is represented by the [ColumnId](https://github.com/KazeJiyu/datatable/blob/master/src/main/java/fr/kazejiyu/generic/datatable/core/impl/ColumnId.java) class and can be created with the `id` static method :
 ```java
 // name is an id that matches any column containing Strings and which header is "col1"
-ColumnId<String> name = ColumnId.id(String.class, "col1");
+ColumnId<String> name = ColumnId.id("col1", String.class);
 ```
 
 > In the following document, ids are used everywhere.
@@ -127,8 +127,8 @@ import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
 public class Main {
 
     // Reference table's columns
-    private static final ColumnId<Integer> AGE = id(Integer.class, "age");
-    private static final ColumnId<String> NAME = id(String.class, "name");
+    private static final ColumnId<Integer> AGE = id("age", Integer.class);
+    private static final ColumnId<String> NAME = id("name", String.class);
     
     Table adultsWhoseNameEndsWithLetterE(Table people) {
         return people.filter(row ->
@@ -149,9 +149,9 @@ import static fr.kazejiyu.generic.datatable.core.impl.ColumnId.*;
 public class Main {
 	
     // Reference table's columns
-    private static final ColumnId<Integer> AGE = id(Integer.class, "age");
-    private static final ColumnId<String> NAME = id(String.class, "name");
-    private static final ColumnId<String> SURENAME = id(String.class, "surename");
+    private static final ColumnId<Integer> AGE = id("age", Integer.class);
+    private static final ColumnId<String> NAME = id("name", String.class);
+    private static final ColumnId<String> SURENAME = id("surename", String.class);
 
     // Retrieve all european adults whose both name and surename ends with the letter "e"
     Table adultsWhoseNameEndsWithLetterE(Table people) {
