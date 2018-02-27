@@ -34,7 +34,8 @@ Table adultsWhoseNameEndsWithLetterE = people.filter(row ->
 
 ## Understanding ids
 
-Ids are a trick used to provide a type-safe way to access the content of a table.
+Ids can be seen as **references**, as keys used to identify specific columns within a table.
+They are tricks used to provide a type-safe way to access the content of a table.
 
 Basically, they are simple data structure containing:
 
@@ -48,7 +49,7 @@ ColumnId<String> name = ColumnId.id("col1", String.class);
 ```
 
 > In the following document, ids are used everywhere.
-> However, although they are the advised way to deal with a table, they always can be replaced by indexes or column names.
+> However, although they are the advised way to deal with a table, they can always be replaced by indexes or column names.
 
 ## Populating a `Table`
 
@@ -165,7 +166,9 @@ public class Main {
 }
 ```
 
-Notice how the `s` method is used to specify several columns of type String to the `WHERE`clause. Due to Java's type erasure, this trick is mandatory. This static method is defined in the `ColumnId` class, as well as the methods:
+Notice how the `s` method is used to specify that the columns concerning by the `WHERE` clause contain String instances. 
+That makes possible to use tailored methods (such as `endsWith` in the above example) ; because of Java's type erasure, this trick is mandatory. 
+This static method is defined in the `ColumnId` class, as well as the methods:
 
 - `n`: used to apply a same filter to several columns of numbers,
 - `b`: used to apply a same filter to several columns of booleans.
